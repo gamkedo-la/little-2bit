@@ -1,0 +1,10 @@
+body {
+    background-color: #000;
+}
+
+#gameCanvas {
+    position: relative;
+    /* Old skool centering... */
+    left: 50%;
+    margin-left: -400px;
+}
