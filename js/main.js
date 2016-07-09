@@ -11,7 +11,7 @@ window.onload = function() {
   gameContext = gameCanvas.getContext('2d');
 
   clearCanvas();
-  loadImages(Menu.initialize);
+  Images.initialize(Menu.initialize);
 };
 
 function gameStart() {
@@ -19,21 +19,26 @@ function gameStart() {
 
   Menu.deactive();
 
+  UI.initialize();
+  Ship.initialize();
+
   gameInterval = setInterval(gameLoop, 1000/framesPerSecond);
   console.log('Starting game!');
 }
 
 function clearCanvas() {
-  drawRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, 'black');
-  if (stars.src) {
-    drawBitmapCenteredWithRotation(gameContext, stars, gameCanvas.width/2,gameCanvas.height/2);
+//  drawRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, 'black');
+  if (Menu.active && Images.stars) {
+    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width/2,gameCanvas.height/2);
   }
 }
 
 function gameLoop() {
   clearCanvas();
 
+  UI.update();
   Ship.update();
 
+  UI.draw();
   Ship.draw();
 }

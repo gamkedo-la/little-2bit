@@ -12,7 +12,7 @@ var Menu = new (function() {
       gameInterval = undefined;
     }
 
-    this.active = true;
+    Menu.active = true;
 
     gameCanvas.addEventListener('mousemove', mouseMove);
     gameCanvas.addEventListener('mouseup', mouseReleased);
@@ -28,7 +28,7 @@ var Menu = new (function() {
   };
 
   this.deactive = function() {
-    this.active = false;
+    Menu.active = false;
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
 

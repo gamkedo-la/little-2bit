@@ -1,19 +1,28 @@
-var stars = document.createElement('img');
+var Images = new (function() {
+  var images = {
+    stars: 'img/stars.png',
+    ship: 'img/spaceship.png',
+    ui: 'img/ui-border.png'
+  };
 
-// @todo make class...
+  this.initialize = function(callback) {
+    var numToLoad = Object.keys(images).length;
 
-function loadImages(callback) {
-  var numToLoad = 0;
-
-  // @todo load the actual images...
-  stars.onload = doneLoading;
-  stars.src = 'img/stars.png';
-  numToLoad++;
-
-  function doneLoading() {
-    numToLoad--;
-    if (numToLoad <= 0) {
-      callback();
+    for (key in images) {
+      if (images.hasOwnProperty(key)) {
+        this[key] = document.createElement('img');
+        this[key].onload = doneLoading;
+        this[key].src = images[key];
+      }
     }
+
+    function doneLoading() {
+      numToLoad--;
+      if (numToLoad == 0) {
+        callback();
+      }
+    }
+
+    return this;
   }
-}
+})();
