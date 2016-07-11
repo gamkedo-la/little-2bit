@@ -19,10 +19,10 @@ var Ship = new (function(){
     x = 200;
     y = gameCanvas.height / 2;
 
-    minX = Images.ship.width / 2 + 5;
+    minX = Images.ship.width / 2;
     maxX = gameCanvas.width - minX;
     minY = UI.height + Images.ship.height / 2;
-    maxY = gameCanvas.height - Images.ship.height / 2 - 5;
+    maxY = gameCanvas.height - Images.ship.height / 2;
   };
 
   this.update = function() {

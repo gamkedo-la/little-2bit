@@ -49,6 +49,7 @@ var Menu = new (function() {
     }
 
     MenuCredits.draw();
+    drawBitmapCenteredWithRotation(gameContext, Images.corners, gameCanvas.width/2, gameCanvas.height/2);
   };
 
   function mouseMove(event) {

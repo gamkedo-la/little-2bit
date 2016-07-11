@@ -1,8 +1,21 @@
 var UI = new (function(){
+  this.height = 60;
+
+  var center = {};
+
+  this.initialize = function(){
+    center.x = gameCanvas.width / 2;
+    center.y = gameCanvas.height / 2;
+  };
+  this.update = function(){};
+  this.draw = function(){
+    drawBitmapCenteredWithRotation(gameContext, Images.corners, center.x,center.y);
+  };
+})();
+
+var Background = new (function(){
   this.keyHeld_W = false;
   this.keyHeld_E = false;
-
-  this.height = 60;
 
   var center = {};
   var x;
@@ -38,7 +51,5 @@ var UI = new (function(){
     var x2 = x - w;
     drawBitmapCenteredWithRotation(gameContext, Images.stars, x,center.y);
     drawBitmapCenteredWithRotation(gameContext, Images.stars, x2,center.y);
-
-    drawBitmapCenteredWithRotation(gameContext, Images.ui, center.x,center.y);
   };
 })();

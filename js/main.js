@@ -20,6 +20,7 @@ function gameStart() {
   Menu.deactive();
 
   UI.initialize();
+  Background.initialize();
   Ship.initialize();
 
   gameInterval = setInterval(gameLoop, 1000/framesPerSecond);
@@ -27,7 +28,6 @@ function gameStart() {
 }
 
 function clearCanvas() {
-//  drawRect(gameContext, 0,0, gameCanvas.width,gameCanvas.height, 'black');
   if (Menu.active && Images.stars) {
     drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width/2,gameCanvas.height/2);
   }
@@ -37,8 +37,10 @@ function gameLoop() {
   clearCanvas();
 
   UI.update();
+  Background.update();
   Ship.update();
 
-  UI.draw();
+  Background.draw();
   Ship.draw();
+  UI.draw();
 }

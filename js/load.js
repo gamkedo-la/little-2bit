@@ -2,7 +2,7 @@ var Images = new (function() {
   var images = {
     stars: 'img/stars.png',
     ship: 'img/spaceship.png',
-    ui: 'img/ui-border.png'
+    corners: 'img/corners.png'
   };
 
   this.initialize = function(callback) {
