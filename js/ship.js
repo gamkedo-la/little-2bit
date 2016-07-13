@@ -15,6 +15,12 @@ var Ship = new (function(){
   var v = 5;
   var minX, minY, maxX, maxY;
 
+  var projectiles = [];
+  var maxProjectiles = 40;
+  var projectilesFiringRate = 3;
+  var projectileClass;
+  var projectileLast = 0;
+
   this.initialize = function() {
     x = 200;
     y = gameCanvas.height / 2;
@@ -23,6 +29,8 @@ var Ship = new (function(){
     maxX = gameCanvas.width - minX;
     minY = UI.height + Images.ship.height / 2;
     maxY = gameCanvas.height - Images.ship.height / 2;
+
+    projectileClass = Rocket;
   };
 
   this.update = function() {
@@ -52,10 +60,39 @@ var Ship = new (function(){
       }
     }
 
-    this.y = y;
+    if (this.keyHeld_1) {
+      projectileClass = Bullet;
+    }
+    else if (this.keyHeld_2) {
+      projectileClass = Rocket;
+    }
+
+    if (this.keyHeld_SPACE) {
+      if (projectiles.length < maxProjectiles && projectileLast == 0) {
+        projectileLast = projectilesFiringRate;
+        projectiles.push(new projectileClass(x, y));
+      }
+      else {
+        projectileLast--;
+      }
+    }
+    else {
+      projectileLast = 0;
+    }
+
+    for (var p = projectiles.length - 1; p >= 0; p--) {
+      projectiles[p].update();
+      if (projectiles[p].readyToRemove) {
+        projectiles.splice(p, 1);
+      }
+    }
   };
 
   this.draw = function() {
+    for (var p = 0; p < projectiles.length; p++) {
+      projectiles[p].draw();
+    }
+
     drawBitmapCenteredWithRotation(gameContext, Images.ship, x,y, 0);
   };
 
