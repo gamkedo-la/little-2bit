@@ -6,7 +6,8 @@ var Bullet = function(x, y) {
   this.update = function() {
     x += vx;
 
-    this.readyToRemove = (x > gameCanvas.width);
+    var levelInfo = Grid.levelInfo();
+    this.readyToRemove = (x > levelInfo.rightBound);
   };
 
   this.draw = function() {
@@ -22,7 +23,8 @@ var Rocket = function(x, y) {
   this.update = function() {
     x += vx;
 
-    this.readyToRemove = (x > gameCanvas.width);
+    var levelInfo = Grid.levelInfo();
+    this.readyToRemove = (x > levelInfo.rightBound);
   };
 
   this.draw = function() {

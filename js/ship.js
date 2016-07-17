@@ -11,8 +11,9 @@ var Ship = new (function(){
   this.keyHeld_5 = false;
   this.keyHeld_6 = false;
 
+  this.speed = 5;
+
   var x,y;
-  var v = 5;
   var minX, minY, maxX, maxY;
 
   var projectiles = [];
@@ -22,39 +23,41 @@ var Ship = new (function(){
   var projectileLast = 0;
 
   this.initialize = function() {
-    x = 200;
+    x = 450;
     y = gameCanvas.height / 2;
 
+    var levelInfo = Grid.levelInfo();
+
     minX = Images.ship.width / 2;
-    maxX = gameCanvas.width - minX;
+    maxX = levelInfo.width - minX;
     minY = UI.height + Images.ship.height / 2;
-    maxY = gameCanvas.height - Images.ship.height / 2;
+    maxY = levelInfo.height - Images.ship.height / 2;
 
     projectileClass = Rocket;
   };
 
   this.update = function() {
     if (this.keyHeld_N) {
-      y -= v;
+      y -= this.speed;
       if (y < minY) {
         y = minY;
       }
     }
     else if (this.keyHeld_S) {
-      y += v;
+      y += this.speed;
       if (y > maxY) {
         y = maxY;
       }
     }
 
     if (this.keyHeld_W) {
-      x -= v;
+      x -= this.speed;
       if (x < minX) {
         x = minX;
       }
     }
     else if (this.keyHeld_E) {
-      x += v;
+      x += this.speed;
       if (x > maxX) {
         x = maxX;
       }
@@ -94,6 +97,10 @@ var Ship = new (function(){
     }
 
     drawBitmapCenteredWithRotation(gameContext, Images.ship, x,y, 0);
+  };
+
+  this.coords = function() {
+    return {x: x, y: y};
   };
 
   return this;

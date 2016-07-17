@@ -6,6 +6,9 @@ var gameFontSmall = '16pt Verdana';
 var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
+// Debug
+var debug = false;
+
 window.onload = function() {
   gameCanvas = document.getElementById('gameCanvas');
   gameContext = gameCanvas.getContext('2d');
@@ -20,7 +23,7 @@ function gameStart() {
   Menu.deactive();
 
   UI.initialize();
-  Background.initialize();
+  Grid.initialize();
   Ship.initialize();
 
   gameInterval = setInterval(gameLoop, 1000/framesPerSecond);
@@ -37,10 +40,14 @@ function gameLoop() {
   clearCanvas();
 
   UI.update();
-  Background.update();
+  Grid.update();
   Ship.update();
 
-  Background.draw();
+  gameContext.save();
+  gameContext.translate(-Grid.cameraPanX(), 0);
+  Grid.draw();
   Ship.draw();
+  gameContext.restore();
+
   UI.draw();
 }

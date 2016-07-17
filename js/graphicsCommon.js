@@ -21,6 +21,16 @@ function drawCircle(canvasContext, centerX,centerY, radius, fillColor) {
   canvasContext.fill();
 }
 
+function drawLines(canvasContext, fillColor, pointArray) {
+  canvasContext.beginPath();
+  canvasContext.moveTo(pointArray[0].x, pointArray[0].y);
+  for(var i = 1; i < pointArray.length; i++){
+    canvasContext.lineTo(pointArray[i].x, pointArray[i].y);
+  }
+  canvasContext.strokeStyle = fillColor;
+  canvasContext.stroke();
+}
+
 function drawText(canvasContext, textX,textY, fillColor, showWords) {
   canvasContext.fillStyle = fillColor;
   canvasContext.fillText(showWords, textX,textY);
