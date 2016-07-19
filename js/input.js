@@ -44,11 +44,9 @@ function keyReleased(event) {
 function keySet(event, setTo) {
   if (event.keyCode == KEY_A || event.keyCode == KEY_LEFT_ARROW) {
     Ship.keyHeld_W = setTo;
-    UI.keyHeld_W = setTo;
     event.preventDefault();
   }
   if (event.keyCode == KEY_D || event.keyCode == KEY_RIGHT_ARROW) {
-    UI.keyHeld_E = setTo;
     Ship.keyHeld_E = setTo;
     event.preventDefault();
   }
