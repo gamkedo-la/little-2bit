@@ -16,7 +16,9 @@ window.onload = function() {
   uiContext = uiCanvas.getContext('2d');
 
   clearCanvas();
-  Images.initialize(Menu.initialize);
+  // Skip menu for now, until we have more levels :)
+//  Images.initialize(Menu.initialize);
+  Images.initialize(gameStart);
 };
 
 function gameStart() {

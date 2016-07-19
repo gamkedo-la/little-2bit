@@ -11,10 +11,13 @@ var Ship = new (function(){
   this.keyHeld_5 = false;
   this.keyHeld_6 = false;
 
+  this.isDead = false;
   this.speed = 5;
 
   var x,y;
   var minX, minY, maxX, maxY;
+  var halfWidth, quarterWidth, eighthWidth;
+  var halfHeight, quarterHeight;
 
   var projectiles = [];
   var maxProjectiles = 40;
@@ -28,15 +31,64 @@ var Ship = new (function(){
 
     var levelInfo = Grid.levelInfo();
 
-    minX = Images.ship.width / 2;
-    maxX = levelInfo.width - minX;
-    minY = Images.ship.height / 2;
-    maxY = levelInfo.height - minY;
+    halfWidth = Images.ship.width / 2;
+    quarterWidth = Images.ship.width / 4;
+    eighthWidth = Images.ship.width / 8;
+    halfHeight = Images.ship.height / 2;
+    quarterHeight = Images.ship.height / 4;
+    minX = halfWidth;
+    maxX = levelInfo.width - halfWidth;
+    minY = halfHeight;
+    maxY = levelInfo.height - halfHeight;
 
     projectileClass = Rocket;
   };
 
+  var boundingBox = function() {
+    return [
+      // Upper halfway right
+      {x: x+quarterWidth, y: y-quarterHeight},
+      // Upper halfway left
+      {x: x-eighthWidth, y: y-halfHeight},
+      // Upper left
+      {x: x-(eighthWidth*3), y: y-halfHeight},
+      // Middle left
+      {x: x-(eighthWidth*3), y: y},
+      // Lower left
+      {x: x-(eighthWidth*3), y: y+halfHeight},
+      // Lower halfway left
+      {x: x-eighthWidth, y: y+halfHeight},
+      // Lower middle
+      {x: x+eighthWidth, y: y+halfHeight},
+      // Lower halfway right
+      {x: x+quarterWidth, y: y+quarterHeight},
+      // Lower right
+      {x: x+halfWidth, y: y+quarterHeight},
+      // Middle right
+      {x: x+halfWidth, y: y}
+    ];
+  };
+
+  function checkCollision() {
+    var checkCoords = boundingBox();
+    for (var c = 0; c < checkCoords.length; c++) {
+      if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
+        if (debug) {
+          drawCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
+        }
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   this.update = function() {
+    if (this.isDead) {
+      return;
+    }
+
     if (this.keyHeld_N) {
       y -= this.speed;
       if (y < minY) {
@@ -63,6 +115,11 @@ var Ship = new (function(){
       }
     }
 
+    if (checkCollision()) {
+      this.isDead = true;
+      // @todo explode into particles?
+    }
+
     if (this.keyHeld_1) {
       projectileClass = Bullet;
     }
@@ -85,18 +142,30 @@ var Ship = new (function(){
 
     for (var p = projectiles.length - 1; p >= 0; p--) {
       projectiles[p].update();
-      if (projectiles[p].readyToRemove) {
+      if (projectiles[p].readyToRemove || this.isDead) {
         projectiles.splice(p, 1);
       }
     }
   };
 
   this.draw = function() {
-    for (var p = 0; p < projectiles.length; p++) {
-      projectiles[p].draw();
+    if (!this.isDead) {
+      for (var p = 0; p < projectiles.length; p++) {
+        projectiles[p].draw();
+      }
+
+      drawBitmapCenteredWithRotation(gameContext, Images.ship, x, y, 0);
     }
 
-    drawBitmapCenteredWithRotation(gameContext, Images.ship, x,y, 0);
+    if (debug) {
+      var bb = boundingBox();
+      for (var c = 0; c < bb.length; c++) {
+        drawCircle(gameContext, bb[c].x, bb[c].y, 5, '#f00');
+      }
+      bb.push(bb[0]);
+      drawLines(gameContext, '#f00', bb);
+      checkCollision();
+    }
   };
 
   this.coords = function() {
