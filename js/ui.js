@@ -4,11 +4,14 @@ var UI = new (function(){
   var center = {};
 
   this.initialize = function(){
-    center.x = gameCanvas.width / 2;
-    center.y = gameCanvas.height / 2;
+    center.x = uiCanvas.width / 2;
+    center.y = uiCanvas.height / 2;
   };
+
   this.update = function(){};
+
   this.draw = function(){
-    drawBitmapCenteredWithRotation(gameContext, Images.corners, center.x,center.y);
+    uiContext.font = gameFontSmall;
+    drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');
   };
 })();

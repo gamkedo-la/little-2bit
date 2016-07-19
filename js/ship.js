@@ -23,15 +23,15 @@ var Ship = new (function(){
   var projectileLast = 0;
 
   this.initialize = function() {
-    x = 450;
+    x = 100;
     y = gameCanvas.height / 2;
 
     var levelInfo = Grid.levelInfo();
 
     minX = Images.ship.width / 2;
     maxX = levelInfo.width - minX;
-    minY = UI.height + Images.ship.height / 2;
-    maxY = levelInfo.height - Images.ship.height / 2;
+    minY = Images.ship.height / 2;
+    maxY = levelInfo.height - minY;
 
     projectileClass = Rocket;
   };

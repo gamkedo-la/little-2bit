@@ -1,4 +1,4 @@
-var gameCanvas, gameContext;
+var gameCanvas, gameContext, uiCanvas, uiContext;
 var framesPerSecond = 30;
 var gameInterval;
 var gameFont = 'bold 20pt Verdana';
@@ -7,11 +7,13 @@ var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
 // Debug
-var debug = false;
+var debug = true;
 
 window.onload = function() {
   gameCanvas = document.getElementById('gameCanvas');
   gameContext = gameCanvas.getContext('2d');
+  uiCanvas = document.getElementById('uiCanvas');
+  uiContext = uiCanvas.getContext('2d');
 
   clearCanvas();
   Images.initialize(Menu.initialize);

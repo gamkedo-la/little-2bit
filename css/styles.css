@@ -3,7 +3,9 @@ body {
     margin-top: 50px;
 }
 
+#uiCanvas,
 #gameCanvas {
+    display: block;
     position: relative;
     /* Old skool centering... */
     left: 50%;
