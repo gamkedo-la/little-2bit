@@ -46,11 +46,15 @@ function gameLoop() {
   UI.update();
   Grid.update();
   Ship.update();
+  ParticleList.update();
 
   gameContext.save();
   gameContext.translate(-Grid.cameraPanX(), 0);
+
   Grid.draw();
   Ship.draw();
+  ParticleList.draw();
+
   gameContext.restore();
 
   UI.draw();

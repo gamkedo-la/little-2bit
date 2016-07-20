@@ -117,7 +117,7 @@ var Ship = new (function(){
 
     if (checkCollision()) {
       this.isDead = true;
-      // @todo explode into particles?
+      ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
     }
 
     if (this.keyHeld_1) {
