@@ -105,7 +105,8 @@ var ParticleList = new (function(){
   };
 
   this.draw = function() {
-  for (var i = 0; i < particleList.length; i++) {
-    drawParticle(particleList[i]);
-  }};
+    for (var i = 0; i < particleList.length; i++) {
+      drawParticle(particleList[i]);
+    }
+  };
 })();

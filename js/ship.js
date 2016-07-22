@@ -12,12 +12,16 @@ var Ship = new (function(){
   this.keyHeld_6 = false;
 
   this.isDead = false;
-  this.speed = 5;
+  this.speedX = 8;
+  this.speedY = 5;
+  this.damage = 50;
 
   var x,y;
   var minX, minY, maxX, maxY;
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight;
+
+  var health = 50;
 
   var projectiles = [];
   var maxProjectiles = 40;
@@ -41,10 +45,23 @@ var Ship = new (function(){
     minY = halfHeight;
     maxY = levelInfo.height - halfHeight;
 
-    projectileClass = Rocket;
+    projectileClass = Bullet;
   };
 
-  var boundingBox = function() {
+  this.doDamage = function(amount) {
+    health -= amount;
+  };
+
+  this.boundingBox = function() {
+    return {
+      left: x-halfWidth,
+      top: y-halfHeight,
+      right: x+halfWidth,
+      bottom: y+halfHeight
+    };
+  };
+
+  this.bounds = function() {
     return [
       // Upper halfway right
       {x: x+quarterWidth, y: y-quarterHeight},
@@ -69,8 +86,8 @@ var Ship = new (function(){
     ];
   };
 
-  function checkCollision() {
-    var checkCoords = boundingBox();
+  this.checkCollision = function() {
+    var checkCoords = this.bounds();
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
         if (debug) {
@@ -82,7 +99,14 @@ var Ship = new (function(){
     }
 
     return false;
-  }
+  };
+
+  this.checkShot = function() {
+    ProjectileList.damagedBy(this, []);
+    EnemyList.checkCollision(this);
+
+    return (health <= 0);
+  };
 
   this.update = function() {
     if (this.isDead) {
@@ -90,32 +114,32 @@ var Ship = new (function(){
     }
 
     if (this.keyHeld_N) {
-      y -= this.speed;
+      y -= this.speedY;
       if (y < minY) {
         y = minY;
       }
     }
     else if (this.keyHeld_S) {
-      y += this.speed;
+      y += this.speedY;
       if (y > maxY) {
         y = maxY;
       }
     }
 
     if (this.keyHeld_W) {
-      x -= this.speed;
-      if (x < minX) {
-        x = minX;
+      x -= this.speedX;
+      if (x < Grid.cameraPanX() + minX) {
+        x = Grid.cameraPanX() + minX;
       }
     }
     else if (this.keyHeld_E) {
-      x += this.speed;
+      x += this.speedX;
       if (x > maxX) {
         x = maxX;
       }
     }
 
-    if (checkCollision()) {
+    if (this.checkCollision() || this.checkShot()) {
       this.isDead = true;
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
     }
@@ -130,7 +154,7 @@ var Ship = new (function(){
     if (this.keyHeld_SPACE) {
       if (projectiles.length < maxProjectiles && projectileLast == 0) {
         projectileLast = projectilesFiringRate;
-        projectiles.push(new projectileClass(x, y));
+        ProjectileList.push(new projectileClass(x+halfWidth, y));
       }
       else {
         projectileLast--;
@@ -139,32 +163,21 @@ var Ship = new (function(){
     else {
       projectileLast = 0;
     }
-
-    for (var p = projectiles.length - 1; p >= 0; p--) {
-      projectiles[p].update();
-      if (projectiles[p].readyToRemove || this.isDead) {
-        projectiles.splice(p, 1);
-      }
-    }
   };
 
   this.draw = function() {
     if (!this.isDead) {
-      for (var p = 0; p < projectiles.length; p++) {
-        projectiles[p].draw();
-      }
-
       drawBitmapCenteredWithRotation(gameContext, Images.ship, x, y, 0);
     }
 
     if (debug) {
-      var bb = boundingBox();
-      for (var c = 0; c < bb.length; c++) {
-        drawCircle(gameContext, bb[c].x, bb[c].y, 5, '#f00');
+      var b = this.bounds();
+      for (var c = 0; c < b.length; c++) {
+        drawCircle(gameContext, b[c].x, b[c].y, 5, '#f00');
       }
-      bb.push(bb[0]);
-      drawLines(gameContext, '#f00', bb);
-      checkCollision();
+      b.push(b[0]);
+      drawLines(gameContext, '#f00', b);
+      this.checkCollision();
     }
   };
 

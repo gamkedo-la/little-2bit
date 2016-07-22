@@ -45,6 +45,8 @@ function gameLoop() {
 
   UI.update();
   Grid.update();
+  ProjectileList.update();
+  EnemyList.update();
   Ship.update();
   ParticleList.update();
 
@@ -52,6 +54,8 @@ function gameLoop() {
   gameContext.translate(-Grid.cameraPanX(), 0);
 
   Grid.draw();
+  ProjectileList.draw();
+  EnemyList.draw();
   Ship.draw();
   ParticleList.draw();
 
