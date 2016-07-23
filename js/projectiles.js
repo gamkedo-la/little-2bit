@@ -5,6 +5,10 @@ var ProjectileList = new (function() {
     projectiles.push(projectile);
   };
 
+  this.clear = function() {
+    projectiles = [];
+  };
+
   this.update = function() {
     for (var p = projectiles.length - 1; p >= 0; p--) {
       projectiles[p].update();
@@ -55,6 +59,8 @@ var Bullet = function(x, y) {
   var halfHeight = height / 2;
   y += 7;
 
+  Sounds.laser.play();
+
   this.update = function() {
     x += vx;
 
@@ -95,6 +101,8 @@ var Rocket = function(x, y) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
   y += 4;
+
+  Sounds.rocket.play();
 
   this.update = function() {
     x += vx;

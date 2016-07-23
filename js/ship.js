@@ -141,7 +141,10 @@ var Ship = new (function(){
 
     if (this.checkCollision() || this.checkShot()) {
       this.isDead = true;
+      EnemyList.clear();
+      ProjectileList.clear();
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
+      Sounds.explosion_ship.play();
     }
 
     if (this.keyHeld_1) {

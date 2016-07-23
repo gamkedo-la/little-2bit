@@ -1,8 +1,12 @@
-var EnemyList = new (function (){
+var EnemyList = new (function(){
   var enemyList = [];
 
-  this.push = function (enemy) {
+  this.push = function(enemy) {
     enemyList.push(enemy);
+  };
+
+  this.clear = function() {
+    enemyList = [];
   };
 
   this.checkCollision = function(ship) {
@@ -71,22 +75,22 @@ var SimpleEnemy = function(_x, _y) {
     health -= amount;
   };
 
-  this.update = function () {
+  this.update = function() {
     x += vx;
     this.isReadyToRemove = (x < Grid.cameraPanX());
 
     if (!this.isReadyToRemove) {
       ProjectileList.damagedBy(this, [Bullet, Rocket]);
-
-      this.isReadyToRemove = (health <= 0);
     }
 
-    if (this.isReadyToRemove) {
+    if (health <= 0) {
+      this.isReadyToRemove = true;
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+      Sounds.explosion_simple_enemy.play();
     }
   };
 
-  this.draw = function () {
+  this.draw = function() {
     drawBitmapCenteredWithRotation(gameContext, Images.simple_enemy, x, y, 0);
 
     if (debug) {
