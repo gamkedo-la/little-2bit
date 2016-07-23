@@ -77,7 +77,7 @@ var SimpleEnemy = function(_x, _y) {
 
   this.update = function() {
     x += vx;
-    this.isReadyToRemove = (x < Grid.cameraPanX());
+    this.isReadyToRemove = (x < Grid.cameraPanX() - halfWidth);
 
     if (!this.isReadyToRemove) {
       ProjectileList.damagedBy(this, [Bullet, Rocket]);

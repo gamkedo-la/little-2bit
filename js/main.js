@@ -7,7 +7,7 @@ var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
 // Debug
-var debug = true;
+var debug = false;
 
 window.onload = function() {
   gameCanvas = document.getElementById('gameCanvas');
@@ -37,7 +37,6 @@ function gameStart() {
 
 function clearCanvas() {
   if (Menu.active && Images.stars) {
-    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width/2,gameCanvas.height/2);
   }
 }
 

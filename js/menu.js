@@ -39,7 +39,8 @@ var Menu = new (function() {
   };
 
   var draw = function() {
-    clearCanvas();
+    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width/2,gameCanvas.height/2);
+
     gameContext.font = gameFont;
     gameContext.textAlign = 'left';
     drawText(gameContext, 25,50, fontColorHighlight, 'Journey of little 2bit');

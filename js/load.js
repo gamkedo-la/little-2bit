@@ -5,6 +5,9 @@ var Images = new (function() {
     simple_enemy: 'img/simple_enemy.png',
     corners: 'img/corners.png',
 
+    button_sound_on: 'img/button-sound-on.png',
+    button_sound_off: 'img/button-sound-off.png',
+
     bottom1: 'img/bottom1.png',
     bottom2: 'img/bottom2.png',
     top1: 'img/top1.png',
@@ -68,6 +71,9 @@ var Sounds = new (function() {
     }
 
     this.play = function () {
+      if (!UI.sound) {
+        return;
+      }
       if (Date.now() - lastPlay > timeOut) {
         lastPlay = Date.now();
         queue[index].currentTime = 0;
