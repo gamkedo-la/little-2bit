@@ -1,8 +1,10 @@
+const GRID_WIDTH = 40;
+const GRID_HEIGHT = 40;
+
 var Grid = new (function() {
-  const WIDTH = 40;
-  const HEIGHT = 40;
   var COLS = 20;
   var ROWS = 15;
+
   var level;
   var bricks = [];
 
@@ -18,7 +20,7 @@ var Grid = new (function() {
 
   this.initialize = function() {
     canvasHalfWidth = gameCanvas.width / 2;
-    colsThatFitOnScreen = Math.floor(gameCanvas.width / WIDTH);
+    colsThatFitOnScreen = Math.floor(gameCanvas.width / GRID_WIDTH);
     camPanX = 0.0;
 
     bricks[BRICK_SPACE] = false;
@@ -39,8 +41,8 @@ var Grid = new (function() {
     return {
       cols: COLS,
       rows: ROWS,
-      width: COLS*WIDTH,
-      height: ROWS*HEIGHT,
+      width: COLS*GRID_WIDTH,
+      height: ROWS*GRID_HEIGHT,
       leftBound: camPanX,
       rightBound: camPanX + gameCanvas.width
     };
@@ -60,22 +62,32 @@ var Grid = new (function() {
   };
 
   this.tileTypeAtCoords = function(x, y) {
-    var col = Math.floor(x / WIDTH);
-    var row = Math.floor(y / HEIGHT);
+    var col = Math.floor(x / GRID_WIDTH);
+    var row = Math.floor(y / GRID_HEIGHT);
 
     return level[tileToIndex(col, row)];
+  };
+
+  this.coordsToTileCoords = function(x, y) {
+    var col = Math.floor(x / GRID_WIDTH);
+    var row = Math.floor(y / GRID_HEIGHT);
+
+    return {
+      x: col * GRID_WIDTH,
+      y: row * GRID_HEIGHT
+    };
   };
 
   this.draw = function() {
     gameContext.drawImage(Images.stars, backgroundX, 0);
     gameContext.drawImage(Images.stars, backgroundX + backgroundWidth, 0);
 
-    var cameraLeftMostCol = Math.floor(camPanX / WIDTH);
+    var cameraLeftMostCol = Math.floor(camPanX / GRID_WIDTH);
     var cameraRightMostCol = cameraLeftMostCol + colsThatFitOnScreen + 2;
 
     var i = 0, x = 0, y = 0;
     for (var r = 0; r < ROWS; r++) {
-      x = cameraLeftMostCol * WIDTH;
+      x = cameraLeftMostCol * GRID_WIDTH;
       i = tileToIndex(cameraLeftMostCol, r);
       for (var c = cameraLeftMostCol; c < cameraRightMostCol; c++) {
         if (level[i] != undefined) {
@@ -88,9 +100,9 @@ var Grid = new (function() {
           }
         }
         i++;
-        x += WIDTH;
+        x += GRID_WIDTH;
       }
-      y += HEIGHT;
+      y += GRID_HEIGHT;
     }
   };
 
@@ -103,7 +115,7 @@ var Grid = new (function() {
     if (camPanX < 0) {
       camPanX = 0;
     }
-    var maxPanRight = COLS * WIDTH - gameCanvas.width;
+    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
     if (camPanX > maxPanRight) {
       camPanX = maxPanRight;
     }

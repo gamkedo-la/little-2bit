@@ -45,7 +45,7 @@ var Ship = new (function(){
     minY = halfHeight;
     maxY = levelInfo.height - halfHeight;
 
-    projectileClass = Bullet;
+    projectileClass = Rocket;
   };
 
   this.doDamage = function(amount) {
@@ -84,6 +84,13 @@ var Ship = new (function(){
       // Middle right
       {x: x+halfWidth, y: y}
     ];
+  };
+
+  this.muzzleCoords = function() {
+    return {
+      x: x + halfWidth,
+      y: y + 7
+    };
   };
 
   this.checkCollision = function() {
@@ -148,7 +155,7 @@ var Ship = new (function(){
     }
 
     if (this.keyHeld_1) {
-      projectileClass = Bullet;
+      projectileClass = Laser;
     }
     else if (this.keyHeld_2) {
       projectileClass = Rocket;
@@ -157,7 +164,8 @@ var Ship = new (function(){
     if (this.keyHeld_SPACE) {
       if (projectiles.length < maxProjectiles && projectileLast == 0) {
         projectileLast = projectilesFiringRate;
-        ProjectileList.push(new projectileClass(x+halfWidth, y));
+        var muzzle = this.muzzleCoords();
+        ProjectileList.push(new projectileClass(muzzle.x, muzzle.y));
       }
       else {
         projectileLast--;
@@ -181,6 +189,8 @@ var Ship = new (function(){
       b.push(b[0]);
       drawLines(gameContext, '#f00', b);
       this.checkCollision();
+      var muzzle = this.muzzleCoords();
+      drawCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
     }
   };
 

@@ -13,6 +13,7 @@ var ProjectileList = new (function() {
     for (var p = projectiles.length - 1; p >= 0; p--) {
       projectiles[p].update();
       if (projectiles[p].readyToRemove || Ship.isDead) {
+        projectiles[p].explode();
         projectiles.splice(p, 1);
       }
     }
@@ -35,29 +36,27 @@ var ProjectileList = new (function() {
     }
 
     for (var p = projectiles.length - 1; p >= 0; p--) {
-      if (types.indexOf(projectiles[p].constructor) == -1) {
+      if (projectiles[p].readyToRemove || types.indexOf(projectiles[p].constructor) == -1) {
         continue;
       }
 
       if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
         object.doDamage(projectiles[p].damage);
-        projectiles[p].explosion();        
-        projectiles.splice(p, 1);
+        projectiles[p].readyToRemove = true;
       }
     }
   }
 })();
 
-var Bullet = function(x, y) {
+var Laser = function(x, y) {
   this.readyToRemove = false;
+  this.outOfBounds = false;
   this.damage = 3;
-  
+
   var vx = 11;
   var width = 8;
   var height = 2;
   var halfWidth = width / 2;
-  var halfHeight = height / 2;
-  y += 7;
 
   Sounds.laser.play();
 
@@ -65,21 +64,25 @@ var Bullet = function(x, y) {
     x += vx;
 
     if (Grid.isSolidTileTypeAtCoords(x + halfWidth, y)) {
+      var tileCoords = Grid.coordsToTileCoords(x + halfWidth, y);
+      x += (tileCoords.x - x - 1);
       this.readyToRemove = true;
     }
     else {
       var levelInfo = Grid.levelInfo();
-      this.readyToRemove = (x > levelInfo.rightBound);
+      this.outOfBounds = (x > levelInfo.rightBound);
+      this.readyToRemove = this.readyToRemove || this.outOfBounds;
     }
   };
 
-  this.explosion = function(){
-    ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
-    return;
-  }
+  this.explode = function() {
+    if (!this.outOfBounds) {
+      ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
+    }
+  };
 
   this.draw = function() {
-    drawRect(gameContext, x-halfWidth, y-halfHeight, width, height, 'white');
+    drawRect(gameContext, x, y, width, height, 'white');
   };
 
   this.coords = function() {
@@ -98,14 +101,13 @@ var Bullet = function(x, y) {
 
 var Rocket = function(x, y) {
   this.readyToRemove = false;
+  this.outOfBounds = false;
   this.damage = 5;
-  
+
   var vx = 10;
-  var width = 40;
-  var height = 24;
+  var width = Images.rocket.width;
+  var height = Images.rocket.height;
   var halfWidth = width / 2;
-  var halfHeight = height / 2;
-  y += 4;
 
   Sounds.rocket.play();
 
@@ -113,20 +115,25 @@ var Rocket = function(x, y) {
     x += vx;
 
     if (Grid.isSolidTileTypeAtCoords(x + halfWidth, y)) {
+      var tileCoords = Grid.coordsToTileCoords(x + halfWidth, y);
+      x += (tileCoords.x - x - 1);
       this.readyToRemove = true;
     }
     else {
       var levelInfo = Grid.levelInfo();
-      this.readyToRemove = (x > levelInfo.rightBound);
+      this.outOfBounds = (x > levelInfo.rightBound);
+      this.readyToRemove = this.readyToRemove || this.outOfBounds;
     }
   };
 
-  this.explosion = function(){
-    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
-  }
+  this.explode = function(){
+    if (!this.outOfBounds) {
+      ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
+    }
+  };
 
   this.draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x-halfWidth, y-halfHeight + 15, 0);
+    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x, y, 0);
   };
 
   this.coords = function() {

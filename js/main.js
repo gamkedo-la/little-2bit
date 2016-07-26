@@ -15,7 +15,6 @@ window.onload = function() {
   uiCanvas = document.getElementById('uiCanvas');
   uiContext = uiCanvas.getContext('2d');
 
-  clearCanvas();
   Sounds.initialize();
   // Skip menu for now, until we have more levels :)
 //  Images.initialize(Menu.initialize);
@@ -35,14 +34,7 @@ function gameStart() {
   console.log('Starting game!');
 }
 
-function clearCanvas() {
-  if (Menu.active && Images.stars) {
-  }
-}
-
 function gameLoop() {
-  clearCanvas();
-
   UI.update();
   Grid.update();
   ProjectileList.update();

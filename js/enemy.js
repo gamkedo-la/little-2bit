@@ -80,7 +80,7 @@ var SimpleEnemy = function(_x, _y) {
     this.isReadyToRemove = (x < Grid.cameraPanX() - halfWidth);
 
     if (!this.isReadyToRemove) {
-      ProjectileList.damagedBy(this, [Bullet, Rocket]);
+      ProjectileList.damagedBy(this, [Laser, Rocket]);
     }
 
     if (health <= 0) {
