@@ -41,7 +41,8 @@ var ProjectileList = new (function() {
 
       if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
         object.doDamage(projectiles[p].damage);
-
+        console.log("I hit something!");
+        ParticleList.spawnParticles(PFX_BUBBLE, projectiles[p].x, projectiles[p].y, 360, 0, 20, 90);
         projectiles.splice(p, 1);
       }
     }
@@ -95,9 +96,9 @@ var Rocket = function(x, y) {
   this.readyToRemove = false;
   this.damage = 5;
 
-  var vx = 16;
-  var width = 24;
-  var height = 6;
+  var vx = 10;
+  var width = 40;
+  var height = 24;
   var halfWidth = width / 2;
   var halfHeight = height / 2;
   y += 4;
@@ -109,6 +110,7 @@ var Rocket = function(x, y) {
 
     if (Grid.isSolidTileTypeAtCoords(x + halfWidth, y)) {
       this.readyToRemove = true;
+      ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 3, 9);
     }
     else {
       var levelInfo = Grid.levelInfo();
@@ -117,7 +119,7 @@ var Rocket = function(x, y) {
   };
 
   this.draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x-halfWidth, y-halfHeight, 0);
+    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x-halfWidth, y-halfHeight + 15, 0);
   };
 
   this.coords = function() {
