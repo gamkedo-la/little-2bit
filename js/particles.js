@@ -1,5 +1,6 @@
 const PFX_BUBBLE = 1;
 const PFX_ROCKET = 2;
+const PFX_LASER = 3;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_BUBBLE] = {
@@ -14,8 +15,18 @@ PFX_CONFIG[PFX_BUBBLE] = {
 
 PFX_CONFIG[PFX_ROCKET] = {
   initialSpeed: 10,
-  initialSize: 3,
+  initialSize: 5,
   initialLifeTime: 30,
+  shrink: true,
+  dieOnCollision: true,
+  speedDecay: 0.98,
+  gravity: 0
+};
+
+PFX_CONFIG[PFX_LASER] = {
+  initialSpeed: 5,
+  initialSize: 1,
+  initialLifeTime: 20,
   shrink: true,
   dieOnCollision: true,
   speedDecay: 0.98,
