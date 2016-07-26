@@ -39,8 +39,7 @@ function drawText(canvasContext, textX,textY, fillColor, showWords) {
 function drawTextAlpha(canvasContext, textX,textY, fillColor, showWords, alpha) {
   canvasContext.save();
 
-	if(alpha === undefined)
-	{
+	if (alpha === undefined) {
 		alpha = 1;
 	}
 	canvasContext.globalAlpha = alpha;

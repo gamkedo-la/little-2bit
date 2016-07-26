@@ -1,6 +1,7 @@
 const PFX_BUBBLE = 1;
 const PFX_ROCKET = 2;
-const PFX_LASER = 3;
+const PFX_ROCKETBLAST = 3;
+const PFX_LASER = 4;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_BUBBLE] = {
@@ -10,7 +11,9 @@ PFX_CONFIG[PFX_BUBBLE] = {
   shrink: true,
   dieOnCollision: true,
   speedDecay: 0.98,
-  gravity: 0
+  gravity: 0,
+  alphaFrom: 1,
+  alphaTo: 0.5
 };
 
 PFX_CONFIG[PFX_ROCKET] = {
@@ -20,17 +23,33 @@ PFX_CONFIG[PFX_ROCKET] = {
   shrink: true,
   dieOnCollision: true,
   speedDecay: 0.98,
-  gravity: 0
+  gravity: 0,
+  alphaFrom: 1,
+  alphaTo: 0.5
+};
+
+PFX_CONFIG[PFX_ROCKETBLAST] = {
+  initialSpeed: 0,
+  initialSize: 80,
+  initialLifeTime: 6,
+  shrink: true,
+  dieOnCollision: false,
+  speedDecay: 0.98,
+  gravity: 0,
+  alphaFrom: 1,
+  alphaTo: 0.5
 };
 
 PFX_CONFIG[PFX_LASER] = {
   initialSpeed: 5,
-  initialSize: 1,
+  initialSize: 2,
   initialLifeTime: 20,
   shrink: true,
   dieOnCollision: true,
   speedDecay: 0.98,
-  gravity: 0
+  gravity: 0,
+  alphaFrom: 1,
+  alphaTo: 1
 };
 
 var ParticleList = new (function(){
@@ -72,6 +91,8 @@ var ParticleList = new (function(){
         initialSpeed: PFX_CONFIG[type].initialSpeed,
         initialLifeTime: PFX_CONFIG[type].initialLifeTime,
         dieOnCollision: PFX_CONFIG[type].dieOnCollision,
+        alphaFrom: PFX_CONFIG[type].alphaFrom,
+        alphaTo: PFX_CONFIG[type].alphaTo,
 
         x: x,
         y: y,
@@ -85,7 +106,8 @@ var ParticleList = new (function(){
         minX: minX,
         maxX: maxX,
         minY: minY,
-        maxY: maxY
+        maxY: maxY,
+        alpha: PFX_CONFIG[type].alphaFrom
       };
 
       particleList.push(particle);
@@ -93,11 +115,14 @@ var ParticleList = new (function(){
   };
 
   var updateParticle = function(particle) {
+    var progress = (particle.initialLifeTime - particle.lifeTime) / particle.initialLifeTime;
     particle.lifeTime--;
 
     if (particle.shrink) {
-      particle.size = particle.initialSize * particle.lifeTime / particle.initialLifeTime;
+      particle.size = particle.initialSize + (progress * - particle.initialSize);
     }
+
+    particle.alpha = particle.alphaFrom + (progress * (particle.alphaTo - particle.alphaFrom));
 
     if (particle.speedDecay) {
       particle.speedX *= particle.speedDecay;
@@ -114,7 +139,14 @@ var ParticleList = new (function(){
   };
 
   var drawParticle = function(particle) {
+    if (particle.alpha < 1) {
+      gameContext.save();
+      gameContext.globalAlpha = particle.alpha;
+    }
     drawCircle(gameContext, particle.x, particle.y, particle.size, particle.color);
+    if (particle.alpha < 1) {
+      gameContext.restore();
+    }
   };
 
   this.update = function() {

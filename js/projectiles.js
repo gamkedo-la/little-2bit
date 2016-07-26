@@ -128,6 +128,7 @@ var Rocket = function(x, y) {
 
   this.explode = function(){
     if (!this.outOfBounds) {
+      ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
       ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
     }
   };
