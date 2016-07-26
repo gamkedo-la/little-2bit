@@ -41,8 +41,10 @@ var ProjectileList = new (function() {
 
       if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
         object.doDamage(projectiles[p].damage);
-        console.log("I hit something!");
-        ParticleList.spawnParticles(PFX_ROCKET, projectiles[p].x, projectiles[p].y, 360, 50, 20, 90);
+        if(projectiles[p].ammo_type == "rocket"){
+          projectiles[p].explosion();
+        }
+        
         projectiles.splice(p, 1);
       }
     }
@@ -52,7 +54,7 @@ var ProjectileList = new (function() {
 var Bullet = function(x, y) {
   this.readyToRemove = false;
   this.damage = 3;
-
+  this.ammo_type = "bullet";
   var vx = 11;
   var width = 8;
   var height = 2;
@@ -95,7 +97,7 @@ var Bullet = function(x, y) {
 var Rocket = function(x, y) {
   this.readyToRemove = false;
   this.damage = 5;
-
+  this.ammo_type = "rocket";
   var vx = 10;
   var width = 40;
   var height = 24;
@@ -116,6 +118,10 @@ var Rocket = function(x, y) {
       this.readyToRemove = (x > levelInfo.rightBound);
     }
   };
+
+  this.explosion = function(){
+    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
+  }
 
   this.draw = function() {
     drawBitmapCenteredWithRotation(gameContext, Images.rocket, x-halfWidth, y-halfHeight + 15, 0);
