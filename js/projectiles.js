@@ -117,7 +117,7 @@ var Rocket = function(x, y) {
   };
 
   this.draw = function() {
-    drawRect(gameContext, x-halfWidth, y-halfHeight, width, height, 'red');
+    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x-halfWidth, y-halfHeight, 0);
   };
 
   this.coords = function() {

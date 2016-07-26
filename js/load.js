@@ -4,6 +4,7 @@ var Images = new (function() {
     ship: 'img/spaceship.png',
     simple_enemy: 'img/simple_enemy.png',
     corners: 'img/corners.png',
+    rocket: 'img/rocket.png',
 
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',
