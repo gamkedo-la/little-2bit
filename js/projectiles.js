@@ -42,7 +42,7 @@ var ProjectileList = new (function() {
       if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
         object.doDamage(projectiles[p].damage);
         console.log("I hit something!");
-        ParticleList.spawnParticles(PFX_BUBBLE, projectiles[p].x, projectiles[p].y, 360, 0, 20, 90);
+        ParticleList.spawnParticles(PFX_ROCKET, projectiles[p].x, projectiles[p].y, 360, 50, 20, 90);
         projectiles.splice(p, 1);
       }
     }
@@ -110,7 +110,6 @@ var Rocket = function(x, y) {
 
     if (Grid.isSolidTileTypeAtCoords(x + halfWidth, y)) {
       this.readyToRemove = true;
-      ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 3, 9);
     }
     else {
       var levelInfo = Grid.levelInfo();

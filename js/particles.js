@@ -1,10 +1,21 @@
 const PFX_BUBBLE = 1;
+const PFX_ROCKET = 2;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_BUBBLE] = {
   initialSpeed: 10,
   initialSize: 20,
   initialLifeTime: 80,
+  shrink: true,
+  dieOnCollision: true,
+  speedDecay: 0.98,
+  gravity: 0
+};
+
+PFX_CONFIG[PFX_ROCKET] = {
+  initialSpeed: 10,
+  initialSize: 3,
+  initialLifeTime: 30,
   shrink: true,
   dieOnCollision: true,
   speedDecay: 0.98,
