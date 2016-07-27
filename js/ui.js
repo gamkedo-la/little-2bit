@@ -34,7 +34,7 @@ var UI = new (function(){
   this.update = function() {};
 
   this.draw = function() {
-    drawRect(uiContext, 0, 0, uiCanvas.width, uiCanvas.height, 'black');
+    drawFillRect(uiContext, 0, 0, uiCanvas.width, uiCanvas.height, 'black');
 
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');

@@ -98,7 +98,7 @@ var Ship = new (function(){
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
         if (debug) {
-          drawCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
+          drawFillCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
         }
 
         return true;
@@ -184,13 +184,13 @@ var Ship = new (function(){
     if (debug) {
       var b = this.bounds();
       for (var c = 0; c < b.length; c++) {
-        drawCircle(gameContext, b[c].x, b[c].y, 5, '#f00');
+        drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#f00');
       }
       b.push(b[0]);
       drawLines(gameContext, '#f00', b);
       this.checkCollision();
       var muzzle = this.muzzleCoords();
-      drawCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
+      drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
     }
   };
 

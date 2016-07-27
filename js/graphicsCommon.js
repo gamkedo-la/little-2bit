@@ -9,16 +9,23 @@ function drawBitmapCenteredWithRotation(canvasContext, useBitmap, atX,atY, withA
   canvasContext.restore();
 }
 
-function drawRect(canvasContext, topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
+function drawFillRect(canvasContext, topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
   canvasContext.fillStyle = fillColor;
   canvasContext.fillRect(topLeftX,topLeftY, boxWidth,boxHeight);
 }
 
-function drawCircle(canvasContext, centerX,centerY, radius, fillColor) {
+function drawFillCircle(canvasContext, centerX, centerY, radius, fillColor) {
   canvasContext.fillStyle = fillColor;
   canvasContext.beginPath();
   canvasContext.arc(centerX,centerY, radius, 0,Math.PI * 2, true);
   canvasContext.fill();
+}
+
+function drawStrokeCircle(canvasContext, centerX, centerY, radius, fillColor) {
+  canvasContext.strokeStyle = fillColor;
+  canvasContext.beginPath();
+  canvasContext.arc(centerX,centerY, radius, 0,Math.PI * 2, true);
+  canvasContext.stroke();
 }
 
 function drawLines(canvasContext, fillColor, pointArray) {

@@ -7,7 +7,7 @@ var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
 // Debug
-var debug = false;
+var debug = true;
 
 window.onload = function() {
   gameCanvas = document.getElementById('gameCanvas');
@@ -47,9 +47,9 @@ function gameLoop() {
 
   Grid.draw();
   ProjectileList.draw();
+  ParticleList.draw();
   EnemyList.draw();
   Ship.draw();
-  ParticleList.draw();
 
   gameContext.restore();
 

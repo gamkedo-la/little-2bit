@@ -11,8 +11,11 @@ if (!Object.keys) {
   };
 }
 
+function distanceBetweenPoints(point1, point2) {
+  return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+}
+
 function checkCollisionShapes(shape1, shape2) {
-  // @todo proximity/radius check first?
   var r1 = shape1.boundingBox();
   var r2 = shape2.boundingBox();
 

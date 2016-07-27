@@ -30,7 +30,7 @@ PFX_CONFIG[PFX_ROCKET] = {
 
 PFX_CONFIG[PFX_ROCKETBLAST] = {
   initialSpeed: 0,
-  initialSize: 80,
+  initialSize: 90,
   initialLifeTime: 6,
   shrink: true,
   dieOnCollision: false,
@@ -143,7 +143,7 @@ var ParticleList = new (function(){
       gameContext.save();
       gameContext.globalAlpha = particle.alpha;
     }
-    drawCircle(gameContext, particle.x, particle.y, particle.size, particle.color);
+    drawFillCircle(gameContext, particle.x, particle.y, particle.size, particle.color);
     if (particle.alpha < 1) {
       gameContext.restore();
     }

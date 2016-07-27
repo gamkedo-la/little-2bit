@@ -19,10 +19,26 @@ var EnemyList = new (function(){
   };
 
   this.update = function () {
-    for (var i = enemyList.length - 1; i >= 0; i--) {
-      enemyList[i].update();
+    var i;
+    for (i = enemyList.length - 1; i >= 0; i--) {
+      enemyList[i].move();
+
+      var coords = enemyList[i].coordsTip();
+      enemyList[i].outOfBounds = (coords.x < Grid.cameraPanX());
+      enemyList[i].readyToRemove = enemyList[i].readyToRemove || enemyList[i].outOfBounds;
+
+      if (!enemyList[i].isReadyToRemove) {
+        ProjectileList.damagedBy(enemyList[i], [Laser, Rocket]);
+      }
+    }
+
+    for (i = enemyList.length - 1; i >= 0; i--) {
+      if (!enemyList[i].isReadyToRemove) {
+        ProjectileList.blastDamagedBy(enemyList[i], [Laser, Rocket]);
+      }
 
       if (enemyList[i].isReadyToRemove) {
+        enemyList[i].explode();
         enemyList.splice(i, 1);
       }
     }
@@ -50,6 +66,7 @@ var SimpleEnemy = function(_x, _y) {
   var health = 10;
   this.damage = 10;
 
+  this.outOfBounds = false;
   this.isReadyToRemove = false;
 
   this.boundingBox = function() {
@@ -71,20 +88,25 @@ var SimpleEnemy = function(_x, _y) {
     ];
   };
 
-  this.doDamage = function(amount) {
-    health -= amount;
+  this.coords = function() {
+    return {x: x, y: y};
   };
 
-  this.update = function() {
+  this.coordsTip = function() {
+    return {x: x + halfWidth, y: y};
+  };
+
+  this.doDamage = function(amount) {
+    health -= amount;
+    this.isReadyToRemove = health <= 0;
+  };
+
+  this.move = function() {
     x += vx;
-    this.isReadyToRemove = (x < Grid.cameraPanX() - halfWidth);
+  };
 
-    if (!this.isReadyToRemove) {
-      ProjectileList.damagedBy(this, [Laser, Rocket]);
-    }
-
-    if (health <= 0) {
-      this.isReadyToRemove = true;
+  this.explode = function() {
+    if (!this.outOfBounds) {
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
       Sounds.explosion_simple_enemy.play();
     }
@@ -96,7 +118,7 @@ var SimpleEnemy = function(_x, _y) {
     if (debug) {
       var b = this.bounds();
       for (var c = 0; c < b.length; c++) {
-        drawCircle(gameContext, b[c].x, b[c].y, 5, '#ff0');
+        drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#ff0');
       }
       b.push(b[0]);
       drawLines(gameContext, 'yellow', b);
