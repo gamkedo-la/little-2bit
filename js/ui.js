@@ -16,7 +16,7 @@ var UI = new (function(){
     center.x = uiCanvas.width / 2;
     center.y = uiCanvas.height / 2;
 
-    soundButton = new Button(uiCanvas.width - 20, uiCanvas.height / 2, Images.button_sound_on, Images.button_sound_off, UI.toggleSound);
+    soundButton = new UIButton(uiCanvas.width - 20, uiCanvas.height / 2, Images.button_sound_on, Images.button_sound_off, UI.toggleSound);
 
     uiCanvas.addEventListener('mouseup', mouseReleased);
   };
@@ -39,33 +39,37 @@ var UI = new (function(){
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');
 
+    // Health-bar
+    drawFillRect(uiContext, 25, 35, 200, 20, '#fff');
+    drawFillRect(uiContext, 25, 35, 200 * Ship.getHealthPercentage(), 20, '#f00');
+
     soundButton.draw(this.sound);
   };
-
-  var Button = function(x, y, img_on, img_off, toggleCallback) {
-    var width = img_on.width;
-    var height = img_on.height;
-    var halfWidth = width / 2;
-    var halfHeight = height / 2;
-
-    this.checkClick = function() {
-      if (this.hover()) {
-        toggleCallback();
-      }
-    };
-
-    this.hover = function() {
-      return (x + halfWidth > mouseX && mouseX > x - halfWidth &&
-        y + halfHeight > mouseY && mouseY > y - halfHeight);
-    };
-
-    this.draw = function(state) {
-      if (state) {
-        drawBitmapCenteredWithRotation(uiContext, img_on, x, y, 0);
-      }
-      else {
-        drawBitmapCenteredWithRotation(uiContext, img_off, x, y, 0);
-      }
-    };
-  };
 })();
+
+var UIButton = function(x, y, img_on, img_off, toggleCallback) {
+  var width = img_on.width;
+  var height = img_on.height;
+  var halfWidth = width / 2;
+  var halfHeight = height / 2;
+
+  this.checkClick = function() {
+    if (this.hover()) {
+      toggleCallback();
+    }
+  };
+
+  this.hover = function() {
+    return (x + halfWidth > mouseX && mouseX > x - halfWidth &&
+    y + halfHeight > mouseY && mouseY > y - halfHeight);
+  };
+
+  this.draw = function(state) {
+    if (state) {
+      drawBitmapCenteredWithRotation(uiContext, img_on, x, y, 0);
+    }
+    else {
+      drawBitmapCenteredWithRotation(uiContext, img_off, x, y, 0);
+    }
+  };
+};

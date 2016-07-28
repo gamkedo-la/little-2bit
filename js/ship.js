@@ -21,7 +21,8 @@ var Ship = new (function(){
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight;
 
-  var health = 50;
+  var totalHealth = 50;
+  var health = totalHealth;
 
   var projectiles = [];
   var maxProjectiles = 40;
@@ -48,8 +49,14 @@ var Ship = new (function(){
     projectileClass = Rocket;
   };
 
+  this.getHealthPercentage = function() {
+    return health / totalHealth;
+  };
+
   this.doDamage = function(amount) {
     health -= amount;
+
+    this.isDead = (health <= 0);
   };
 
   this.boundingBox = function() {
@@ -66,7 +73,7 @@ var Ship = new (function(){
       // Upper halfway right
       {x: x+quarterWidth, y: y-quarterHeight},
       // Upper halfway left
-      {x: x-eighthWidth, y: y-halfHeight},
+      {x: x, y: y-halfHeight},
       // Upper left
       {x: x-(eighthWidth*3), y: y-halfHeight},
       // Middle left
@@ -100,19 +107,15 @@ var Ship = new (function(){
         if (debug) {
           drawFillCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
         }
-
-        return true;
+        this.isDead = true;
+        break;
       }
     }
-
-    return false;
   };
 
   this.checkShot = function() {
     ProjectileList.damagedBy(this, []);
     EnemyList.checkCollision(this);
-
-    return (health <= 0);
   };
 
   this.update = function() {
@@ -146,8 +149,10 @@ var Ship = new (function(){
       }
     }
 
-    if (this.checkCollision() || this.checkShot()) {
-      this.isDead = true;
+    this.checkCollision();
+    this.checkShot();
+
+    if (this.isDead) {
       EnemyList.clear();
       ProjectileList.clear();
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
