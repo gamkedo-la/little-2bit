@@ -200,5 +200,9 @@ var Ship = new (function() {
     return { x: x, y: y };
   };
 
+  this.currentProjectile = function() {
+    return projectileClass;
+  };
+
   return this;
 })();

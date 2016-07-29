@@ -5,6 +5,7 @@ var Images = new (function() {
     simple_enemy: 'img/simple_enemy.png',
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
+    ui_laser: 'img/ui-laser.png',
 
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',

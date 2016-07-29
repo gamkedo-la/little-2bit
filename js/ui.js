@@ -7,6 +7,7 @@ var UI = new (function() {
   var backgroundX = 0;
 
   var soundButton;
+  var projectileImg;
   var center = {};
 
   this.toggleSound = function() {
@@ -35,6 +36,18 @@ var UI = new (function() {
 
   this.update = function() {
     backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
+
+    // @todo new images?
+    switch (Ship.currentProjectile()) {
+      case Rocket:
+        projectileImg = Images.rocket;
+        break;
+      case Laser:
+        projectileImg = Images.ui_laser;
+        break;
+      default:
+        projectileImg = false;
+    }
   };
 
   this.draw = function() {
@@ -53,6 +66,11 @@ var UI = new (function() {
       else {
         drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#ccc');
       }
+    }
+
+    if (projectileImg) {
+      drawText(uiContext, 325, 45, '#fff', 'Weapon');
+      uiContext.drawImage(projectileImg, 410, 25);
     }
 
     soundButton.draw(this.sound);
