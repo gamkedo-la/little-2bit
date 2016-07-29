@@ -12,8 +12,8 @@ var Grid = new (function() {
   var colsThatFitOnScreen;
 
   var camPanX;
-  var backgroundX;
-  var backgroundWidth;
+  this.backgroundX = 0;
+  this.backgroundWidth = 0;
 
 //  const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 150;
   const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 50;
@@ -29,7 +29,7 @@ var Grid = new (function() {
     bricks[BRICK_BOTTOM1] = Images.bottom1;
     bricks[BRICK_BOTTOM2] = Images.bottom2;
 
-    backgroundWidth = Images.stars.width;
+    this.backgroundWidth = Images.stars.width;
 
     // @todo dynamic load level
     COLS = level1.cols;
@@ -49,7 +49,7 @@ var Grid = new (function() {
   };
 
   this.update = function() {
-    backgroundX = Math.floor(Grid.cameraPanX() / backgroundWidth) * backgroundWidth;
+    this.backgroundX = Math.floor(Grid.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
     cameraFollow();
   };
   
@@ -79,8 +79,8 @@ var Grid = new (function() {
   };
 
   this.draw = function() {
-    gameContext.drawImage(Images.stars, backgroundX, 0);
-    gameContext.drawImage(Images.stars, backgroundX + backgroundWidth, 0);
+    gameContext.drawImage(Images.stars, this.backgroundX, 0);
+    gameContext.drawImage(Images.stars, this.backgroundX + this.backgroundWidth, 0);
 
     var cameraLeftMostCol = Math.floor(camPanX / GRID_WIDTH);
     var cameraRightMostCol = cameraLeftMostCol + colsThatFitOnScreen + 2;

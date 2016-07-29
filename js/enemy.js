@@ -64,7 +64,7 @@ var SimpleEnemy = function(_x, _y) {
   var eighthHeight = Images.simple_enemy.height / 8;
 
   var health = 10;
-  this.damage = 10;
+  this.damage = 2;
 
   this.outOfBounds = false;
   this.isReadyToRemove = false;

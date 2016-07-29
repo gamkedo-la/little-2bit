@@ -14,6 +14,11 @@ function drawFillRect(canvasContext, topLeftX, topLeftY, boxWidth, boxHeight, fi
   canvasContext.fillRect(topLeftX,topLeftY, boxWidth,boxHeight);
 }
 
+function drawStrokeRect(canvasContext, topLeftX, topLeftY, boxWidth, boxHeight, strokeColor) {
+  canvasContext.strokeStyle = strokeColor;
+  canvasContext.strokeRect(topLeftX,topLeftY, boxWidth,boxHeight);
+}
+
 function drawFillCircle(canvasContext, centerX, centerY, radius, fillColor) {
   canvasContext.fillStyle = fillColor;
   canvasContext.beginPath();

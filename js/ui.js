@@ -1,9 +1,10 @@
 var UI = new (function(){
   this.height = 60;
-
   this.sound = true;
 
   var mouseX, mouseY;
+
+  var backgroundX = 0;
 
   var soundButton;
   var center = {};
@@ -12,7 +13,8 @@ var UI = new (function(){
     UI.sound = !UI.sound;
   };
 
-  this.initialize = function(){
+  this.initialize = function() {
+    this.height = uiCanvas.height;
     center.x = uiCanvas.width / 2;
     center.y = uiCanvas.height / 2;
 
@@ -31,17 +33,27 @@ var UI = new (function(){
     event.preventDefault();
   }
 
-  this.update = function() {};
+  this.update = function() {
+    backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
+  };
 
   this.draw = function() {
-    drawFillRect(uiContext, 0, 0, uiCanvas.width, uiCanvas.height, 'black');
+    uiContext.drawImage(Images.stars, -backgroundX, 0);
+    uiContext.drawImage(Images.stars, -backgroundX + Grid.backgroundWidth, 0);
 
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');
 
     // Health-bar
-    drawFillRect(uiContext, 25, 35, 200, 20, '#fff');
-    drawFillRect(uiContext, 25, 35, 200 * Ship.getHealthPercentage(), 20, '#f00');
+    drawText(uiContext, 25, 45, '#fff', 'Health');
+    for (var h = 0; h < MAXHEALTH; h++) {
+      if (h < Ship.health) {
+        drawFillRect(uiContext, 100 + h*10, 32, 8, 13, '#f00');
+      }
+      else {
+        drawFillRect(uiContext, 100 + h*10, 32, 8, 13, '#ccc');
+      }
+    }
 
     soundButton.draw(this.sound);
   };

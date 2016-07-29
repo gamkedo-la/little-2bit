@@ -1,3 +1,5 @@
+const MAXHEALTH = 20;
+
 var Ship = new (function(){
   this.keyHeld_N = false;
   this.keyHeld_S = false;
@@ -21,8 +23,7 @@ var Ship = new (function(){
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight;
 
-  var totalHealth = 50;
-  var health = totalHealth;
+  this.health = MAXHEALTH;
 
   var projectiles = [];
   var maxProjectiles = 40;
@@ -49,14 +50,10 @@ var Ship = new (function(){
     projectileClass = Rocket;
   };
 
-  this.getHealthPercentage = function() {
-    return health / totalHealth;
-  };
-
   this.doDamage = function(amount) {
-    health -= amount;
+    this.health -= amount;
 
-    this.isDead = (health <= 0);
+    this.isDead = (this.health <= 0);
   };
 
   this.boundingBox = function() {
