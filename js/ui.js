@@ -1,4 +1,4 @@
-var UI = new (function(){
+var UI = new (function() {
   this.height = 60;
   this.sound = true;
 
@@ -48,10 +48,10 @@ var UI = new (function(){
     drawText(uiContext, 25, 45, '#fff', 'Health');
     for (var h = 0; h < MAXHEALTH; h++) {
       if (h < Ship.health) {
-        drawFillRect(uiContext, 100 + h*10, 32, 8, 13, '#f00');
+        drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#f00');
       }
       else {
-        drawFillRect(uiContext, 100 + h*10, 32, 8, 13, '#ccc');
+        drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#ccc');
       }
     }
 

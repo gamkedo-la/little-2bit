@@ -9,7 +9,7 @@ var fontColorHighlight = '#09d';
 // Debug
 var debug = true;
 
-window.onload = function() {
+window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
   gameContext = gameCanvas.getContext('2d');
   uiCanvas = document.getElementById('uiCanvas');
@@ -22,7 +22,7 @@ window.onload = function() {
 };
 
 function gameStart() {
-	setupInput();
+  setupInput();
 
   Menu.deactive();
 
@@ -30,7 +30,7 @@ function gameStart() {
   Grid.initialize();
   Ship.initialize();
 
-  gameInterval = setInterval(gameLoop, 1000/framesPerSecond);
+  gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
   console.log('Starting game!');
 }
 

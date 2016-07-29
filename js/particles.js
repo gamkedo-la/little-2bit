@@ -52,7 +52,7 @@ PFX_CONFIG[PFX_LASER] = {
   alphaTo: 1
 };
 
-var ParticleList = new (function(){
+var ParticleList = new (function() {
   var particleList = [];
 
   function randomRange(initial) {
@@ -119,7 +119,7 @@ var ParticleList = new (function(){
     particle.lifeTime--;
 
     if (particle.shrink) {
-      particle.size = particle.initialSize + (progress * - particle.initialSize);
+      particle.size = particle.initialSize + (progress * -particle.initialSize);
     }
 
     particle.alpha = particle.alphaFrom + (progress * (particle.alphaTo - particle.alphaFrom));

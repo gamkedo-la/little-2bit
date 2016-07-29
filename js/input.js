@@ -1,12 +1,10 @@
 //Prevents player from drag selecting
-document.onselectstart = function()
-{
+document.onselectstart = function() {
   window.getSelection().removeAllRanges();
 };
 
 //Prevents player from drag selecting
-document.onmousedown = function()
-{
+document.onmousedown = function() {
   window.getSelection().removeAllRanges();
 };
 

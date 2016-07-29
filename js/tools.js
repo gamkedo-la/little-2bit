@@ -1,5 +1,5 @@
 if (!Object.keys) {
-  Object.keys = function (obj) {
+  Object.keys = function(obj) {
     var arr = [],
       key;
     for (key in obj) {

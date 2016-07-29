@@ -127,19 +127,19 @@ var Laser = function(x, y) {
   };
 
   this.coords = function() {
-    return {x: x, y: y};
+    return { x: x, y: y };
   };
 
   this.coordsTip = function() {
-    return {x: x + halfWidth, y: y};
+    return { x: x + halfWidth, y: y };
   };
 
   this.bounds = function() {
     return [
-      {x: x, y: y},
-      {x: x+width, y: y},
-      {x: x+width, y: y+height},
-      {x: x, y: y+height}
+      { x: x, y: y },
+      { x: x + width, y: y },
+      { x: x + width, y: y + height },
+      { x: x, y: y + height }
     ];
   };
 };
@@ -166,7 +166,7 @@ var Rocket = function(x, y) {
     x += (_x - x);
   };
 
-  this.explode = function(){
+  this.explode = function() {
     if (!this.outOfBounds) {
       ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
       ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
@@ -181,19 +181,19 @@ var Rocket = function(x, y) {
   };
 
   this.coords = function() {
-    return {x: x, y: y};
+    return { x: x, y: y };
   };
 
   this.coordsTip = function() {
-    return {x: x + halfWidth, y: y};
+    return { x: x + halfWidth, y: y };
   };
 
   this.bounds = function() {
     return [
-      {x: x, y: y},
-      {x: x+width, y: y},
-      {x: x+width, y: y+height},
-      {x: x, y: y+height}
+      { x: x, y: y },
+      { x: x + width, y: y },
+      { x: x + width, y: y + height },
+      { x: x, y: y + height }
     ];
   };
 };

@@ -1,4 +1,4 @@
-var EnemyList = new (function(){
+var EnemyList = new (function() {
   var enemyList = [];
 
   this.push = function(enemy) {
@@ -18,7 +18,7 @@ var EnemyList = new (function(){
     }
   };
 
-  this.update = function () {
+  this.update = function() {
     var i;
     for (i = enemyList.length - 1; i >= 0; i--) {
       enemyList[i].move();
@@ -71,29 +71,29 @@ var SimpleEnemy = function(_x, _y) {
 
   this.boundingBox = function() {
     return {
-      left: x-halfWidth,
-      top: y-halfHeight,
-      right: x+halfWidth,
-      bottom: y+halfHeight
+      left: x - halfWidth,
+      top: y - halfHeight,
+      right: x + halfWidth,
+      bottom: y + halfHeight
     };
   };
 
   this.bounds = function() {
     return [
-      {x: x-quarterWidth, y: y},
-      {x: x, y: y+halfHeight},
-      {x: x+quarterWidth, y: y+halfHeight},
-      {x: x+quarterWidth, y: y-halfHeight},
-      {x: x, y: y-halfHeight}
+      { x: x - quarterWidth, y: y },
+      { x: x, y: y + halfHeight },
+      { x: x + quarterWidth, y: y + halfHeight },
+      { x: x + quarterWidth, y: y - halfHeight },
+      { x: x, y: y - halfHeight }
     ];
   };
 
   this.coords = function() {
-    return {x: x, y: y};
+    return { x: x, y: y };
   };
 
   this.coordsTip = function() {
-    return {x: x + halfWidth, y: y};
+    return { x: x + halfWidth, y: y };
   };
 
   this.doDamage = function(amount) {

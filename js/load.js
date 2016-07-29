@@ -59,7 +59,7 @@ var Sounds = new (function() {
     }
   };
 
-  var Sound = function (_file) {
+  var Sound = function(_file) {
     var timeOut = 8;
     var lastPlay = 0;
     var numSounds = 5;
@@ -71,7 +71,7 @@ var Sounds = new (function() {
       queue[i] = file.cloneNode(false);
     }
 
-    this.play = function () {
+    this.play = function() {
       if (!UI.sound) {
         return;
       }

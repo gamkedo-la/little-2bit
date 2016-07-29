@@ -56,7 +56,7 @@ var MenuCredits = new (function() {
       showLines++;
     }
 
-    for (var i = lines.length-1; i >= 0 ; i--) {
+    for (var i = lines.length - 1; i >= 0; i--) {
       lines[i].draw();
       if (lines[i].remove) {
         lines.splice(i, 1);
@@ -67,7 +67,7 @@ var MenuCredits = new (function() {
   var MenuCreditLine = function(text) {
     this.remove = false;
 
-    var x = gameCanvas.width/4*3;
+    var x = gameCanvas.width / 4 * 3;
     var y = startY;
     var alpha = 0.2;
 

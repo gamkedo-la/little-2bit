@@ -24,7 +24,7 @@ var Menu = new (function() {
 
     MenuCredits.initialize();
 
-    menuLoop = setInterval(draw, 1000/menuFps);
+    menuLoop = setInterval(draw, 1000 / menuFps);
   };
 
   this.deactive = function() {
@@ -39,18 +39,18 @@ var Menu = new (function() {
   };
 
   var draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width/2,gameCanvas.height/2);
+    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width / 2, gameCanvas.height / 2);
 
     gameContext.font = gameFont;
     gameContext.textAlign = 'left';
-    drawText(gameContext, 25,50, fontColorHighlight, 'Journey of little 2bit');
+    drawText(gameContext, 25, 50, fontColorHighlight, 'Journey of little 2bit');
 
     for (var b = 0; b < buttons.length; b++) {
       buttons[b].draw();
     }
 
     MenuCredits.draw();
-    drawBitmapCenteredWithRotation(gameContext, Images.corners, gameCanvas.width/2, gameCanvas.height/2);
+    drawBitmapCenteredWithRotation(gameContext, Images.corners, gameCanvas.width / 2, gameCanvas.height / 2);
   };
 
   function mouseMove(event) {
@@ -68,40 +68,40 @@ var Menu = new (function() {
     }
   }
 
-	// Private button class
-	var MenuButton = function(text, callback) {
-		gameContext.font = gameFont;
+  // Private button class
+  var MenuButton = function(text, callback) {
+    gameContext.font = gameFont;
+    var width = gameContext.measureText(text).width;
+    var height = 30;
+    var heightOffset = 5;
+    var x = 25;
+    var y = 100 + buttons.length * (height + heightOffset);
 
-		var width = gameContext.measureText(text).width;
-		var height = 30;
-		var heightOffset = 5;
-		var x = 25;
-		var y = 100 + buttons.length * (height + heightOffset);
+    this.draw = function() {
+      var color = fontColor;
+      if (this.hover()) {
+        color = fontColorHighlight;
+      }
 
-		this.draw = function() {
-			var color = fontColor;
-			if (this.hover()) {
-				color = fontColorHighlight;
-			}
+      gameContext.font = gameFont;
+      drawText(gameContext, x, y, color, text);
+    };
 
-			drawText(gameContext, x, y, color, text);
-		};
+    this.hover = function() {
+      return x + width > mouseX && mouseX > x &&
+        y + heightOffset > mouseY && mouseY > y - height + heightOffset;
+    };
 
-		this.hover = function() {
-			return x + width > mouseX && mouseX > x &&
-				y+heightOffset > mouseY && mouseY > y-height+heightOffset;
-		};
-
-		this.checkClick = function() {
-			if (this.hover()) {
-				callback();
+    this.checkClick = function() {
+      if (this.hover()) {
+        callback();
         return true;
-			}
+      }
       return false;
-		};
+    };
 
-		return this;
-	}; // MenuButton
+    return this;
+  }; // MenuButton
 
   return this;
 })();

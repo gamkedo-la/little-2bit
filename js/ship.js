@@ -1,6 +1,6 @@
 const MAXHEALTH = 20;
 
-var Ship = new (function(){
+var Ship = new (function() {
   this.keyHeld_N = false;
   this.keyHeld_S = false;
   this.keyHeld_W = false;
@@ -18,7 +18,7 @@ var Ship = new (function(){
   this.speedY = 5;
   this.damage = 50;
 
-  var x,y;
+  var x, y;
   var minX, minY, maxX, maxY;
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight;
@@ -58,35 +58,35 @@ var Ship = new (function(){
 
   this.boundingBox = function() {
     return {
-      left: x-halfWidth,
-      top: y-halfHeight,
-      right: x+halfWidth,
-      bottom: y+halfHeight
+      left: x - halfWidth,
+      top: y - halfHeight,
+      right: x + halfWidth,
+      bottom: y + halfHeight
     };
   };
 
   this.bounds = function() {
     return [
       // Upper halfway right
-      {x: x+quarterWidth, y: y-quarterHeight},
+      { x: x + quarterWidth, y: y - quarterHeight },
       // Upper halfway left
-      {x: x, y: y-halfHeight},
+      { x: x, y: y - halfHeight },
       // Upper left
-      {x: x-(eighthWidth*3), y: y-halfHeight},
+      { x: x - (eighthWidth * 3), y: y - halfHeight },
       // Middle left
-      {x: x-(eighthWidth*3), y: y},
+      { x: x - (eighthWidth * 3), y: y },
       // Lower left
-      {x: x-(eighthWidth*3), y: y+halfHeight},
+      { x: x - (eighthWidth * 3), y: y + halfHeight },
       // Lower halfway left
-      {x: x-eighthWidth, y: y+halfHeight},
+      { x: x - eighthWidth, y: y + halfHeight },
       // Lower middle
-      {x: x+eighthWidth, y: y+halfHeight},
+      { x: x + eighthWidth, y: y + halfHeight },
       // Lower halfway right
-      {x: x+quarterWidth, y: y+quarterHeight},
+      { x: x + quarterWidth, y: y + quarterHeight },
       // Lower right
-      {x: x+halfWidth, y: y+quarterHeight},
+      { x: x + halfWidth, y: y + quarterHeight },
       // Middle right
-      {x: x+halfWidth, y: y}
+      { x: x + halfWidth, y: y }
     ];
   };
 
@@ -197,7 +197,7 @@ var Ship = new (function(){
   };
 
   this.coords = function() {
-    return {x: x, y: y};
+    return { x: x, y: y };
   };
 
   return this;
