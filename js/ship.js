@@ -1,4 +1,5 @@
 const MAXHEALTH = 20;
+const SHIP_FRAME_DELAY = 2;
 
 var Ship = new (function() {
   this.keyHeld_N = false;
@@ -35,7 +36,7 @@ var Ship = new (function() {
 
   var shipFrame = 0;
   var maxShipFrames = 0;
-  var shipFrameDelay = 3;
+  var shipFrameDelay = SHIP_FRAME_DELAY;
 
   this.initialize = function() {
     var levelInfo = Grid.levelInfo();
@@ -188,7 +189,7 @@ var Ship = new (function() {
     if (!this.isDead) {
       gameContext.drawImage(Images.ship, width * shipFrame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
       if (shipFrameDelay-- <= 0) {
-        shipFrameDelay = 2;
+        shipFrameDelay = SHIP_FRAME_DELAY;
         shipFrame++;
         if (shipFrame >= maxShipFrames) {
           shipFrame = 0;
