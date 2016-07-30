@@ -37,10 +37,9 @@ var UI = new (function() {
   this.update = function() {
     backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
 
-    // @todo new images?
     switch (Ship.currentProjectile()) {
       case Rocket:
-        projectileImg = Images.rocket;
+        projectileImg = Images.ui_rocket;
         break;
       case Laser:
         projectileImg = Images.ui_laser;

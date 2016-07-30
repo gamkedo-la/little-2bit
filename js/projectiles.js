@@ -102,11 +102,16 @@ var Laser = function(x, y) {
   this.blastRange = 0;
 
   var vx = 11;
-  var width = 8;
-  var height = 2;
+  var width = 30;
+  var height = 24;
   var halfWidth = width / 2;
+  var halfHeight = height / 2;
 
   Sounds.laser.play();
+
+  var frame = 0;
+  var frameDelay = 1;
+  var maxFrames = Math.floor(Images.laser.width / width);
 
   this.move = function() {
     x += vx;
@@ -123,7 +128,14 @@ var Laser = function(x, y) {
   };
 
   this.draw = function() {
-    drawFillRect(gameContext, x, y, width, height, 'white');
+    gameContext.drawImage(Images.laser, width * frame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+    if (frameDelay-- <= 0) {
+      frameDelay = 1;
+      frame++;
+      if (frame >= maxFrames) {
+        frame = 0;
+      }
+    }
   };
 
   this.coords = function() {

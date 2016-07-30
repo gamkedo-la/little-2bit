@@ -56,7 +56,7 @@ var Ship = new (function() {
 
     maxShipFrames = Math.floor(Images.ship.width / width);
 
-    projectileClass = Rocket;
+    projectileClass = Laser;
   };
 
   this.doDamage = function(amount) {
