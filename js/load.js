@@ -1,7 +1,7 @@
 var Images = new (function() {
   var images = {
     stars: 'img/stars.png',
-    ship: 'img/spaceship.png',
+    ship: 'img/player_ship.png',
     simple_enemy: 'img/simple_enemy.png',
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',

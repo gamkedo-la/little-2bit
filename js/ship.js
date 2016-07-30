@@ -20,6 +20,8 @@ var Ship = new (function() {
 
   var x, y;
   var minX, minY, maxX, maxY;
+  var width = 100;
+  var height = 35;
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight;
 
@@ -31,21 +33,27 @@ var Ship = new (function() {
   var projectileClass;
   var projectileLast = 0;
 
-  this.initialize = function() {
-    x = 100;
-    y = gameCanvas.height / 2;
+  var shipFrame = 0;
+  var maxShipFrames = 0;
+  var shipFrameDelay = 3;
 
+  this.initialize = function() {
     var levelInfo = Grid.levelInfo();
 
-    halfWidth = Images.ship.width / 2;
-    quarterWidth = Images.ship.width / 4;
-    eighthWidth = Images.ship.width / 8;
-    halfHeight = Images.ship.height / 2;
-    quarterHeight = Images.ship.height / 4;
+    x = 100;
+    y = levelInfo.height / 2;
+
+    halfWidth = width / 2;
+    quarterWidth = width / 4;
+    eighthWidth = width / 8;
+    halfHeight = height / 2;
+    quarterHeight = height / 4;
     minX = halfWidth;
     maxX = levelInfo.width - halfWidth;
     minY = halfHeight;
     maxY = levelInfo.height - halfHeight;
+
+    maxShipFrames = Math.floor(Images.ship.width / width);
 
     projectileClass = Rocket;
   };
@@ -68,21 +76,19 @@ var Ship = new (function() {
   this.bounds = function() {
     return [
       // Upper halfway right
-      { x: x + quarterWidth, y: y - quarterHeight },
+      { x: x + quarterWidth, y: y - halfHeight },
       // Upper halfway left
       { x: x, y: y - halfHeight },
       // Upper left
       { x: x - (eighthWidth * 3), y: y - halfHeight },
       // Middle left
-      { x: x - (eighthWidth * 3), y: y },
+      { x: x - quarterWidth, y: y },
       // Lower left
-      { x: x - (eighthWidth * 3), y: y + halfHeight },
-      // Lower halfway left
-      { x: x - eighthWidth, y: y + halfHeight },
+      { x: x - quarterWidth, y: y + halfHeight },
       // Lower middle
-      { x: x + eighthWidth, y: y + halfHeight },
+      { x: x, y: y + halfHeight },
       // Lower halfway right
-      { x: x + quarterWidth, y: y + quarterHeight },
+      { x: x + quarterWidth, y: y + halfHeight },
       // Lower right
       { x: x + halfWidth, y: y + quarterHeight },
       // Middle right
@@ -93,7 +99,7 @@ var Ship = new (function() {
   this.muzzleCoords = function() {
     return {
       x: x + halfWidth,
-      y: y + 7
+      y: y + 2
     };
   };
 
@@ -180,7 +186,14 @@ var Ship = new (function() {
 
   this.draw = function() {
     if (!this.isDead) {
-      drawBitmapCenteredWithRotation(gameContext, Images.ship, x, y, 0);
+      gameContext.drawImage(Images.ship, width * shipFrame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+      if (shipFrameDelay-- <= 0) {
+        shipFrameDelay = 2;
+        shipFrame++;
+        if (shipFrame >= maxShipFrames) {
+          shipFrame = 0;
+        }
+      }
     }
 
     if (debug) {
