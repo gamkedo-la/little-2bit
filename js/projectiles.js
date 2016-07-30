@@ -58,6 +58,7 @@ var ProjectileList = new (function() {
         object.doDamage(projectiles[p].damage);
         projectiles[p].readyToRemove = true;
         projectiles[p].hitObject = object;
+        shakeScreen(8);
       }
     }
   };

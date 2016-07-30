@@ -6,6 +6,9 @@ var gameFontSmall = '16pt Verdana';
 var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
+var screenShakeAmount = 0;
+var screenShakeAmountHalf = 0;
+
 // Debug
 var debug = true;
 
@@ -34,6 +37,11 @@ function gameStart() {
   console.log('Starting game!');
 }
 
+function shakeScreen(amount) {
+  screenShakeAmountHalf = amount / 2;
+  screenShakeAmount = amount;
+}
+
 function gameLoop() {
   UI.update();
   Grid.update();
@@ -44,6 +52,21 @@ function gameLoop() {
 
   gameContext.save();
   gameContext.translate(-Grid.cameraPanX(), 0);
+
+  if (screenShakeAmount) {
+    if (screenShakeAmount < screenShakeAmountHalf) {
+      screenShakeAmount *= 0.75;
+    }
+    else {
+      screenShakeAmount *= 0.95;
+    }
+
+    gameContext.translate(Math.random()*screenShakeAmount-screenShakeAmount*0.5, Math.random()*screenShakeAmount-screenShakeAmount*0.5);
+
+    if (screenShakeAmount <= 0.02) {
+      screenShakeAmount = 0;
+    }
+  }
 
   Grid.draw();
   ProjectileList.draw();

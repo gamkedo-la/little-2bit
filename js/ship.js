@@ -62,6 +62,8 @@ var Ship = new (function() {
   this.doDamage = function(amount) {
     this.health -= amount;
 
+    shakeScreen(5 * amount);
+
     this.isDead = (this.health <= 0);
   };
 
@@ -118,7 +120,8 @@ var Ship = new (function() {
   };
 
   this.checkShot = function() {
-    ProjectileList.damagedBy(this, []);
+    // @todo enemy shot classes
+//    ProjectileList.damagedBy(this, []);
     EnemyList.checkCollision(this);
   };
 
@@ -157,6 +160,8 @@ var Ship = new (function() {
     this.checkShot();
 
     if (this.isDead) {
+      shakeScreen(25);
+
       EnemyList.clear();
       ProjectileList.clear();
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
