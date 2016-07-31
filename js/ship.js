@@ -1,12 +1,12 @@
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
+const SHIP_DEFAULT_PROJECTILE = Laser;
 
 var Ship = new (function() {
   this.keyHeld_N = false;
   this.keyHeld_S = false;
   this.keyHeld_W = false;
   this.keyHeld_E = false;
-  this.keyHeld_SPACE = false;
   this.keyHeld_1 = false;
   this.keyHeld_2 = false;
   this.keyHeld_3 = false;
@@ -28,15 +28,15 @@ var Ship = new (function() {
 
   this.health = MAXHEALTH;
 
-  var projectiles = [];
-  var maxProjectiles = 40;
-  var projectilesFiringRate = 3;
+  var projectileType;
   var projectileClass;
   var projectileLast = 0;
+  var projectileTimeout = 0;
+  var projectileSpeedX = 0;
 
-  var shipFrame = 0;
-  var maxShipFrames = 0;
-  var shipFrameDelay = SHIP_FRAME_DELAY;
+  var frame = 0;
+  var maxFrames = 0;
+  var frameDelay = SHIP_FRAME_DELAY;
 
   this.initialize = function() {
     var levelInfo = Grid.levelInfo();
@@ -54,9 +54,9 @@ var Ship = new (function() {
     minY = halfHeight;
     maxY = levelInfo.height - halfHeight;
 
-    maxShipFrames = Math.floor(Images.ship.width / width);
+    maxFrames = Math.floor(Images.ship.width / width);
 
-    projectileClass = Laser;
+    this.setProjectile(SHIP_DEFAULT_PROJECTILE);
   };
 
   this.doDamage = function(amount) {
@@ -125,6 +125,15 @@ var Ship = new (function() {
     EnemyList.checkCollision(this);
   };
 
+  this.setProjectile = function(projectile) {
+    projectileClass = projectile;
+    projectileType = projectileClass.prototype.constructor.name;
+    projectileTimeout = 0;
+    if (FIRING_RATES[projectileType].timeLimit > 0) {
+      projectileTimeout = Date.now() + FIRING_RATES[projectileType].timeLimit * 1000;
+    }
+  };
+
   this.update = function() {
     if (this.isDead) {
       return;
@@ -144,12 +153,14 @@ var Ship = new (function() {
     }
 
     if (this.keyHeld_W) {
+      projectileSpeedX = -this.speedX;
       x -= this.speedX;
       if (x < Grid.cameraPanX() + minX) {
         x = Grid.cameraPanX() + minX;
       }
     }
     else if (this.keyHeld_E) {
+      projectileSpeedX = this.speedX;
       x += this.speedX;
       if (x > maxX) {
         x = maxX;
@@ -160,7 +171,7 @@ var Ship = new (function() {
     this.checkShot();
 
     if (this.isDead) {
-      shakeScreen(25);
+      shakeScreen(35);
 
       EnemyList.clear();
       ProjectileList.clear();
@@ -168,36 +179,38 @@ var Ship = new (function() {
       Sounds.explosion_ship.play();
     }
 
+    // @todo replace with pickups
     if (this.keyHeld_1) {
-      projectileClass = Laser;
+      this.setProjectile(Laser);
     }
     else if (this.keyHeld_2) {
-      projectileClass = Rocket;
+      this.setProjectile(Rocket);
     }
 
-    if (this.keyHeld_SPACE) {
-      if (projectiles.length < maxProjectiles && projectileLast == 0) {
-        projectileLast = projectilesFiringRate;
+    if (FIRING_RATES[projectileType]) {
+      projectileLast++;
+
+      if (projectileLast >= FIRING_RATES[projectileType].rate) {
+        projectileLast = 0;
         var muzzle = this.muzzleCoords();
-        ProjectileList.push(new projectileClass(muzzle.x, muzzle.y));
-      }
-      else {
-        projectileLast--;
+        ProjectileList.push(new projectileClass(muzzle.x, muzzle.y, 0));
       }
     }
-    else {
-      projectileLast = 0;
+
+    // Reset to default projectile
+    if (projectileTimeout > 0 && projectileTimeout <= Date.now()) {
+      this.setProjectile(SHIP_DEFAULT_PROJECTILE);
     }
   };
 
   this.draw = function() {
     if (!this.isDead) {
-      gameContext.drawImage(Images.ship, width * shipFrame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
-      if (shipFrameDelay-- <= 0) {
-        shipFrameDelay = SHIP_FRAME_DELAY;
-        shipFrame++;
-        if (shipFrame >= maxShipFrames) {
-          shipFrame = 0;
+      gameContext.drawImage(Images.ship, width * frame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+      if (frameDelay-- <= 0) {
+        frameDelay = SHIP_FRAME_DELAY;
+        frame++;
+        if (frame >= maxFrames) {
+          frame = 0;
         }
       }
     }

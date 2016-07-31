@@ -69,7 +69,7 @@ var UI = new (function() {
 
     if (projectileImg) {
       drawText(uiContext, 325, 45, '#fff', 'Weapon');
-      uiContext.drawImage(projectileImg, 410, 25);
+      uiContext.drawImage(projectileImg, 415, 25);
     }
 
     soundButton.draw(this.sound);
@@ -82,13 +82,13 @@ var UIButton = function(x, y, img_on, img_off, toggleCallback) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
-  this.checkClick = function() {
-    if (this.hover()) {
+  this.checkClick = function(mouseX, mouseY) {
+    if (this.hover(mouseX, mouseY)) {
       toggleCallback();
     }
   };
 
-  this.hover = function() {
+  this.hover = function(mouseX, mouseY) {
     return (x + halfWidth > mouseX && mouseX > x - halfWidth &&
     y + halfHeight > mouseY && mouseY > y - halfHeight);
   };

@@ -24,7 +24,6 @@ const KEY_W = 87;
 const KEY_S = 83;
 const KEY_A = 65;
 const KEY_D = 68;
-const KEY_SPACE = 32;
 
 function setupInput() {
   document.addEventListener('keydown', keyPressed);
@@ -54,10 +53,6 @@ function keySet(event, setTo) {
   }
   if (event.keyCode == KEY_S || event.keyCode == KEY_DOWN_ARROW) {
     Ship.keyHeld_S = setTo;
-    event.preventDefault();
-  }
-  if (event.keyCode == KEY_SPACE) {
-    Ship.keyHeld_SPACE = setTo;
     event.preventDefault();
   }
   if (event.keyCode == KEY_1) {

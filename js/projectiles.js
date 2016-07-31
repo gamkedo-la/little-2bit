@@ -1,3 +1,14 @@
+const FIRING_RATES = {
+  Laser: {
+    rate: 5,
+    timeLimit: 0
+  },
+  Rocket: {
+    rate: 12,
+    timeLimit: 5
+  }
+};
+
 var ProjectileList = new (function() {
   var projectiles = [];
 
@@ -95,14 +106,14 @@ var ProjectileList = new (function() {
   };
 })();
 
-var Laser = function(x, y) {
+function Laser(x, y, ship_vx) {
   this.readyToRemove = false;
   this.hitObject = false;
   this.outOfBounds = false;
   this.damage = 3;
   this.blastRange = 0;
 
-  var vx = 11;
+  var vx = 15 + ship_vx;
   var width = 30;
   var height = 24;
   var halfWidth = width / 2;
@@ -155,16 +166,16 @@ var Laser = function(x, y) {
       { x: x, y: y + height }
     ];
   };
-};
+}
 
-var Rocket = function(x, y) {
+function Rocket(x, y, ship_vx) {
   this.readyToRemove = false;
   this.hitObject = false;
   this.outOfBounds = false;
   this.damage = 5;
   this.blastRange = 90;
 
-  var vx = 10;
+  var vx = 13 + ship_vx;
   var width = 40;
   var height = 24;
   var halfWidth = width / 2;
@@ -221,4 +232,4 @@ var Rocket = function(x, y) {
       { x: x, y: y + height }
     ];
   };
-};
+}
