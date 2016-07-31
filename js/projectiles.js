@@ -165,11 +165,16 @@ var Rocket = function(x, y) {
   this.blastRange = 90;
 
   var vx = 10;
-  var width = Images.rocket.width;
-  var height = Images.rocket.height;
+  var width = 40;
+  var height = 24;
   var halfWidth = width / 2;
+  var halfHeight = height / 2;
 
   Sounds.rocket.play();
+
+  var frame = 0;
+  var frameDelay = 1;
+  var maxFrames = Math.floor(Images.rocket.width / width);
 
   this.move = function() {
     x += vx;
@@ -187,7 +192,14 @@ var Rocket = function(x, y) {
   };
 
   this.draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.rocket, x, y, 0);
+    gameContext.drawImage(Images.rocket, width * frame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+    if (frameDelay-- <= 0) {
+      frameDelay = 1;
+      frame++;
+      if (frame >= maxFrames) {
+        frame = 0;
+      }
+    }
     if (debug) {
       drawStrokeCircle(gameContext, x, y, this.blastRange, '#fff');
     }
