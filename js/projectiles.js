@@ -21,8 +21,6 @@ var ProjectileList = new (function() {
   };
 
   this.update = function() {
-    var levelInfo = Grid.levelInfo();
-
     for (var p = projectiles.length - 1; p >= 0; p--) {
       projectiles[p].move();
 
@@ -33,7 +31,6 @@ var ProjectileList = new (function() {
         projectiles[p].readyToRemove = true;
       }
       else {
-        projectiles[p].outOfBounds = (levelInfo.leftBound > coords.x || coords.x > levelInfo.rightBound || 0 > coords.y || coords.y > levelInfo.height);
         projectiles[p].readyToRemove = projectiles[p].readyToRemove || projectiles[p].outOfBounds;
       }
 
@@ -124,6 +121,9 @@ function ProjectileBase(x, y, vx, width, height, damage, blastRange) {
 
   this.move = function() {
     x += vx;
+
+    var levelInfo = Grid.levelInfo();
+    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
   };
 
   this.collideAt = function(_x) {
