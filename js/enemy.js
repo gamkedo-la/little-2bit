@@ -31,13 +31,13 @@ var EnemyList = new (function() {
       enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].outOfBounds;
 
       if (!enemyList[i].isReadyToRemove) {
-        ProjectileList.damagedBy(enemyList[i], [Laser, Rocket]);
+        ProjectileList.damagedBy(enemyList[i], [Laser, DoubleLaser, Rocket]);
       }
     }
 
     for (i = enemyList.length - 1; i >= 0; i--) {
       if (!enemyList[i].isReadyToRemove) {
-        ProjectileList.blastDamagedBy(enemyList[i], [Laser, Rocket]);
+        ProjectileList.blastDamagedBy(enemyList[i], [Laser, DoubleLaser, Rocket]);
       }
 
       if (enemyList[i].isReadyToRemove) {

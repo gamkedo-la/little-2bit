@@ -133,8 +133,7 @@ function PowerUpDoubleLaser(x, y) {
   var image = Images.powerUp_double_laser;
 
   this._pickUp = function() {
-    Ship.setProjectile(Rocket);
-//    Ship.setProjectile(DoubleLaser);
+    Ship.setProjectile(DoubleLaser);
   };
 
   PowerUpBase.call(this, x, y, width, height, image);

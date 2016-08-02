@@ -1,14 +1,3 @@
-const FIRING_RATES = {
-  Laser: {
-    rate: 8,
-    timeLimit: 0
-  },
-  Rocket: {
-    rate: 18,
-    timeLimit: 5
-  }
-};
-
 var ProjectileList = new (function() {
   var projectiles = [];
 
@@ -178,6 +167,21 @@ function ProjectileBase(x, y, vx, vy, width, height, damage, blastRange, image) 
   };
 }
 
+const FIRING_RATES = {
+  Laser: {
+    rate: 8,
+    timeLimit: 0
+  },
+  DoubleLaser: {
+    rate: 8,
+    timeLimit: 8
+  },
+  Rocket: {
+    rate: 18,
+    timeLimit: 5
+  }
+};
+
 function Laser(x, y) {
   var damage = 2;
   var blastRange = 0;
@@ -200,6 +204,32 @@ function Laser(x, y) {
 }
 Laser.prototype = Object.create(ProjectileBase.prototype);
 Laser.prototype.constructor = Laser;
+
+function DoubleLaser(x, y) {
+  var damage = 4;
+  var blastRange = 0;
+  var vx = 20;
+  var vy = 0;
+  var width = 30;
+  var height = 36;
+
+  this._draw = function(frame, x, y, width, height) {
+    // @todo replace with single, better image
+    gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y, width, height);
+    gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y + 15, width, height);
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_LASER, x, y - 18, 360, 50, 2, 5);
+    ParticleList.spawnParticles(PFX_LASER, x, y + 18, 360, 50, 2, 5);
+  };
+
+  ProjectileBase.call(this, x, y, vx, vy, width, height, damage, blastRange, Images.laser);
+
+  Sounds.laser.play();
+}
+DoubleLaser.prototype = Object.create(ProjectileBase.prototype);
+DoubleLaser.prototype.constructor = DoubleLaser;
 
 function Rocket(x, y) {
   var damage = 5;

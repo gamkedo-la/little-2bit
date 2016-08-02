@@ -42,6 +42,7 @@ var UI = new (function() {
         projectileImg = Images.ui_rocket;
         break;
       case Laser:
+      case DoubleLaser:
         projectileImg = Images.ui_laser;
         break;
       default:
