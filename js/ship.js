@@ -119,10 +119,11 @@ var Ship = new (function() {
     }
   };
 
-  this.checkShot = function() {
+  this.checkCollisions = function() {
     // @todo enemy shot classes
 //    ProjectileList.damagedBy(this, []);
     EnemyList.checkCollision(this);
+    PowerUpList.checkCollision(this);
   };
 
   this.setProjectile = function(projectile) {
@@ -168,23 +169,16 @@ var Ship = new (function() {
     }
 
     this.checkCollision();
-    this.checkShot();
+    this.checkCollisions();
 
     if (this.isDead) {
       shakeScreen(35);
 
       EnemyList.clear();
+      PowerUpList.clear();
       ProjectileList.clear();
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
       Sounds.explosion_ship.play();
-    }
-
-    // @todo replace with pickups
-    if (this.keyHeld_1) {
-      this.setProjectile(Laser);
-    }
-    else if (this.keyHeld_2) {
-      this.setProjectile(Rocket);
     }
 
     if (FIRING_RATES[projectileType]) {

@@ -45,6 +45,7 @@ function shakeScreen(amount) {
 function gameLoop() {
   UI.update();
   Grid.update();
+  PowerUpList.update();
   ProjectileList.update();
   EnemyList.update();
   Ship.update();
@@ -69,6 +70,7 @@ function gameLoop() {
   }
 
   Grid.draw();
+  PowerUpList.draw();
   ProjectileList.draw();
   ParticleList.draw();
   EnemyList.draw();

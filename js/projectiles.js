@@ -27,14 +27,14 @@ var ProjectileList = new (function() {
       var coords = projectiles[p].coordsTip();
       if (Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
         var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
-        projectiles[p].collideAt(tileCoords.x - 1);
-        projectiles[p].readyToRemove = true;
+        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
+        projectiles[p].isReadyToRemove = true;
       }
       else {
-        projectiles[p].readyToRemove = projectiles[p].readyToRemove || projectiles[p].outOfBounds;
+        projectiles[p].isReadyToRemove = projectiles[p].isReadyToRemove || projectiles[p].outOfBounds;
       }
 
-      if (projectiles[p].readyToRemove || Ship.isDead) {
+      if (projectiles[p].isReadyToRemove || Ship.isDead) {
         projectiles[p].explode();
         projectiles.splice(p, 1);
       }
@@ -58,13 +58,13 @@ var ProjectileList = new (function() {
     }
 
     for (var p = projectiles.length - 1; p >= 0; p--) {
-      if (projectiles[p].readyToRemove || types.indexOf(projectiles[p].constructor) == -1) {
+      if (projectiles[p].isReadyToRemove || types.indexOf(projectiles[p].constructor) == -1) {
         continue;
       }
 
       if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
         object.doDamage(projectiles[p].damage);
-        projectiles[p].readyToRemove = true;
+        projectiles[p].isReadyToRemove = true;
         projectiles[p].hitObject = object;
         shakeScreen(4);
       }
@@ -79,7 +79,7 @@ var ProjectileList = new (function() {
 
     for (var p = projectiles.length - 1; p >= 0; p--) {
       // Only projectiles that have exploded
-      if (!projectiles[p].readyToRemove) {
+      if (!projectiles[p].isReadyToRemove) {
         continue;
       }
 
@@ -103,8 +103,8 @@ var ProjectileList = new (function() {
   };
 })();
 
-function ProjectileBase(x, y, vx, width, height, damage, blastRange, image) {
-  this.readyToRemove = false;
+function ProjectileBase(x, y, vx, vy, width, height, damage, blastRange, image) {
+  this.isReadyToRemove = false;
   this.hitObject = false;
   this.outOfBounds = false;
   this.damage = damage;
@@ -119,13 +119,15 @@ function ProjectileBase(x, y, vx, width, height, damage, blastRange, image) {
 
   this.move = function() {
     x += vx;
+    y += vy;
 
     var levelInfo = Grid.levelInfo();
     this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
   };
 
-  this.collideAt = function(_x) {
+  this.collideAt = function(_x, _y) {
     x += (_x - x);
+    y += (_y - y);
   };
 
   this.explode = function() {
@@ -180,17 +182,19 @@ function Laser(x, y) {
   var damage = 2;
   var blastRange = 0;
   var vx = 20;
+  var vy = 0;
   var width = 30;
   var height = 24;
 
   this._draw = function(frame, x, y, width, height) {
     gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y, width, height);
   };
+
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, x, y, vx, width, height, damage, blastRange, Images.laser);
+  ProjectileBase.call(this, x, y, vx, vy, width, height, damage, blastRange, Images.laser);
 
   Sounds.laser.play();
 }
@@ -201,18 +205,20 @@ function Rocket(x, y) {
   var damage = 5;
   var blastRange = 90;
   var vx = 15;
+  var vy = 0;
   var width = 40;
   var height = 24;
 
   this._draw = function(frame, x, y, width, height) {
     gameContext.drawImage(Images.rocket, width * frame, 0, width, height, x, y, width, height);
   };
+
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
     ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
   };
 
-  ProjectileBase.call(this, x, y, vx, width, height, damage, blastRange, Images.rocket);
+  ProjectileBase.call(this, x, y, vx, vy, width, height, damage, blastRange, Images.rocket);
 
   Sounds.rocket.play();
 }

@@ -1,8 +1,13 @@
 var EnemyList = new (function() {
   var enemyList = [];
 
-  this.push = function(enemy) {
-    enemyList.push(enemy);
+  this.brickTypeIsEnemy = function(type) {
+    return brickTypeEnemyClasses[type];
+  };
+
+  this.createEnemyByBrickType = function(type, x, y) {
+    var Enemy = brickTypeEnemyClasses[type];
+    enemyList.push(new Enemy(x, y));
   };
 
   this.clear = function() {
@@ -23,7 +28,7 @@ var EnemyList = new (function() {
     for (i = enemyList.length - 1; i >= 0; i--) {
       enemyList[i].move();
 
-      enemyList[i].readyToRemove = enemyList[i].readyToRemove || enemyList[i].outOfBounds;
+      enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].outOfBounds;
 
       if (!enemyList[i].isReadyToRemove) {
         ProjectileList.damagedBy(enemyList[i], [Laser, Rocket]);
@@ -121,6 +126,12 @@ function EnemyBase(x, y, vx, health, damage, width, height, image) {
     }
   }
 }
+
+var brickTypeEnemyClasses = [];
+brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_ADVANCED] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = SimpleEnemy;
 
 function SimpleEnemy(x, y) {
   var vx = -3;

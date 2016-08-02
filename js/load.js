@@ -8,6 +8,8 @@ var Images = new (function() {
     laser: 'img/laser.png',
     ui_rocket: 'img/ui-rocket.png',
     ui_laser: 'img/ui-laser.png',
+    powerUp_rocket: 'img/ui-rocket.png',
+    powerUp_double_laser: 'img/ui-laser.png',
 
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',
