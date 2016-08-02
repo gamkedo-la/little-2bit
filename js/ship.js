@@ -29,7 +29,7 @@ var Ship = new (function() {
   this.health = MAXHEALTH;
 
   var projectileType;
-  var projectileClass;
+  var ProjectileClass;
   var projectileLast = 0;
   var projectileTimeout = 0;
   var projectileSpeedX = 0;
@@ -127,8 +127,8 @@ var Ship = new (function() {
   };
 
   this.setProjectile = function(projectile) {
-    projectileClass = projectile;
-    projectileType = projectileClass.prototype.constructor.name;
+    ProjectileClass = projectile;
+    projectileType = ProjectileClass.prototype.constructor.name;
     projectileTimeout = 0;
     if (FIRING_RATES[projectileType].timeLimit > 0) {
       projectileTimeout = Date.now() + FIRING_RATES[projectileType].timeLimit * 1000;
@@ -187,7 +187,7 @@ var Ship = new (function() {
       if (projectileLast >= FIRING_RATES[projectileType].rate) {
         projectileLast = 0;
         var muzzle = this.muzzleCoords();
-        ProjectileList.push(new projectileClass(muzzle.x, muzzle.y, 0));
+        ProjectileList.push(new ProjectileClass(muzzle.x, muzzle.y));
       }
     }
 
@@ -227,7 +227,7 @@ var Ship = new (function() {
   };
 
   this.currentProjectile = function() {
-    return projectileClass;
+    return ProjectileClass;
   };
 
   return this;
