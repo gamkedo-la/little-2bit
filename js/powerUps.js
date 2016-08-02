@@ -17,7 +17,7 @@ var PowerUpList = new (function() {
   this.checkCollision = function(ship) {
     for (var i = 0; i < powerUpList.length; i++) {
       if (checkCollisionShapes(ship, powerUpList[i])) {
-        powerUpList[i].setProjectile();
+        powerUpList[i].pickUp();
       }
     }
   };
@@ -46,7 +46,7 @@ var PowerUpList = new (function() {
   };
 })();
 
-function PowerUpBase(x, y, width, height, image, projectileClass) {
+function PowerUpBase(x, y, width, height, image) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
@@ -81,9 +81,9 @@ function PowerUpBase(x, y, width, height, image, projectileClass) {
     return { x: x, y: y };
   };
 
-  this.setProjectile = function() {
-    Ship.setProjectile(projectileClass);
+  this.pickUp = function() {
     this.isReadyToRemove = true;
+    this._pickUp();
   };
 
   this.draw = function() {
@@ -116,9 +116,12 @@ function PowerUpRocket(x, y) {
   var width = 40;
   var height = 24;
   var image = Images.powerUp_rocket;
-  var projectileClass = Rocket;
 
-  PowerUpBase.call(this, x, y, width, height, image, projectileClass);
+  this._pickUp = function() {
+    Ship.setProjectile(Rocket);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
 }
 
 PowerUpRocket.prototype = Object.create(PowerUpBase.prototype);
@@ -128,10 +131,13 @@ function PowerUpDoubleLaser(x, y) {
   var width = 40;
   var height = 24;
   var image = Images.powerUp_double_laser;
-//  var projectileClass = DoubleLaser;
-  var projectileClass = Rocket;
 
-  PowerUpBase.call(this, x, y, width, height, image, projectileClass);
+  this._pickUp = function() {
+    Ship.setProjectile(Rocket);
+//    Ship.setProjectile(DoubleLaser);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
 }
 
 PowerUpDoubleLaser.prototype = Object.create(PowerUpBase.prototype);
