@@ -66,7 +66,7 @@ var ProjectileList = new (function() {
         object.doDamage(projectiles[p].damage);
         projectiles[p].readyToRemove = true;
         projectiles[p].hitObject = object;
-        shakeScreen(8);
+        shakeScreen(4);
       }
     }
   };
@@ -103,7 +103,7 @@ var ProjectileList = new (function() {
   };
 })();
 
-function ProjectileBase(x, y, vx, width, height, damage, blastRange) {
+function ProjectileBase(x, y, vx, width, height, damage, blastRange, image) {
   this.readyToRemove = false;
   this.hitObject = false;
   this.outOfBounds = false;
@@ -112,8 +112,6 @@ function ProjectileBase(x, y, vx, width, height, damage, blastRange) {
 
   var halfWidth = width / 2;
   var halfHeight = height / 2;
-
-  var image = this._getImage();
 
   var frame = 0;
   var frameDelay = 1;
@@ -156,7 +154,16 @@ function ProjectileBase(x, y, vx, width, height, damage, blastRange) {
   };
 
   this.coordsTip = function() {
-    return { x: x + halfWidth, y: y };
+    return { x: x + width, y: y };
+  };
+
+  this.boundingBox = function() {
+    return {
+      left: x - halfWidth,
+      top: y - halfHeight,
+      right: x + halfWidth,
+      bottom: y + halfHeight
+    };
   };
 
   this.bounds = function() {
@@ -170,25 +177,25 @@ function ProjectileBase(x, y, vx, width, height, damage, blastRange) {
 }
 
 function Laser(x, y) {
+  var damage = 2;
+  var blastRange = 0;
   var vx = 20;
   var width = 30;
   var height = 24;
-  ProjectileBase.call(this, x, y, vx, width, height);
+
+  this._draw = function(frame, x, y, width, height) {
+    gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y, width, height);
+  };
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
+  };
+
+  ProjectileBase.call(this, x, y, vx, width, height, damage, blastRange, Images.laser);
 
   Sounds.laser.play();
 }
 Laser.prototype = Object.create(ProjectileBase.prototype);
 Laser.prototype.constructor = Laser;
-
-Laser.prototype._getImage = function() {
-  return Images.laser;
-};
-Laser.prototype._draw = function(frame, x, y, width, height) {
-  gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y, width, height);
-};
-Laser.prototype._explode = function(x, y) {
-  ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
-};
 
 function Rocket(x, y) {
   var damage = 5;
@@ -196,20 +203,18 @@ function Rocket(x, y) {
   var vx = 15;
   var width = 40;
   var height = 24;
-  ProjectileBase.call(this, x, y, vx, width, height, damage, blastRange);
+
+  this._draw = function(frame, x, y, width, height) {
+    gameContext.drawImage(Images.rocket, width * frame, 0, width, height, x, y, width, height);
+  };
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
+    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
+  };
+
+  ProjectileBase.call(this, x, y, vx, width, height, damage, blastRange, Images.rocket);
 
   Sounds.rocket.play();
 }
 Rocket.prototype = Object.create(ProjectileBase.prototype);
 Rocket.prototype.constructor = Rocket;
-
-Rocket.prototype._getImage = function() {
-  return Images.rocket;
-};
-Rocket.prototype._draw = function(frame, x, y, width, height) {
-  gameContext.drawImage(Images.rocket, width * frame, 0, width, height, x, y, width, height);
-};
-Rocket.prototype._explode = function(x, y) {
-  ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
-  ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
-};

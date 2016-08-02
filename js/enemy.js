@@ -23,8 +23,6 @@ var EnemyList = new (function() {
     for (i = enemyList.length - 1; i >= 0; i--) {
       enemyList[i].move();
 
-      var coords = enemyList[i].coordsTip();
-      enemyList[i].outOfBounds = (coords.x < Grid.cameraPanX());
       enemyList[i].readyToRemove = enemyList[i].readyToRemove || enemyList[i].outOfBounds;
 
       if (!enemyList[i].isReadyToRemove) {
@@ -51,21 +49,15 @@ var EnemyList = new (function() {
   };
 })();
 
-var SimpleEnemy = function(_x, _y) {
-  var x = _x;
-  var y = _y;
-  var vx = -3;
+function EnemyBase(x, y, vx, health, damage, width, height, image) {
+  var halfWidth = width / 2;
+  var halfHeight = height / 2;
 
-  var halfWidth = Images.simple_enemy.width / 2;
-  var quarterWidth = Images.simple_enemy.width / 4;
-  var eighthWidth = Images.simple_enemy.width / 8;
-  var halfHeight = Images.simple_enemy.height / 2;
-  var quarterHeight = Images.simple_enemy.height / 4;
-  var eighthHeight = Images.simple_enemy.height / 8;
+  var frame = 0;
+  var frameDelay = 1;
+  var maxFrames = image.width / width;
 
-  var health = 10;
-  this.damage = 2;
-
+  this.damage = damage;
   this.outOfBounds = false;
   this.isReadyToRemove = false;
 
@@ -79,13 +71,7 @@ var SimpleEnemy = function(_x, _y) {
   };
 
   this.bounds = function() {
-    return [
-      { x: x - quarterWidth, y: y },
-      { x: x, y: y + halfHeight },
-      { x: x + quarterWidth, y: y + halfHeight },
-      { x: x + quarterWidth, y: y - halfHeight },
-      { x: x, y: y - halfHeight }
-    ];
+    return this._bounds(x, y);
   };
 
   this.coords = function() {
@@ -98,22 +84,32 @@ var SimpleEnemy = function(_x, _y) {
 
   this.doDamage = function(amount) {
     health -= amount;
-    this.isReadyToRemove = health <= 0;
-  };
-
-  this.move = function() {
-    x += vx;
+    this.isReadyToRemove = (health <= 0);
   };
 
   this.explode = function() {
     if (!this.outOfBounds) {
-      ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
-      Sounds.explosion_simple_enemy.play();
+      this._explode(x, y);
     }
   };
 
+  this.move = function() {
+    x += vx;
+
+    var levelInfo = Grid.levelInfo();
+    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
+  };
+
   this.draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.simple_enemy, x, y, 0);
+    this._draw(frame, x, y, width, height);
+
+    if (frameDelay-- <= 0) {
+      frameDelay = 1;
+      frame++;
+      if (frame >= maxFrames) {
+        frame = 0;
+      }
+    }
 
     if (debug) {
       var b = this.bounds();
@@ -123,5 +119,44 @@ var SimpleEnemy = function(_x, _y) {
       b.push(b[0]);
       drawLines(gameContext, 'yellow', b);
     }
+  }
+}
+
+function SimpleEnemy(x, y) {
+  var vx = -3;
+  var health = 10;
+  var damage = 2;
+  var width = 60;
+  var height = 94;
+
+  var halfWidth = width / 2;
+  var quarterWidth = width / 4;
+  var eighthWidth = width / 8;
+  var halfHeight = height / 2;
+  var quarterHeight = height / 4;
+  var eighthHeight = height / 8;
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x - quarterWidth, y: y },
+      { x: x, y: y + halfHeight },
+      { x: x + quarterWidth, y: y + halfHeight },
+      { x: x + quarterWidth, y: y - halfHeight },
+      { x: x, y: y - halfHeight }
+    ];
   };
-};
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_simple_enemy.play();
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapCenteredWithRotation(gameContext, Images.simple_enemy, x, y, 0);
+  };
+
+  EnemyBase.call(this, x, y, vx, health, damage, width, height, Images.simple_enemy);
+}
+
+SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
+SimpleEnemy.prototype.constructor = SimpleEnemy;
