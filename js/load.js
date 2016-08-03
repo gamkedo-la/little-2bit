@@ -7,10 +7,12 @@ var Images = new (function() {
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
     ui_rocket: 'img/ui-rocket.png',
+    ui_double_rocket: 'img/ui-rocket.png',
     ui_laser: 'img/ui-laser.png',
     ui_double_laser: 'img/ui-laser.png',
     ui_triple_laser: 'img/ui-laser.png',
     powerUp_rocket: 'img/ui-rocket.png',
+    powerUp_double_rocket: 'img/ui-rocket.png',
     powerUp_double_laser: 'img/ui-laser.png',
     powerUp_triple_laser: 'img/ui-laser.png',
 

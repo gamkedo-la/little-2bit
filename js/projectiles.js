@@ -189,6 +189,11 @@ const PROJECTILE_INFO = {
     rate: 18,
     timeLimit: 5,
     uiImageName: 'ui_rocket'
+  },
+  DoubleRocket: {
+    rate: 18,
+    timeLimit: 5,
+    uiImageName: 'ui_double_rocket'
   }
 };
 
@@ -266,3 +271,14 @@ function Rocket(list, x, y) {
 }
 Rocket.prototype = Object.create(ProjectileBase.prototype);
 Rocket.prototype.constructor = Rocket;
+
+function DoubleRocket(list, x, y) {
+  this._initialize = function() {
+    new Rocket(list, x, y - 12);
+    new Rocket(list, x, y + 12);
+  };
+
+  ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
+}
+DoubleRocket.prototype = Object.create(ProjectileBase.prototype);
+DoubleRocket.prototype.constructor = DoubleRocket;

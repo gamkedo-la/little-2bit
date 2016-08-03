@@ -126,6 +126,22 @@ function PowerUpRocket(x, y) {
 PowerUpRocket.prototype = Object.create(PowerUpBase.prototype);
 PowerUpRocket.prototype.constructor = PowerUpRocket;
 
+brickTypePowerUps[POWERUP_DOUBLE_ROCKET] = PowerUpDoubleRocket;
+function PowerUpDoubleRocket(x, y) {
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_double_rocket;
+
+  this._pickUp = function() {
+    Ship.setProjectile(DoubleRocket);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
+}
+
+PowerUpDoubleRocket.prototype = Object.create(PowerUpBase.prototype);
+PowerUpDoubleRocket.prototype.constructor = PowerUpDoubleRocket;
+
 brickTypePowerUps[POWERUP_DOUBLE_LASER] = PowerUpDoubleLaser;
 function PowerUpDoubleLaser(x, y) {
   var width = 40;
