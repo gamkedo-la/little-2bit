@@ -206,7 +206,7 @@ function Laser(list, x, y, angle) {
   var height = 24;
 
   this._draw = function(frame, x, y, width, height) {
-    gameContext.drawImage(Images.laser, width * frame, 0, width, height, x, y, width, height);
+    drawBitmapFrameCenteredWithRotation(gameContext, Images.laser, frame, x, y, width, height, angle);
   };
 
   this._explode = function(x, y) {

@@ -1,6 +1,6 @@
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
-const SHIP_DEFAULT_PROJECTILE = Laser;
+const SHIP_DEFAULT_PROJECTILE = TripleLaser;
 
 var Ship = new (function() {
   this.keyHeld_N = false;
