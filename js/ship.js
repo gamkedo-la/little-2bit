@@ -7,12 +7,6 @@ var Ship = new (function() {
   this.keyHeld_S = false;
   this.keyHeld_W = false;
   this.keyHeld_E = false;
-  this.keyHeld_1 = false;
-  this.keyHeld_2 = false;
-  this.keyHeld_3 = false;
-  this.keyHeld_4 = false;
-  this.keyHeld_5 = false;
-  this.keyHeld_6 = false;
 
   this.isDead = false;
   this.speedX = 8;
@@ -32,7 +26,6 @@ var Ship = new (function() {
   var ProjectileClass;
   var projectileLast = 0;
   var projectileTimeout = 0;
-  var projectileSpeedX = 0;
 
   var frame = 0;
   var maxFrames = 0;
@@ -106,7 +99,7 @@ var Ship = new (function() {
     };
   };
 
-  this.checkCollision = function() {
+  this.checkCollisions = function() {
     var checkCoords = this.bounds();
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
@@ -117,21 +110,20 @@ var Ship = new (function() {
         break;
       }
     }
-  };
 
-  this.checkCollisions = function() {
-    // @todo enemy shot classes
-//    ProjectileList.damagedBy(this, []);
-    EnemyList.checkCollision(this);
-    PowerUpList.checkCollision(this);
+    if (!this.isDead) {
+      enemyProjectiles.checkCollision(this);
+      EnemyList.checkCollision(this);
+      PowerUpList.checkCollision(this);
+    }
   };
 
   this.setProjectile = function(projectile) {
     ProjectileClass = projectile;
     projectileType = ProjectileClass.prototype.constructor.name;
     projectileTimeout = 0;
-    if (FIRING_RATES[projectileType].timeLimit > 0) {
-      projectileTimeout = Date.now() + FIRING_RATES[projectileType].timeLimit * 1000;
+    if (PROJECTILE_INFO[projectileType].timeLimit > 0) {
+      projectileTimeout = Date.now() + PROJECTILE_INFO[projectileType].timeLimit * 1000;
     }
   };
 
@@ -154,21 +146,18 @@ var Ship = new (function() {
     }
 
     if (this.keyHeld_W) {
-      projectileSpeedX = -this.speedX;
       x -= this.speedX;
       if (x < Grid.cameraPanX() + minX) {
         x = Grid.cameraPanX() + minX;
       }
     }
     else if (this.keyHeld_E) {
-      projectileSpeedX = this.speedX;
       x += this.speedX;
       if (x > maxX) {
         x = maxX;
       }
     }
 
-    this.checkCollision();
     this.checkCollisions();
 
     if (this.isDead) {
@@ -176,18 +165,19 @@ var Ship = new (function() {
 
       EnemyList.clear();
       PowerUpList.clear();
-      ProjectileList.clear();
+      shipProjectiles.clear();
+      enemyProjectiles.clear();
       ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
       Sounds.explosion_ship.play();
     }
 
-    if (FIRING_RATES[projectileType]) {
+    if (PROJECTILE_INFO[projectileType]) {
       projectileLast++;
 
-      if (projectileLast >= FIRING_RATES[projectileType].rate) {
+      if (projectileLast >= PROJECTILE_INFO[projectileType].rate) {
         projectileLast = 0;
         var muzzle = this.muzzleCoords();
-        ProjectileList.push(new ProjectileClass(muzzle.x, muzzle.y));
+        shipProjectiles.spawn(ProjectileClass, muzzle.x, muzzle.y);
       }
     }
 
@@ -216,7 +206,7 @@ var Ship = new (function() {
       }
       b.push(b[0]);
       drawLines(gameContext, '#f00', b);
-      this.checkCollision();
+      this.checkCollisions();
       var muzzle = this.muzzleCoords();
       drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
     }

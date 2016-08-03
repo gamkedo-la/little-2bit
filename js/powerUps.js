@@ -109,9 +109,8 @@ function PowerUpBase(x, y, width, height, image) {
 }
 
 var brickTypePowerUps = [];
-brickTypePowerUps[POWERUP_ROCKET] = PowerUpRocket;
-brickTypePowerUps[POWERUP_DOUBLE_LASER] = PowerUpDoubleLaser;
 
+brickTypePowerUps[POWERUP_ROCKET] = PowerUpRocket;
 function PowerUpRocket(x, y) {
   var width = 40;
   var height = 24;
@@ -127,6 +126,7 @@ function PowerUpRocket(x, y) {
 PowerUpRocket.prototype = Object.create(PowerUpBase.prototype);
 PowerUpRocket.prototype.constructor = PowerUpRocket;
 
+brickTypePowerUps[POWERUP_DOUBLE_LASER] = PowerUpDoubleLaser;
 function PowerUpDoubleLaser(x, y) {
   var width = 40;
   var height = 24;
@@ -141,3 +141,19 @@ function PowerUpDoubleLaser(x, y) {
 
 PowerUpDoubleLaser.prototype = Object.create(PowerUpBase.prototype);
 PowerUpDoubleLaser.prototype.constructor = PowerUpDoubleLaser;
+
+brickTypePowerUps[POWERUP_TRIPLE_LASER] = PowerUpTripleLaser;
+function PowerUpTripleLaser(x, y) {
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_triple_laser;
+
+  this._pickUp = function() {
+    Ship.setProjectile(TripleLaser);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
+}
+
+PowerUpTripleLaser.prototype = Object.create(PowerUpBase.prototype);
+PowerUpTripleLaser.prototype.constructor = PowerUpTripleLaser;

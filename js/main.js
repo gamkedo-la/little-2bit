@@ -6,6 +6,8 @@ var gameFontSmall = '16pt Verdana';
 var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 
+var shipProjectiles, enemyProjectiles;
+
 var screenShakeAmount = 0;
 var screenShakeAmountHalf = 0;
 
@@ -33,6 +35,9 @@ function gameStart() {
   Grid.initialize();
   Ship.initialize();
 
+  shipProjectiles = new ProjectileList();
+  enemyProjectiles = new ProjectileList();
+
   gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
   console.log('Starting game!');
 }
@@ -46,7 +51,8 @@ function gameLoop() {
   UI.update();
   Grid.update();
   PowerUpList.update();
-  ProjectileList.update();
+  shipProjectiles.update();
+  enemyProjectiles.update();
   EnemyList.update();
   Ship.update();
   ParticleList.update();
@@ -71,7 +77,8 @@ function gameLoop() {
 
   Grid.draw();
   PowerUpList.draw();
-  ProjectileList.draw();
+  shipProjectiles.draw();
+  enemyProjectiles.draw();
   ParticleList.draw();
   EnemyList.draw();
   Ship.draw();

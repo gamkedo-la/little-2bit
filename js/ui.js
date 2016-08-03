@@ -37,17 +37,8 @@ var UI = new (function() {
   this.update = function() {
     backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
 
-    switch (Ship.currentProjectile()) {
-      case Rocket:
-        projectileImg = Images.ui_rocket;
-        break;
-      case Laser:
-      case DoubleLaser:
-        projectileImg = Images.ui_laser;
-        break;
-      default:
-        projectileImg = false;
-    }
+    var imageName = PROJECTILE_INFO[Ship.currentProjectile().prototype.constructor.name].uiImageName;
+    projectileImg = Images[imageName];
   };
 
   this.draw = function() {

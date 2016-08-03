@@ -16,7 +16,7 @@ var EnemyList = new (function() {
 
   this.checkCollision = function(ship) {
     for (var i = 0; i < enemyList.length; i++) {
-      if (checkCollisionShapes(ship, enemyList[i])) {
+      if (!enemyList[i].isReadyToRemove && checkCollisionShapes(ship, enemyList[i])) {
         ship.doDamage(enemyList[i].damage);
         enemyList[i].doDamage(ship.damage);
       }
@@ -24,21 +24,12 @@ var EnemyList = new (function() {
   };
 
   this.update = function() {
-    var i;
-    for (i = enemyList.length - 1; i >= 0; i--) {
+    for (var i = enemyList.length - 1; i >= 0; i--) {
       enemyList[i].move();
 
+      shipProjectiles.checkCollision(enemyList[i]);
+
       enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].outOfBounds;
-
-      if (!enemyList[i].isReadyToRemove) {
-        ProjectileList.damagedBy(enemyList[i], [Laser, DoubleLaser, Rocket]);
-      }
-    }
-
-    for (i = enemyList.length - 1; i >= 0; i--) {
-      if (!enemyList[i].isReadyToRemove) {
-        ProjectileList.blastDamagedBy(enemyList[i], [Laser, DoubleLaser, Rocket]);
-      }
 
       if (enemyList[i].isReadyToRemove) {
         enemyList[i].explode();
