@@ -109,8 +109,13 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
   }
 
   this.move = function() {
-    x += vx;
-    y += vy;
+    if (this._move) {
+      this._move();
+    }
+    else {
+      x += vx;
+      y += vy;
+    }
 
     var levelInfo = Grid.levelInfo();
     this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
