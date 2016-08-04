@@ -6,6 +6,7 @@ var Images = new (function() {
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
+    energy_ball: 'img/enemy_shot.png',
     ui_rocket: 'img/ui-rocket.png',
     ui_double_rocket: 'img/ui-double-rocket.png',
     ui_laser: 'img/ui-laser.png',
@@ -55,7 +56,9 @@ var Images = new (function() {
 
 var Sounds = new (function() {
   var sounds = {
+    ship_hit: 'sfx/ship_hit.wav',
     laser: 'sfx/laser.wav',
+    energy_ball: 'sfx/laser.wav',
     rocket: 'sfx/rocket1.wav',
     explosion_ship: 'sfx/explosion2.wav',
     explosion_simple_enemy: 'sfx/explosion1.wav'

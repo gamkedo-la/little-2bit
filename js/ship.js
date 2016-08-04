@@ -23,7 +23,8 @@ var Ship = new (function() {
   this.health = MAXHEALTH;
 
   var projectileType;
-  var ProjectileClass;
+  var projectileClass;
+  var projectileRate = 0;
   var projectileLast = 0;
   var projectileTimeout = 0;
 
@@ -56,6 +57,8 @@ var Ship = new (function() {
     this.health -= amount;
 
     shakeScreen(5 * amount);
+
+    Sounds.ship_hit.play();
 
     this.isDead = (this.health <= 0);
   };
@@ -119,8 +122,9 @@ var Ship = new (function() {
   };
 
   this.setProjectile = function(projectile) {
-    ProjectileClass = projectile;
-    projectileType = ProjectileClass.prototype.constructor.name;
+    projectileClass = projectile;
+    projectileType = projectileClass.prototype.constructor.name;
+    projectileRate = PROJECTILE_INFO[projectileType].rate;
     projectileTimeout = 0;
     if (PROJECTILE_INFO[projectileType].timeLimit > 0) {
       projectileTimeout = Date.now() + PROJECTILE_INFO[projectileType].timeLimit * 1000;
@@ -182,10 +186,10 @@ var Ship = new (function() {
     if (PROJECTILE_INFO[projectileType]) {
       projectileLast++;
 
-      if (projectileLast >= PROJECTILE_INFO[projectileType].rate) {
+      if (projectileLast > projectileRate) {
         projectileLast = 0;
         var muzzle = this.muzzleCoords();
-        shipProjectiles.spawn(ProjectileClass, muzzle.x, muzzle.y);
+        shipProjectiles.spawn(projectileClass, muzzle.x, muzzle.y);
       }
     }
 
@@ -197,7 +201,7 @@ var Ship = new (function() {
 
   this.draw = function() {
     if (!this.isDead) {
-      gameContext.drawImage(Images.ship, width * frame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+      drawBitmapFrameCenteredWithRotation(gameContext, Images.ship, frame, x, y, width, height);
       if (frameDelay-- <= 0) {
         frameDelay = SHIP_FRAME_DELAY;
         frame++;
@@ -225,7 +229,7 @@ var Ship = new (function() {
   };
 
   this.currentProjectile = function() {
-    return ProjectileClass;
+    return projectileClass;
   };
 
   return this;

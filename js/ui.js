@@ -51,7 +51,7 @@ var UI = new (function() {
     // Health-bar
     drawText(uiContext, 25, 45, '#fff', 'Health');
     for (var h = 0; h < MAXHEALTH; h++) {
-      if (h < Ship.health) {
+      if (!Ship.isDead && h < Ship.health) {
         drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#f00');
       }
       else {

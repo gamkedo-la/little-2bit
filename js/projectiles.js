@@ -1,8 +1,8 @@
 var ProjectileList = function() {
   var projectiles = [];
 
-  this.spawn = function(ProjectileClass, x, y) {
-    new ProjectileClass(this, x, y);
+  this.spawn = function(projectileClass, x, y) {
+    new projectileClass(this, x, y);
   };
 
   this.push = function(projectile) {
@@ -133,7 +133,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
   };
 
   this.draw = function() {
-    this._draw(frame, x - halfWidth, y - halfHeight, width, height);
+    this._draw(frame, x, y, width, height);
     if (this.blastRange && debug) {
       drawStrokeCircle(gameContext, x, y, this.blastRange, '#fff');
     }
@@ -181,12 +181,12 @@ const PROJECTILE_INFO = {
     uiImageName: 'ui_laser'
   },
   DoubleLaser: {
-    rate: 8,
+    rate: 10,
     timeLimit: 8,
     uiImageName: 'ui_double_laser'
   },
   TripleLaser: {
-    rate: 8,
+    rate: 10,
     timeLimit: 8,
     uiImageName: 'ui_triple_laser'
   },
@@ -196,14 +196,19 @@ const PROJECTILE_INFO = {
     uiImageName: 'ui_rocket'
   },
   DoubleRocket: {
-    rate: 18,
+    rate: 24,
     timeLimit: 5,
     uiImageName: 'ui_double_rocket'
+  },
+
+  // Enemy Projectiles
+  EnergyBall: {
+    rate: 32
   }
 };
 
 function Laser(list, x, y, angle) {
-  var damage = 2;
+  var damage = 3;
   var blastRange = 0;
   var speed = 20;
   var vx = speed;
@@ -212,18 +217,19 @@ function Laser(list, x, y, angle) {
     vx = speed * Math.cos(angle);
     vy = speed * Math.sin(angle);
   }
+  var image = Images.laser;
   var width = 30;
   var height = 24;
 
   this._draw = function(frame, x, y, width, height) {
-    drawBitmapFrameCenteredWithRotation(gameContext, Images.laser, frame, x, y, width, height, angle);
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
   };
 
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, Images.laser);
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
 
   Sounds.laser.play();
 }
@@ -254,15 +260,16 @@ TripleLaser.prototype = Object.create(ProjectileBase.prototype);
 TripleLaser.prototype.constructor = TripleLaser;
 
 function Rocket(list, x, y) {
-  var damage = 5;
+  var damage = 6;
   var blastRange = 90;
   var vx = 15;
   var vy = 0;
+  var image = Images.rocket;
   var width = 40;
   var height = 24;
 
   this._draw = function(frame, x, y, width, height) {
-    gameContext.drawImage(Images.rocket, width * frame, 0, width, height, x, y, width, height);
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
   this._explode = function(x, y) {
@@ -270,7 +277,7 @@ function Rocket(list, x, y) {
     ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, Images.rocket);
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
 
   Sounds.rocket.play();
 }
@@ -279,11 +286,42 @@ Rocket.prototype.constructor = Rocket;
 
 function DoubleRocket(list, x, y) {
   this._initialize = function() {
-    new Rocket(list, x, y - 12);
-    new Rocket(list, x, y + 12);
+    new Rocket(list, x, y - 14);
+    new Rocket(list, x, y + 14);
   };
 
   ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
 }
 DoubleRocket.prototype = Object.create(ProjectileBase.prototype);
 DoubleRocket.prototype.constructor = DoubleRocket;
+
+// Enemy Projectiles
+
+function EnergyBall(list, x, y, angle) {
+  var damage = 0.5;
+  var blastRange = 0;
+  var speed = -8;
+  var vx = speed;
+  var vy = 0;
+  if (angle) {
+    vx = speed * Math.cos(angle);
+    vy = speed * Math.sin(angle);
+  }
+  var image = Images.energy_ball;
+  var width = 30;
+  var height = 30;
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
+  };
+
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
+
+  Sounds.energy_ball.play();
+}
+EnergyBall.prototype = Object.create(ProjectileBase.prototype);
+EnergyBall.prototype.constructor = EnergyBall;

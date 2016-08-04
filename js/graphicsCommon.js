@@ -1,10 +1,9 @@
 function drawBitmapCenteredWithRotation(canvasContext, useBitmap, atX, atY, withAng) {
   canvasContext.save();
   canvasContext.translate(atX, atY);
-  if (withAng == undefined) {
-    withAng = 0;
+  if (withAng != undefined) {
+    canvasContext.rotate(withAng);
   }
-  canvasContext.rotate(withAng);
   canvasContext.drawImage(useBitmap, -useBitmap.width / 2, -useBitmap.height / 2);
   canvasContext.restore();
 }
@@ -12,11 +11,10 @@ function drawBitmapCenteredWithRotation(canvasContext, useBitmap, atX, atY, with
 function drawBitmapFrameCenteredWithRotation(canvasContext, useBitmap, frame, atX, atY, width, height, withAng) {
   canvasContext.save();
   canvasContext.translate(atX, atY);
-  if (withAng == undefined) {
-    withAng = 0;
+  if (withAng != undefined) {
+    canvasContext.rotate(withAng);
   }
-  canvasContext.rotate(withAng);
-  canvasContext.drawImage(useBitmap, width * frame, 0, width, height, 0, 0, width, height);
+  canvasContext.drawImage(useBitmap, width * frame, 0, width, height, -width / 2, -height / 2, width, height);
   canvasContext.restore();
 }
 

@@ -25,7 +25,7 @@ var EnemyList = new (function() {
 
   this.update = function() {
     for (var i = enemyList.length - 1; i >= 0; i--) {
-      enemyList[i].move();
+      enemyList[i].update();
 
       shipProjectiles.checkCollision(enemyList[i]);
 
@@ -45,9 +45,13 @@ var EnemyList = new (function() {
   };
 })();
 
-function EnemyBase(x, y, vx, health, damage, width, height, image) {
+function EnemyBase(x, y, vx, health, damage, width, height, image, projectileClass) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
+
+  var projectileType = projectileClass.prototype.constructor.name;
+  var projectileRate = PROJECTILE_INFO[projectileType].rate;
+  var projectileLast = projectileRate;
 
   var frame = 0;
   var frameDelay = 1;
@@ -89,8 +93,19 @@ function EnemyBase(x, y, vx, health, damage, width, height, image) {
     }
   };
 
-  this.move = function() {
-    x += vx;
+  this.update = function() {
+    if (this._update) {
+      this._update();
+    }
+    else {
+      x += vx;
+
+      projectileLast++;
+      if (projectileLast > projectileRate) {
+        projectileLast = 0;
+        new projectileClass(enemyProjectiles, x, y);
+      }
+    }
 
     var levelInfo = Grid.levelInfo();
     this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
@@ -119,15 +134,13 @@ function EnemyBase(x, y, vx, health, damage, width, height, image) {
 }
 
 var brickTypeEnemyClasses = [];
-brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
-brickTypeEnemyClasses[ENEMY_ADVANCED] = SimpleEnemy;
-brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleEnemy;
-brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = SimpleEnemy;
 
+brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
 function SimpleEnemy(x, y) {
   var vx = -3;
   var health = 10;
-  var damage = 2;
+  var damage = 3;
+  var image = Images.simple_enemy;
   var width = 60;
   var height = 94;
 
@@ -154,11 +167,15 @@ function SimpleEnemy(x, y) {
   };
 
   this._draw = function(frame, x, y, width, height) {
-    drawBitmapCenteredWithRotation(gameContext, Images.simple_enemy, x, y, 0);
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, x, y, vx, health, damage, width, height, Images.simple_enemy);
+  EnemyBase.call(this, x, y, vx, health, damage, width, height, image, EnergyBall);
 }
 
 SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
 SimpleEnemy.prototype.constructor = SimpleEnemy;
+
+brickTypeEnemyClasses[ENEMY_ADVANCED] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = SimpleEnemy;
