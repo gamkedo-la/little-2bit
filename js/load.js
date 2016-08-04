@@ -58,7 +58,7 @@ var Sounds = new (function() {
   var sounds = {
     ship_hit: 'sfx/ship_hit.wav',
     laser: 'sfx/laser.wav',
-    energy_ball: 'sfx/laser.wav',
+    energy_ball: 'sfx/energy_ball.wav',
     rocket: 'sfx/rocket1.wav',
     explosion_ship: 'sfx/explosion2.wav',
     explosion_simple_enemy: 'sfx/explosion1.wav'
