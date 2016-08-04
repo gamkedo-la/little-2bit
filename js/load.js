@@ -3,6 +3,7 @@ var Images = new (function() {
     stars: 'img/stars.png',
     ship: 'img/player_ship.png',
     simple_enemy: 'img/simple_enemy.png',
+    shooting_enemy: 'img/enemy_ship.png',
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
@@ -61,7 +62,8 @@ var Sounds = new (function() {
     energy_ball: 'sfx/energy_ball.wav',
     rocket: 'sfx/rocket1.wav',
     explosion_ship: 'sfx/explosion2.wav',
-    explosion_simple_enemy: 'sfx/explosion1.wav'
+    explosion_simple_enemy: 'sfx/explosion1.wav',
+    explosion_shooting_enemy: 'sfx/explosion1.wav'
   };
 
   this.initialize = function() {

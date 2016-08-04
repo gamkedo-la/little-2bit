@@ -49,13 +49,15 @@ function EnemyBase(x, y, vx, health, damage, width, height, image, projectileCla
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
-  var projectileType = projectileClass.prototype.constructor.name;
-  var projectileRate = PROJECTILE_INFO[projectileType].rate;
-  var projectileLast = projectileRate;
-
   var frame = 0;
-  var frameDelay = 1;
+  var frameDelay = 2;
   var maxFrames = image.width / width;
+
+  if (projectileClass) {
+    var projectileType = projectileClass.prototype.constructor.name;
+    var projectileRate = PROJECTILE_INFO[projectileType].rate;
+    var projectileLast = projectileRate;
+  }
 
   this.damage = damage;
   this.outOfBounds = false;
@@ -95,15 +97,18 @@ function EnemyBase(x, y, vx, health, damage, width, height, image, projectileCla
 
   this.update = function() {
     if (this._update) {
-      this._update();
+      this._update(x, y);
     }
     else {
       x += vx;
 
-      projectileLast++;
-      if (projectileLast > projectileRate) {
-        projectileLast = 0;
-        new projectileClass(enemyProjectiles, x, y);
+      if (projectileClass) {
+        projectileLast++;
+        if (projectileLast > projectileRate) {
+          projectileLast = 0;
+          var muzzle = this.muzzle(x, y);
+          new projectileClass(enemyProjectiles, muzzle.x, muzzle.y);
+        }
       }
     }
 
@@ -170,12 +175,60 @@ function SimpleEnemy(x, y) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, x, y, vx, health, damage, width, height, image, EnergyBall);
+  EnemyBase.call(this, x, y, vx, health, damage, width, height, image);
 }
 
 SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
 SimpleEnemy.prototype.constructor = SimpleEnemy;
 
-brickTypeEnemyClasses[ENEMY_ADVANCED] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_SHOOTING] = ShootingEnemy;
+function ShootingEnemy(x, y) {
+  var vx = 0;//-3;
+  var health = 10;
+  var damage = 3;
+  var image = Images.shooting_enemy;
+  var width = 100;
+  var height = 80;
+
+  var halfWidth = width / 2;
+  var quarterWidth = width / 4;
+  var eighthWidth = width / 8;
+  var halfHeight = height / 2;
+  var quarterHeight = height / 4;
+  var eighthHeight = height / 8;
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x - quarterWidth - eighthWidth, y: y },
+      { x: x - eighthWidth, y: y + halfHeight },
+      { x: x + quarterWidth, y: y + halfHeight },
+      { x: x + halfWidth, y: y },
+      { x: x + quarterWidth, y: y - halfHeight },
+      { x: x, y: y - halfHeight }
+    ];
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_shooting_enemy.play();
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
+  };
+
+  this.muzzle = function(x, y) {
+    return {
+      x: x - halfWidth,
+      y: y
+    };
+  };
+
+  EnemyBase.call(this, x, y, vx, health, damage, width, height, image, EnergyBall);
+}
+
+ShootingEnemy.prototype = Object.create(EnemyBase.prototype);
+ShootingEnemy.prototype.constructor = ShootingEnemy;
+
 brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleEnemy;
 brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = SimpleEnemy;
