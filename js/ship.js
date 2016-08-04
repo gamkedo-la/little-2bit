@@ -9,8 +9,8 @@ var Ship = new (function() {
   this.keyHeld_E = false;
 
   this.isDead = false;
-  this.speedX = 8;
-  this.speedY = 5;
+  this.speedX = 10;
+  this.speedY = 8;
   this.damage = 50;
 
   var x, y;
@@ -132,6 +132,8 @@ var Ship = new (function() {
       return;
     }
 
+    x += Grid.cameraSpeed();
+
     if (this.keyHeld_N) {
       y -= this.speedY;
       if (y < minY) {
@@ -147,15 +149,21 @@ var Ship = new (function() {
 
     if (this.keyHeld_W) {
       x -= this.speedX;
-      if (x < Grid.cameraPanX() + minX) {
-        x = Grid.cameraPanX() + minX;
-      }
     }
     else if (this.keyHeld_E) {
       x += this.speedX;
       if (x > maxX) {
         x = maxX;
       }
+    }
+
+    var camPanX = Grid.cameraPanX();
+    if (x < camPanX + minX) {
+      x = camPanX + minX;
+    }
+
+    if (Grid.cameraSpeed() != 0 && x > camPanX + gameCanvas.width - width) {
+      x = camPanX + gameCanvas.width - width;
     }
 
     this.checkCollisions();

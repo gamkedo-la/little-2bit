@@ -1,3 +1,4 @@
+const CAMERA_SPEED = 4;
 const GRID_WIDTH = 40;
 const GRID_HEIGHT = 40;
 
@@ -14,9 +15,9 @@ var Grid = new (function() {
   var camPanX;
   this.backgroundX = 0;
   this.backgroundWidth = 0;
+  this.keyHeld_E = false;
 
-//  const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 150;
-  const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 50;
+  const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 100;
 
   this.initialize = function() {
     canvasHalfWidth = gameCanvas.width / 2;
@@ -48,9 +49,21 @@ var Grid = new (function() {
     };
   };
 
+  this.cameraSpeed = function() {
+    // @todo check if a boss is active
+    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
+    if (camPanX >= maxPanRight) {
+      return 0;
+    }
+    return CAMERA_SPEED;
+  };
+
   this.update = function() {
-    this.backgroundX = Math.floor(Grid.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
-    cameraFollow();
+    if (!Ship.isDead) {
+      camPanX += this.cameraSpeed();
+      this.backgroundX = Math.floor(Grid.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
+      cameraFollow(this.keyHeld_E);
+    }
   };
 
   function tileToIndex(col, row) {
@@ -110,10 +123,10 @@ var Grid = new (function() {
     }
   };
 
-  function cameraFollow() {
+  function cameraFollow(keyHeld_E) {
     var shipCoords = Ship.coords();
-    if (shipCoords.x > camPanX + canvasHalfWidth - PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X) {
-      camPanX += Ship.speedX;
+    if (keyHeld_E && shipCoords.x > camPanX + canvasHalfWidth - PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X) {
+      camPanX += Ship.speedX / 2;
     }
 
     if (camPanX < 0) {

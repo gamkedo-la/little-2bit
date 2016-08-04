@@ -38,6 +38,7 @@ function keySet(event, setTo) {
   }
   if (event.keyCode == KEY_D || event.keyCode == KEY_RIGHT_ARROW) {
     Ship.keyHeld_E = setTo;
+    Grid.keyHeld_E = setTo;
     event.preventDefault();
   }
   if (event.keyCode == KEY_W || event.keyCode == KEY_UP_ARROW) {
