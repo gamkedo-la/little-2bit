@@ -175,6 +175,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
 }
 
 const PROJECTILE_INFO = {
+  // Ship Projectiles
   Laser: {
     rate: 8,
     timeLimit: 0,

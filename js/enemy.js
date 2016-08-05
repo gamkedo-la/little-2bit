@@ -142,12 +142,12 @@ var brickTypeEnemyClasses = [];
 
 brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
 function SimpleEnemy(x, y) {
-  var vx = -3;
-  var health = 10;
+  var vx = -5;
+  var health = 4;
   var damage = 3;
   var image = Images.simple_enemy;
-  var width = 60;
-  var height = 94;
+  var width = 72;
+  var height = 48;
 
   var halfWidth = width / 2;
   var quarterWidth = width / 4;
@@ -158,11 +158,11 @@ function SimpleEnemy(x, y) {
 
   this._bounds = function(x, y) {
     return [
-      { x: x - quarterWidth, y: y },
-      { x: x, y: y + halfHeight },
-      { x: x + quarterWidth, y: y + halfHeight },
-      { x: x + quarterWidth, y: y - halfHeight },
-      { x: x, y: y - halfHeight }
+      { x: x - halfWidth, y: y },
+      { x: x - eighthWidth, y: y + quarterHeight + eighthHeight },
+      { x: x + eighthWidth, y: y + quarterHeight + eighthHeight },
+      { x: x + quarterWidth + eighthWidth, y: y },
+      { x: x + quarterWidth + eighthWidth, y: y - halfHeight }
     ];
   };
 
@@ -183,7 +183,7 @@ SimpleEnemy.prototype.constructor = SimpleEnemy;
 
 brickTypeEnemyClasses[ENEMY_SHOOTING] = ShootingEnemy;
 function ShootingEnemy(x, y) {
-  var vx = 0;//-3;
+  var vx = -3;
   var health = 10;
   var damage = 3;
   var image = Images.shooting_enemy;
