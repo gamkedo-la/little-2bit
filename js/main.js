@@ -12,7 +12,7 @@ var screenShakeAmount = 0;
 var screenShakeAmountHalf = 0;
 
 // Debug
-var debug = true;
+var debug = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');

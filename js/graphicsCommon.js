@@ -18,6 +18,10 @@ function drawBitmapFrameCenteredWithRotation(canvasContext, useBitmap, frame, at
   canvasContext.restore();
 }
 
+function drawBitmapCenteredWithScale(canvasContext, useBitmap, atX, atY, scale) {
+  canvasContext.drawImage(useBitmap, 0, 0, useBitmap.width, useBitmap.height, atX - useBitmap.width / 2, atY - useBitmap.height / 2, scale * useBitmap.width, scale * useBitmap.height);
+}
+
 function drawFillRect(canvasContext, topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
   canvasContext.fillStyle = fillColor;
   canvasContext.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);

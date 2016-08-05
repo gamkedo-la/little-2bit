@@ -18,7 +18,7 @@ var Ship = new (function() {
   var width = 100;
   var height = 35;
   var halfWidth, quarterWidth, eighthWidth;
-  var halfHeight, quarterHeight;
+  var halfHeight, quarterHeight, eighthHeight;
 
   this.health = MAXHEALTH;
 
@@ -43,6 +43,7 @@ var Ship = new (function() {
     eighthWidth = width / 8;
     halfHeight = height / 2;
     quarterHeight = height / 4;
+    eighthHeight = height / 8;
     minX = halfWidth;
     maxX = levelInfo.width - halfWidth;
     minY = halfHeight;
@@ -202,7 +203,14 @@ var Ship = new (function() {
   this.draw = function() {
     if (!this.isDead) {
       drawBitmapFrameCenteredWithRotation(gameContext, Images.ship, frame, x, y, width, height);
-      if (frameDelay-- <= 0) {
+
+      // Add some smoke to the engines!
+      var minSmoke = (this.keyHeld_E) ? 5 : 1;
+      var maxSmoke = (this.keyHeld_E) ? 10 : 3;
+      ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth - 5, y - quarterHeight - eighthHeight, 160, 195, minSmoke, maxSmoke);
+      ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth + 5, y + quarterHeight + eighthHeight, 165, 200, minSmoke, maxSmoke);
+
+      if (maxFrames > 1 && frameDelay-- <= 0) {
         frameDelay = SHIP_FRAME_DELAY;
         frame++;
         if (frame >= maxFrames) {

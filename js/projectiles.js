@@ -274,7 +274,7 @@ function Rocket(list, x, y) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_ROCKETBLAST, x, y, 0, 0, 1, 1);
+    ParticleList.spawnParticles(PFX_ROCKET_BLAST, x, y, 0, 0, 1, 1);
     ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
   };
 

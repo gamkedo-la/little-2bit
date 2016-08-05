@@ -1,7 +1,9 @@
+const DEC2RAD = (Math.PI / -180);
 const PFX_BUBBLE = 1;
 const PFX_ROCKET = 2;
-const PFX_ROCKETBLAST = 3;
+const PFX_ROCKET_BLAST = 3;
 const PFX_LASER = 4;
+const PFX_SMOKE = 5;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_BUBBLE] = {
@@ -13,7 +15,8 @@ PFX_CONFIG[PFX_BUBBLE] = {
   speedDecay: 0.98,
   gravity: 0,
   alphaFrom: 1,
-  alphaTo: 0.5
+  alphaTo: 0.5,
+  color: '#f00'
 };
 
 PFX_CONFIG[PFX_ROCKET] = {
@@ -25,10 +28,11 @@ PFX_CONFIG[PFX_ROCKET] = {
   speedDecay: 0.98,
   gravity: 0,
   alphaFrom: 1,
-  alphaTo: 0.5
+  alphaTo: 0.5,
+  color: '#f00'
 };
 
-PFX_CONFIG[PFX_ROCKETBLAST] = {
+PFX_CONFIG[PFX_ROCKET_BLAST] = {
   initialSpeed: 0,
   initialSize: 90,
   initialLifeTime: 6,
@@ -37,7 +41,8 @@ PFX_CONFIG[PFX_ROCKETBLAST] = {
   speedDecay: 0.98,
   gravity: 0,
   alphaFrom: 1,
-  alphaTo: 0.5
+  alphaTo: 0.5,
+  color: '#f00'
 };
 
 PFX_CONFIG[PFX_LASER] = {
@@ -49,7 +54,21 @@ PFX_CONFIG[PFX_LASER] = {
   speedDecay: 0.98,
   gravity: 0,
   alphaFrom: 1,
-  alphaTo: 1
+  alphaTo: 1,
+  color: '#f00'
+};
+
+PFX_CONFIG[PFX_SMOKE] = {
+  initialSpeed: 3,
+  initialSize: 3,
+  initialLifeTime: 30,
+  shrink: false,
+  dieOnCollision: false,
+  speedDecay: 0.975,
+  gravity: 0,
+  alphaFrom: 1,
+  alphaTo: 0.2,
+  image: 'particle_smoke'
 };
 
 var ParticleList = new (function() {
@@ -65,8 +84,8 @@ var ParticleList = new (function() {
     }
 
     // Degrees -> radians
-    angleMin = angleMin * (Math.PI / -180);
-    angleMax = angleMax * (Math.PI / -180);
+    angleMin = angleMin * DEC2RAD;
+    angleMax = angleMax * DEC2RAD;
 
     var quantity = minQuantity;
     if (maxQuantity) {
@@ -84,22 +103,11 @@ var ParticleList = new (function() {
       var speed = randomRange(PFX_CONFIG[type].initialSpeed);
 
       var particle = {
-        shrink: PFX_CONFIG[type].shrink,
-        gravity: PFX_CONFIG[type].gravity,
-        speedDecay: PFX_CONFIG[type].speedDecay,
-        initialSize: PFX_CONFIG[type].initialSize,
-        initialSpeed: PFX_CONFIG[type].initialSpeed,
-        initialLifeTime: PFX_CONFIG[type].initialLifeTime,
-        dieOnCollision: PFX_CONFIG[type].dieOnCollision,
-        alphaFrom: PFX_CONFIG[type].alphaFrom,
-        alphaTo: PFX_CONFIG[type].alphaTo,
-
         x: x,
         y: y,
         size: randomRange(PFX_CONFIG[type].initialSize),
         speed: speed,
         lifeTime: Math.round(randomRange(PFX_CONFIG[type].initialLifeTime)),
-        color: '#f00',
         angle: angle,
         speedX: speed * Math.cos(angle),
         speedY: speed * Math.sin(angle),
@@ -109,6 +117,16 @@ var ParticleList = new (function() {
         maxY: maxY,
         alpha: PFX_CONFIG[type].alphaFrom
       };
+
+      for (var property in PFX_CONFIG[type]) {
+        if (PFX_CONFIG[type].hasOwnProperty(property)) {
+          particle[property] = PFX_CONFIG[type][property];
+        }
+      }
+
+      if (particle.image != undefined) {
+        particle.image = Images[particle.image];
+      }
 
       particleList.push(particle);
     }
@@ -129,10 +147,11 @@ var ParticleList = new (function() {
       particle.speedY *= particle.speedDecay;
     }
 
-    particle.isReadyToRemove = (particle.lifeTime <= 0);
-    if (!particle.isReadyToRemove && particle.dieOnCollision) {
-      particle.isReadyToRemove = (particle.minX > particle.x || particle.x > particle.maxX || particle.minY > particle.y || particle.y > particle.maxY || Grid.isSolidTileTypeAtCoords(particle.x, particle.y));
-    }
+    particle.isOutOfBounds = (particle.minX > particle.x || particle.x > particle.maxX || particle.minY > particle.y || particle.y > particle.maxY);
+    particle.isDead = (particle.lifeTime <= 0);
+    particle.hasCollided = particle.dieOnCollision && Grid.isSolidTileTypeAtCoords(particle.x, particle.y);
+
+    particle.isReadyToRemove  = particle.isOutOfBounds || particle.isDead || particle.hasCollided;
 
     particle.x += particle.speedX;
     particle.y += particle.speedY;
@@ -143,7 +162,17 @@ var ParticleList = new (function() {
       gameContext.save();
       gameContext.globalAlpha = particle.alpha;
     }
-    drawFillCircle(gameContext, particle.x, particle.y, particle.size, particle.color);
+    if (particle.image) {
+      if (particle.shrink) {
+        drawBitmapCenteredWithScale(gameContext, particle.image, particle.x, particle.y, particle.size / particle.initialSize);
+      }
+      else {
+        drawBitmapCenteredWithRotation(gameContext, particle.image, particle.x, particle.y);
+      }
+    }
+    else {
+      drawFillCircle(gameContext, particle.x, particle.y, particle.size, particle.color);
+    }
     if (particle.alpha < 1) {
       gameContext.restore();
     }
