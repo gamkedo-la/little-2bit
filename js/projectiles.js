@@ -15,19 +15,18 @@ var ProjectileList = function() {
 
   this.update = function() {
     for (var p = projectiles.length - 1; p >= 0; p--) {
-      projectiles[p].move();
-
-      var coords = projectiles[p].coordsTip();
+      var coords = projectiles[p].nextStep();
       if (Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
-        var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
-        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
+        // @todo where will it hit the wall?
+//        var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
+//        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
         projectiles[p].isReadyToRemove = true;
       }
       else {
-        projectiles[p].isReadyToRemove = projectiles[p].isReadyToRemove || projectiles[p].outOfBounds;
+        projectiles[p].move();
       }
 
-      if (projectiles[p].isReadyToRemove || Ship.isDead) {
+      if (projectiles[p].isReadyToRemove || projectiles[p].outOfBounds || Ship.isDead) {
         projectiles[p].explode();
         projectiles.splice(p, 1);
       }
@@ -58,10 +57,24 @@ var ProjectileList = function() {
         continue;
       }
 
-      if (checkCollisionPointShape(projectiles[p].coords(), objectBounds)) {
-        object.doDamage(projectiles[p].damage);
-        projectiles[p].isReadyToRemove = true;
+      if (checkCollisionShapes(projectiles[p], object)) {
         projectiles[p].hitObject = object;
+      }
+      else {
+        var coords = projectiles[p].coords();
+        var next = projectiles[p].nextStep();
+        var bounds = [
+          { x: coords.x, y: coords.y},
+          { x: next.x, y: next.y + 1}
+        ];
+        if (checkCollisionBounds(bounds, objectBounds)) {
+          projectiles[p].hitObject = object;
+        }
+      }
+
+      if (projectiles[p].hitObject) {
+        projectiles[p].hitObject.doDamage(projectiles[p].damage);
+        projectiles[p].isReadyToRemove = true;
       }
     }
 
@@ -108,6 +121,17 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     list.push(this);
   }
 
+  this.nextStep = function() {
+    if (this._nextStep) {
+      return this._nextStep();
+    }
+
+    return {
+      x: x + vx,
+      y: y + vy
+    };
+  };
+
   this.move = function() {
     if (this._move) {
       this._move();
@@ -122,8 +146,8 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
   };
 
   this.collideAt = function(_x, _y) {
-    x += (_x - x);
-    y += (_y - y);
+    x = _x;
+    y = _y;
   };
 
   this.explode = function() {
@@ -149,10 +173,6 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
 
   this.coords = function() {
     return { x: x, y: y };
-  };
-
-  this.coordsTip = function() {
-    return { x: x + width, y: y };
   };
 
   this.boundingBox = function() {

@@ -80,10 +80,6 @@ function EnemyBase(x, y, vx, health, damage, width, height, image, projectileCla
     return { x: x, y: y };
   };
 
-  this.coordsTip = function() {
-    return { x: x + halfWidth, y: y };
-  };
-
   this.doDamage = function(amount) {
     health -= amount;
     this.isReadyToRemove = (health <= 0);

@@ -25,15 +25,20 @@ function checkCollisionShapes(shape1, shape2) {
 
   var bounds1 = shape1.bounds();
   var bounds2 = shape2.bounds();
+
+  return checkCollisionBounds(bounds1, bounds2)
+}
+
+function checkCollisionBounds(bounds1, bounds2) {
   var i;
   for (i = 0; i < bounds1.length; i++) {
-    if (checkCollisionPointShape(bounds1[i], bounds2)) {
+    if (checkCollisionPointBounds(bounds1[i], bounds2)) {
       return true;
     }
   }
 
   for (i = 0; i < bounds2.length; i++) {
-    if (checkCollisionPointShape(bounds2[i], bounds1)) {
+    if (checkCollisionPointBounds(bounds2[i], bounds1)) {
       return true;
     }
   }
@@ -41,14 +46,14 @@ function checkCollisionShapes(shape1, shape2) {
   return false;
 }
 
-function checkCollisionPointShape(point, shape) {
-  var sum_signs = 0, j = 0, on_edge = false, cross_product, shapeLength = shape.length;
+function checkCollisionPointBounds(point, bounds) {
+  var sum_signs = 0, j = 0, on_edge = false, cross_product, shapeLength = bounds.length;
   for (var i = 0; i < shapeLength; i++) {
     j++;
     if (j == shapeLength) {
       j = 0;
     }
-    cross_product = (point.x - shape[i].x) * (shape[j].y - shape[i].y) - (point.y - shape[i].y) * (shape[j].x - shape[i].x);
+    cross_product = (point.x - bounds[i].x) * (bounds[j].y - bounds[i].y) - (point.y - bounds[i].y) * (bounds[j].x - bounds[i].x);
     if (cross_product == 0) {
       on_edge = true;
     }
