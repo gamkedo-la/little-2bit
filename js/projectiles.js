@@ -19,6 +19,8 @@ var ProjectileList = function() {
       var coords = projectiles[p].coords();
       if (!projectiles[p].outOfBounds && Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
         // @todo where will it hit the wall?
+        var prev = projectiles[p].prevStep();
+        projectiles[p].collideAt(prev.x - 1, prev.y + 1);
 //        var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
 //        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
         projectiles[p].isReadyToRemove = true;
@@ -130,6 +132,17 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     };
   };
 
+  this.prevStep = function() {
+    if (this._prevStep) {
+      return this._prevStep();
+    }
+
+    return {
+      x: x - vx,
+      y: y - vy
+    };
+  };
+
   this.move = function() {
     if (this._move) {
       this._move();
@@ -140,7 +153,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     }
 
     var levelInfo = Grid.levelInfo();
-    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
+    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
   };
 
   this.collideAt = function(_x, _y) {
@@ -158,6 +171,11 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     this._draw(frame, x, y, width, height);
     if (this.blastRange && debug) {
       drawStrokeCircle(gameContext, x, y, this.blastRange, '#fff');
+    }
+    if (debug) {
+      var b = this.bounds();
+      b.push(b[0]);
+      drawLines(gameContext, '#fff', b);
     }
 
     if (frameDelay-- <= 0) {
@@ -183,11 +201,15 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
   };
 
   this.bounds = function() {
+    if (this._bounds) {
+      return this._bounds(x, y);
+    }
+
     return [
-      { x: x, y: y },
-      { x: x + width, y: y },
-      { x: x + width, y: y + height },
-      { x: x, y: y + height }
+      { x: x - halfWidth, y: y - halfHeight },
+      { x: x + halfWidth, y: y - halfHeight },
+      { x: x + halfWidth, y: y + halfHeight },
+      { x: x - halfWidth, y: y + halfHeight }
     ];
   };
 }
@@ -239,6 +261,18 @@ function Laser(list, x, y, angle) {
   var image = Images.laser;
   var width = 30;
   var height = 24;
+
+  var halfWidth = width / 2;
+  var quarterHeight = height / 4;
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x - halfWidth, y: y - quarterHeight },
+      { x: x + halfWidth, y: y - quarterHeight },
+      { x: x + halfWidth, y: y + quarterHeight },
+      { x: x - halfWidth, y: y + quarterHeight }
+    ];
+  };
 
   this._draw = function(frame, x, y, width, height) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);

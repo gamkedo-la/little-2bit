@@ -109,7 +109,7 @@ function EnemyBase(x, y, vx, health, damage, width, height, image, projectileCla
     }
 
     var levelInfo = Grid.levelInfo();
-    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || 0 > y || y > levelInfo.height);
+    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
   };
 
   this.draw = function() {
