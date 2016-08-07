@@ -97,7 +97,7 @@ function PowerUpBase(x, y, width, height, image) {
       }
     }
 
-    if (debug) {
+    if (debug_draw_bounds) {
       var b = this.bounds();
       for (var c = 0; c < b.length; c++) {
         drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#ff0');

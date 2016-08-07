@@ -50,6 +50,10 @@ var Grid = new (function() {
   };
 
   this.cameraSpeed = function() {
+    if (debug_stop_camera) {
+      return 0;
+    }
+
     // @todo check if a boss is active
     var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
     if (camPanX >= maxPanRight) {

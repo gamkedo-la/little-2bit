@@ -165,10 +165,10 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
 
   this.draw = function() {
     this._draw(frame, x, y, width, height);
-    if (this.blastRange && debug) {
+    if (this.blastRange && debug_draw_bounds) {
       drawStrokeCircle(gameContext, x, y, this.blastRange, '#fff');
     }
-    if (debug) {
+    if (debug_draw_bounds) {
       var b = this.bounds();
       b.push(b[0]);
       drawLines(gameContext, '#fff', b);

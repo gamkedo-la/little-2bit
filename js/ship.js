@@ -184,7 +184,7 @@ var Ship = new (function() {
       Sounds.explosion_ship.play();
     }
 
-    if (PROJECTILE_INFO[projectileType] && !single_step) {
+    if (PROJECTILE_INFO[projectileType] && !debug_single_step) {
       projectileLast++;
 
       if (projectileLast > projectileRate) {
@@ -219,7 +219,7 @@ var Ship = new (function() {
       }
     }
 
-    if (debug) {
+    if (debug_draw_bounds) {
       var b = this.bounds();
       for (var c = 0; c < b.length; c++) {
         drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#f00');

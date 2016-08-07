@@ -13,7 +13,9 @@ var screenShakeAmountHalf = 0;
 
 // Debug
 var debug = true;
-var single_step = false;
+var debug_draw_bounds = false;
+var debug_single_step = false;
+var debug_stop_camera = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
@@ -39,7 +41,7 @@ function gameStart() {
   shipProjectiles = new ProjectileList();
   enemyProjectiles = new ProjectileList();
 
-  if (single_step) {
+  if (debug_single_step) {
     gameLoop();
     console.log('Single Step gameLoop!');
     console.log('middle mouse = spawn Laser');
@@ -67,7 +69,9 @@ function gameStart() {
       2: 'Double laser',
       3: 'Triple laser',
       4: 'Rocket',
-      5: 'Double Rocket'
+      5: 'Double Rocket',
+      b: 'Draw bounds',
+      p: 'Stop camera movement'
     });
 
     document.addEventListener('keyup', function(event) {
@@ -87,6 +91,12 @@ function gameStart() {
           break;
         case 53: // 5
           Ship.setProjectile(DoubleRocket);
+          break;
+        case 66: // b
+          debug_draw_bounds = !debug_draw_bounds;
+          break;
+        case 80: // p
+          debug_stop_camera = !debug_stop_camera;
           break;
         default:
           console.log('Pressed', event.keyCode);
