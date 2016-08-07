@@ -183,8 +183,8 @@ function ShootingEnemy(x, y) {
   var health = 10;
   var damage = 3;
   var image = Images.shooting_enemy;
-  var width = 100;
-  var height = 80;
+  var width = 70;
+  var height = 60;
 
   var halfWidth = width / 2;
   var quarterWidth = width / 4;
@@ -195,12 +195,13 @@ function ShootingEnemy(x, y) {
 
   this._bounds = function(x, y) {
     return [
-      { x: x - quarterWidth - eighthWidth, y: y },
-      { x: x - eighthWidth, y: y + halfHeight },
+      { x: x - quarterWidth - eighthWidth, y: y - eighthHeight },
+      { x: x - quarterWidth - eighthWidth, y: y + eighthHeight },
+      { x: x - quarterWidth, y: y + halfHeight },
       { x: x + quarterWidth, y: y + halfHeight },
       { x: x + halfWidth, y: y },
-      { x: x + quarterWidth, y: y - halfHeight },
-      { x: x, y: y - halfHeight }
+      { x: x + quarterWidth, y: y - quarterHeight - eighthHeight},
+      { x: x, y: y - quarterHeight - eighthHeight }
     ];
   };
 

@@ -15,15 +15,13 @@ var ProjectileList = function() {
 
   this.update = function() {
     for (var p = projectiles.length - 1; p >= 0; p--) {
-      var coords = projectiles[p].nextStep();
-      if (Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
+      projectiles[p].move();
+      var coords = projectiles[p].coords();
+      if (!projectiles[p].outOfBounds && Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
         // @todo where will it hit the wall?
 //        var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
 //        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
         projectiles[p].isReadyToRemove = true;
-      }
-      else {
-        projectiles[p].move();
       }
 
       if (projectiles[p].isReadyToRemove || projectiles[p].outOfBounds || Ship.isDead) {
