@@ -12,7 +12,8 @@ var screenShakeAmount = 0;
 var screenShakeAmountHalf = 0;
 
 // Debug
-var debug = false;
+var debug = true;
+var single_step = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
@@ -38,8 +39,27 @@ function gameStart() {
   shipProjectiles = new ProjectileList();
   enemyProjectiles = new ProjectileList();
 
-  gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
-  console.log('Starting game!');
+  if (single_step) {
+    gameLoop();
+    console.log('Single Step gameLoop!');
+    console.log('middle mouse = spawn Laser');
+    console.log('left mouse = single gameLoop step');
+    document.addEventListener('mousedown', function(event) {
+      if (event.button == 1) {
+        var c = Ship.coords();
+        shipProjectiles.spawn(Laser, c.x, c.y);
+      }
+      else {
+        gameLoop();
+      }
+      event.preventDefault();
+    });
+
+  }
+  else {
+    gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
+    console.log('Starting game!');
+  }
 }
 
 function shakeScreen(amount) {

@@ -184,7 +184,7 @@ var Ship = new (function() {
       Sounds.explosion_ship.play();
     }
 
-    if (PROJECTILE_INFO[projectileType]) {
+    if (PROJECTILE_INFO[projectileType] && !single_step) {
       projectileLast++;
 
       if (projectileLast > projectileRate) {
