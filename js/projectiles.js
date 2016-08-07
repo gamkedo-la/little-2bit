@@ -1,3 +1,4 @@
+const COLLISION_CHECK_STEPS = 4;
 var ProjectileList = function() {
   var projectiles = [];
 
@@ -18,11 +19,15 @@ var ProjectileList = function() {
       projectiles[p].move();
       var coords = projectiles[p].coords();
       if (!projectiles[p].outOfBounds && Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
-        // @todo where will it hit the wall?
-        var prev = projectiles[p].prevStep();
-        projectiles[p].collideAt(prev.x - 1, prev.y + 1);
-//        var tileCoords = Grid.coordsToTileCoords(coords.x, coords.y);
-//        projectiles[p].collideAt(tileCoords.x - 1, tileCoords.y + 1);
+        // Approximately figure out where it hit the wall
+        var collision_check_step = -1 / COLLISION_CHECK_STEPS;
+        for (var s = 1; s < COLLISION_CHECK_STEPS; s++) {
+          var prev = projectiles[p].step(collision_check_step * s);
+          projectiles[p].moveTo(prev);
+          if (!Grid.isSolidTileTypeAtCoords(prev.x, prev.y)) {
+            break;
+          }
+        }
         projectiles[p].isReadyToRemove = true;
       }
 
@@ -62,7 +67,7 @@ var ProjectileList = function() {
       }
       else {
         var coords = projectiles[p].coords();
-        var next = projectiles[p].nextStep();
+        var next = projectiles[p].step(.5);
         var bounds = [
           { x: coords.x, y: coords.y},
           { x: next.x, y: next.y + 1}
@@ -121,25 +126,17 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     list.push(this);
   }
 
-  this.nextStep = function() {
-    if (this._nextStep) {
-      return this._nextStep();
+  this.step = function(ratio) {
+    if (ratio == undefined) {
+      ratio = 1;
     }
-
-    return {
-      x: x + vx,
-      y: y + vy
-    };
-  };
-
-  this.prevStep = function() {
     if (this._prevStep) {
-      return this._prevStep();
+      return this._prevStep(ratio);
     }
 
     return {
-      x: x - vx,
-      y: y - vy
+      x: x + vx * ratio,
+      y: y + vy * ratio
     };
   };
 
@@ -148,17 +145,16 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
       this._move();
     }
     else {
-      x += vx;
-      y += vy;
+      this.moveTo(this.step(1));
     }
 
     var levelInfo = Grid.levelInfo();
     this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
   };
 
-  this.collideAt = function(_x, _y) {
-    x = _x;
-    y = _y;
+  this.moveTo = function(coords) {
+    x = coords.x;
+    y = coords.y;
   };
 
   this.explode = function() {

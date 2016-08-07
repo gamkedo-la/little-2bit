@@ -54,11 +54,44 @@ function gameStart() {
       }
       event.preventDefault();
     });
-
   }
   else {
     gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
     console.log('Starting game!');
+  }
+
+  if (debug) {
+    console.log('Debug mode enabled! Action keys:');
+    console.table({
+      1: 'Single laser',
+      2: 'Double laser',
+      3: 'Triple laser',
+      4: 'Rocket',
+      5: 'Double Rocket'
+    });
+
+    document.addEventListener('keyup', function(event) {
+      event.preventDefault();
+      switch (event.keyCode) {
+        case 49: // 1
+          Ship.setProjectile(Laser);
+          break;
+        case 50: // 2
+          Ship.setProjectile(DoubleLaser);
+          break;
+        case 51: // 3
+          Ship.setProjectile(TripleLaser);
+          break;
+        case 52: // 4
+          Ship.setProjectile(Rocket);
+          break;
+        case 53: // 5
+          Ship.setProjectile(DoubleRocket);
+          break;
+        default:
+          console.log('Pressed', event.keyCode);
+      }
+    });
   }
 }
 
