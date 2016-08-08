@@ -101,12 +101,12 @@ PFX_CONFIG[PFX_LASER] = {
 };
 
 PFX_CONFIG[PFX_SMOKE] = {
-  initialSpeed: 2,
+  initialSpeed: 3,
   randomInitialSpeed: true,
   speedDecay: 0.975,
   initialSize: 1,
   randomInitialSize: true,
-  sizeDecay: 1.03,
+  sizeDecay: 1.04,
   initialLifeTime: 30,
   randomInitialLifeTime: true,
   initialAngle: 180,
