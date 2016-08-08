@@ -45,7 +45,7 @@ var EnemyList = new (function() {
   };
 })();
 
-function EnemyBase(x, y, vx, health, damage, width, height, image, projectileClass) {
+function EnemyBase(x, y, vx, vy, health, damage, width, height, image, projectileClass) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
@@ -91,12 +91,26 @@ function EnemyBase(x, y, vx, health, damage, width, height, image, projectileCla
     }
   };
 
+  this.move = function() {
+    if (debug_stop_enemies) {
+      return;
+    }
+
+    if (this._move) {
+      this._move(x, y);
+    }
+    else {
+      x += vx;
+      y += vy;
+    }
+  };
+
   this.update = function() {
     if (this._update) {
       this._update(x, y);
     }
     else {
-      x += vx;
+      this.move();
 
       if (projectileClass) {
         projectileLast++;
@@ -139,6 +153,7 @@ var brickTypeEnemyClasses = [];
 brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
 function SimpleEnemy(x, y) {
   var vx = -5;
+  var vy = 0;
   var health = 4;
   var damage = 3;
   var image = Images.simple_enemy;
@@ -171,7 +186,7 @@ function SimpleEnemy(x, y) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, x, y, vx, health, damage, width, height, image);
+  EnemyBase.call(this, x, y, vx, vy, health, damage, width, height, image);
 }
 
 SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
@@ -180,6 +195,7 @@ SimpleEnemy.prototype.constructor = SimpleEnemy;
 brickTypeEnemyClasses[ENEMY_SHOOTING] = ShootingEnemy;
 function ShootingEnemy(x, y) {
   var vx = -3;
+  var vy = 0;
   var health = 10;
   var damage = 3;
   var image = Images.shooting_enemy;
@@ -221,7 +237,7 @@ function ShootingEnemy(x, y) {
     };
   };
 
-  EnemyBase.call(this, x, y, vx, health, damage, width, height, image, EnergyBall);
+  EnemyBase.call(this, x, y, vx, vy, health, damage, width, height, image, EnergyBall);
 }
 
 ShootingEnemy.prototype = Object.create(EnemyBase.prototype);

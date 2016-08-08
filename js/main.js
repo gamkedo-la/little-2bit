@@ -16,6 +16,7 @@ var debug = true;
 var debug_draw_bounds = false;
 var debug_single_step = false;
 var debug_stop_camera = false;
+var debug_stop_enemies = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
@@ -71,6 +72,7 @@ function gameStart() {
       4: 'Rocket',
       5: 'Double Rocket',
       b: 'Draw bounds',
+      o: 'Stop enemy movement',
       p: 'Stop camera movement'
     });
 
@@ -94,6 +96,9 @@ function gameStart() {
           break;
         case 66: // b
           debug_draw_bounds = !debug_draw_bounds;
+          break;
+        case 79: // o
+          debug_stop_enemies = !debug_stop_enemies;
           break;
         case 80: // p
           debug_stop_camera = !debug_stop_camera;
