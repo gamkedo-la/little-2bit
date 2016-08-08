@@ -262,6 +262,7 @@ function Laser(list, x, y, angle) {
   var quarterHeight = height / 4;
 
   this._bounds = function(x, y) {
+    // @todo what about rotated projectiles...?
     return [
       { x: x - halfWidth, y: y - quarterHeight },
       { x: x + halfWidth, y: y - quarterHeight },
@@ -323,7 +324,7 @@ function Rocket(list, x, y) {
 
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_ROCKET_BLAST, x, y, 0, 0, 1, 1);
-    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 5, 10);
+    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 10, 30);
   };
 
   ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);

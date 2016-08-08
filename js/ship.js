@@ -200,13 +200,14 @@ var Ship = new (function() {
     }
   };
 
+
   this.draw = function() {
     if (!this.isDead) {
       drawBitmapFrameCenteredWithRotation(gameContext, Images.ship, frame, x, y, width, height);
 
       // Add some smoke to the engines!
-      var minSmoke = (this.keyHeld_E) ? 5 : 1;
-      var maxSmoke = (this.keyHeld_E) ? 10 : 3;
+      var minSmoke = (this.keyHeld_E) ? 2 : 1;
+      var maxSmoke = (this.keyHeld_E) ? 4 : 1;
       ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth - 5, y - quarterHeight - eighthHeight, 160, 195, minSmoke, maxSmoke);
       ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth + 5, y + quarterHeight + eighthHeight, 165, 200, minSmoke, maxSmoke);
 
