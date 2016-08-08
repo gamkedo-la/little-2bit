@@ -10,6 +10,7 @@ var Images = new (function() {
     energy_ball: 'img/enemy_shot.png',
     ui_rocket: 'img/ui-rocket.png',
     ui_double_rocket: 'img/ui-double-rocket.png',
+    ui_homing_rocket: 'img/ui-homing-rocket.png',
     ui_laser: 'img/ui-laser.png',
     ui_double_laser: 'img/ui-double-laser.png',
     ui_triple_laser: 'img/ui-triple-laser.png',

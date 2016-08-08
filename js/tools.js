@@ -1,3 +1,5 @@
+const DEC2RAD = (Math.PI / -180);
+
 if (!Object.keys) {
   Object.keys = function(obj) {
     var arr = [],
@@ -12,7 +14,11 @@ if (!Object.keys) {
 }
 
 function distanceBetweenPoints(point1, point2) {
-  return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+  return Math.sqrt(distanceBetweenPointsSquared(point1, point2));
+}
+
+function distanceBetweenPointsSquared(point1, point2) {
+  return Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2);
 }
 
 function checkCollisionShapes(shape1, shape2) {

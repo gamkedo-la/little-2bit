@@ -130,8 +130,9 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     if (ratio == undefined) {
       ratio = 1;
     }
-    if (this._prevStep) {
-      return this._prevStep(ratio);
+
+    if (this._step) {
+      return this._step(ratio);
     }
 
     return {
@@ -142,7 +143,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
 
   this.move = function() {
     if (this._move) {
-      this._move();
+      this._move(x, y);
     }
     else {
       this.moveTo(this.step(1));
@@ -236,6 +237,11 @@ const PROJECTILE_INFO = {
     rate: 24,
     timeLimit: 5,
     uiImageName: 'ui_double_rocket'
+  },
+  HomingRocket: {
+    rate: 32,
+    timeLimit: 4,
+    uiImageName: 'ui_homing_rocket'
   },
 
   // Enemy Projectiles
@@ -344,6 +350,81 @@ function DoubleRocket(list, x, y) {
 }
 DoubleRocket.prototype = Object.create(ProjectileBase.prototype);
 DoubleRocket.prototype.constructor = DoubleRocket;
+
+function HomingRocket(list, x, y) {
+  var damage = 6;
+  var blastRange = 90;
+  var speed = 13;
+  var vx = speed;
+  var vy = 0;
+  var angle = 0;
+  var image = Images.rocket;
+  var width = 40;
+  var height = 24;
+
+  var targetRange = 180;
+  var target = false;
+  var rotationEase = 4;
+
+  this._move = function(x, y) {
+    if (!target) {
+      // Find a target
+      target = EnemyList.findClosestEnemyInRange({ x: x, y: y }, targetRange);
+    }
+
+    if (target) {
+      // Rotate towards target
+      var targetCoords = target.coords();
+      var targetAngle = Math.atan2(targetCoords.y - y, targetCoords.x - x);
+
+      if (Math.abs(targetAngle - angle) > Math.PI) {
+        if (targetAngle > 0 && angle < 0) {
+          angle -= (2 * Math.PI - targetAngle + angle) / rotationEase;
+        }
+        else if (angle > 0 && targetAngle < 0) {
+          angle += (2 * Math.PI - targetAngle + angle) / rotationEase;
+        }
+      }
+      else if (targetAngle < angle) {
+        angle -= Math.abs(targetAngle - angle) / rotationEase;
+      }
+      else {
+        angle += Math.abs(angle - targetAngle) / rotationEase;
+      }
+      
+      vx = speed * Math.cos(angle);
+      vy = speed * Math.sin(angle);
+    }
+
+    this.moveTo({
+      x: x + vx,
+      y: y + vy
+    });
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
+
+    if (debug_draw_bounds) {
+      drawStrokeCircle(gameContext, x, y, targetRange, '#f00');
+      drawLines(gameContext, '#fff', [
+        { x: x, y: y },
+        { x: x + 75 * Math.cos(angle), y: y + 75 * Math.sin(angle) }
+      ]);
+    }
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_ROCKET_BLAST, x, y, 0, 0, 1, 1);
+    ParticleList.spawnParticles(PFX_ROCKET, x, y, 0, 360, 10, 30);
+  };
+
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
+
+  Sounds.rocket.play();
+}
+HomingRocket.prototype = Object.create(ProjectileBase.prototype);
+HomingRocket.prototype.constructor = HomingRocket;
 
 // Enemy Projectiles
 

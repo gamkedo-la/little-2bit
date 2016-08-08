@@ -71,6 +71,7 @@ function gameStart() {
       3: 'Triple laser',
       4: 'Rocket',
       5: 'Double Rocket',
+      6: 'Homing Rocket',
       b: 'Draw bounds',
       o: 'Stop enemy movement',
       p: 'Stop camera movement'
@@ -93,6 +94,9 @@ function gameStart() {
           break;
         case 53: // 5
           Ship.setProjectile(DoubleRocket);
+          break;
+        case 54: // 6
+          Ship.setProjectile(HomingRocket);
           break;
         case 66: // b
           debug_draw_bounds = !debug_draw_bounds;
