@@ -1,4 +1,3 @@
-const DEC2RAD = (Math.PI / -180);
 const PFX_TYPE = 0;
 const PFX_BUBBLE = 1;
 const PFX_ROCKET = 2;
@@ -118,7 +117,6 @@ PFX_CONFIG[PFX_SMOKE] = {
   alphaDecay: 0.95,
   gravity: 0,
   dieOnCollision: false,
-  // Pick one: color or image
   image: 'particle_smoke'
 };
 

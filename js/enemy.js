@@ -14,6 +14,31 @@ var EnemyList = new (function() {
     enemyList = [];
   };
 
+  this.findClosestEnemyInRange = function(point, range) {
+    var enemy,
+      rangeSquared = range * range,
+      currentDistance,
+      closestDistance = -1;
+    for (var i = 0; i < enemyList.length; i++) {
+      var enemyCoords = enemyList[i].coords();
+      // Skip enemies behind the projectile
+      if (enemyCoords.x <= point.x) {
+        continue;
+      }
+      // Skip enemies too far away
+      currentDistance = distanceBetweenPointsSquared(point, enemyCoords);
+      if (currentDistance > rangeSquared) {
+        continue;
+      }
+      if (closestDistance == -1 || closestDistance > currentDistance) {
+        closestDistance = currentDistance;
+        enemy = enemyList[i];
+      }
+    }
+
+    return enemy;
+  };
+
   this.checkCollision = function(ship) {
     for (var i = 0; i < enemyList.length; i++) {
       if (!enemyList[i].isReadyToRemove && checkCollisionShapes(ship, enemyList[i])) {
