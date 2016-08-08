@@ -18,6 +18,8 @@ var Images = new (function() {
     powerUp_double_laser: 'img/ui-double-laser.png',
     powerUp_triple_laser: 'img/ui-triple-laser.png',
     powerUp_shield: 'img/ui-shield.png',
+    shield_big: 'img/player_shield_big.png',
+    shield_small: 'img/player_shield_small.png',
 
     particle_smoke: 'img/particle-smoke.png',
 

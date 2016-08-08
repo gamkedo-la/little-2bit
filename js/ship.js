@@ -13,6 +13,8 @@ var Ship = new (function() {
   this.speedY = 8;
   this.damage = 50;
 
+  this.shieldAmount = 0;
+
   var x, y;
   var minX, minY, maxX, maxY;
   var width = 100;
@@ -54,8 +56,13 @@ var Ship = new (function() {
     this.setProjectile(SHIP_DEFAULT_PROJECTILE);
   };
 
-  this.doDamage = function(amount) {
-    this.health -= amount;
+  this.doDamage = function (amount) {
+
+      if (this.shieldAmount > 0) {
+          this.shieldAmount--;
+      } else {
+          this.health -= amount;
+      }
 
     shakeScreen(5 * amount);
 
@@ -132,6 +139,12 @@ var Ship = new (function() {
     }
   };
 
+    this.setShield = function() {
+        this.shieldAmount = 2;
+    }
+
+    
+
   this.update = function() {
     if (this.isDead) {
       return;
@@ -200,6 +213,20 @@ var Ship = new (function() {
     }
   };
 
+    this.drawShield = function() {
+        switch (this.shieldAmount) {
+            case 2:
+                drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_big, frame, x+5, y, 108, 65);
+                break;
+            case 1:
+                drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_small, frame, x+5, y, 108, 65);
+                break;
+            case 0:
+            default:
+                break;
+        }    
+    }
+
 
   this.draw = function() {
     if (!this.isDead) {
@@ -218,6 +245,8 @@ var Ship = new (function() {
           frame = 0;
         }
       }
+
+        this.drawShield();
     }
 
     if (debug_draw_bounds) {
