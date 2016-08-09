@@ -2,6 +2,8 @@ const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
 
+const SHIELD_LIFE_AMOUNT = 5;
+
 var Ship = new (function() {
   this.keyHeld_N = false;
   this.keyHeld_S = false;
@@ -56,10 +58,14 @@ var Ship = new (function() {
     this.setProjectile(SHIP_DEFAULT_PROJECTILE);
   };
 
-  this.doDamage = function (amount) {
 
-      if (this.shieldAmount > 0) {
-          this.shieldAmount--;
+  this.doDamage = function (amount) {
+      if (this.shieldAmount < amount) {
+          amountLeft = amount - this.shieldAmount;
+          this.health -= amountLeft;
+          this.shieldAmount=0;
+      } else if (this.shieldAmount > 0) { //remove remainder if damage is more than what shield is left.
+          this.shieldAmount -= amount;
       } else {
           this.health -= amount;
       }
@@ -140,10 +146,10 @@ var Ship = new (function() {
   };
 
     this.setShield = function() {
-        this.shieldAmount = 2;
+        this.shieldAmount = SHIELD_LIFE_AMOUNT;
     }
 
-    
+
 
   this.update = function() {
     if (this.isDead) {
@@ -214,17 +220,23 @@ var Ship = new (function() {
   };
 
     this.drawShield = function() {
-        switch (this.shieldAmount) {
-            case 2:
-                drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_big, frame, x+5, y, 108, 65);
-                break;
-            case 1:
-                drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_small, frame, x+5, y, 108, 65);
-                break;
-            case 0:
-            default:
-                break;
-        }    
+        // switch (this.shieldAmount) {
+        //     case 2:
+        //         drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_big, frame, x+5, y, 108, 65);
+        //         break;
+        //     case 1:
+        //         drawBitmapFrameCenteredWithRotation(gameContext, Images.shield_small, frame, x+5, y, 108, 65);
+        //         break;
+        //     case 0:
+        //     default:
+        //         break;
+        //}
+
+        if (this.shieldAmount>=SHIELD_LIFE_AMOUNT/2) {
+            drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_big, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT)
+        } else if (this.shieldAmount>0) {
+            drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_small, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT)
+        }
     }
 
 

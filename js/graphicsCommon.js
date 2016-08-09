@@ -18,6 +18,17 @@ function drawBitmapFrameCenteredWithRotation(canvasContext, useBitmap, frame, at
   canvasContext.restore();
 }
 
+function drawBitmapFrameCenteredWithRotationAndAlpha(canvasContext, useBitmap, frame, atX, atY, width, height, withAng, alpha) {
+  canvasContext.save();
+  canvasContext.globalAlpha = alpha;
+  canvasContext.translate(atX, atY);
+  if (withAng != undefined) {
+    canvasContext.rotate(withAng);
+  }
+  canvasContext.drawImage(useBitmap, width * frame, 0, width, height, -width / 2, -height / 2, width, height);
+  canvasContext.restore();
+}
+
 function drawBitmapCenteredWithScaleAndRotation(canvasContext, useBitmap, atX, atY, scale, angle) {
   canvasContext.save();
   canvasContext.translate(atX, atY);
