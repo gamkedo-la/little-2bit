@@ -70,7 +70,7 @@ var EnemyList = new (function() {
   };
 })();
 
-function EnemyBase(x, y, vx, vy, health, damage, width, height, image, projectileClass) {
+function EnemyBase(x, y, vx, vy, health, damage, width, height, image, projectileClass, projectileAngle) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
@@ -142,13 +142,13 @@ function EnemyBase(x, y, vx, vy, health, damage, width, height, image, projectil
         if (projectileLast > projectileRate) {
           projectileLast = 0;
           var muzzle = this.muzzle(x, y);
-          new projectileClass(enemyProjectiles, muzzle.x, muzzle.y);
+          new projectileClass(enemyProjectiles, muzzle.x, muzzle.y, projectileAngle * DEC2RAD);
         }
       }
     }
 
     var levelInfo = Grid.levelInfo();
-    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
+    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width * 2 || -height > y || y > levelInfo.height + height);
   };
 
   this.draw = function() {
@@ -262,11 +262,54 @@ function ShootingEnemy(x, y) {
     };
   };
 
-  EnemyBase.call(this, x, y, vx, vy, health, damage, width, height, image, EnergyBall);
+  EnemyBase.call(this, x, y, vx, vy, health, damage, width, height, image, EnergyBall, 0);
 }
 
 ShootingEnemy.prototype = Object.create(EnemyBase.prototype);
 ShootingEnemy.prototype.constructor = ShootingEnemy;
 
-brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleEnemy;
+brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleTurret;
+function SimpleTurret(x, y) {
+  var vx = 0;
+  var vy = 0;
+  var health = 4;
+  var damage = 3;
+  var image = Images.simple_turret;
+  var width = 40;
+  var height = 40;
+
+  var halfWidth = width / 2;
+  var halfHeight = height / 2;
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x - halfWidth, y: y - halfHeight },
+      { x: x + halfWidth, y: y - halfHeight },
+      { x: x + halfWidth, y: y + halfHeight },
+      { x: x - halfWidth, y: y + halfHeight }
+    ];
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_simple_turret.play();
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
+  };
+
+  this.muzzle = function(x, y) {
+    return {
+      x: x,
+      y: y - halfHeight
+    };
+  };
+
+  EnemyBase.call(this, x, y, vx, vy, health, damage, width, height, image, EnergyBall, -90);
+}
+
+SimpleTurret.prototype = Object.create(EnemyBase.prototype);
+SimpleTurret.prototype.constructor = SimpleTurret;
+
 brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = SimpleEnemy;

@@ -29,6 +29,7 @@ var Grid = new (function() {
     bricks[BRICK_TOP2] = Images.top2;
     bricks[BRICK_BOTTOM1] = Images.bottom1;
     bricks[BRICK_BOTTOM2] = Images.bottom2;
+    bricks[BRICK_BOTTOM_TURRET] = Images.bottom_turret;
 
     this.backgroundWidth = Images.stars.width;
 
@@ -109,19 +110,34 @@ var Grid = new (function() {
       for (var c = cameraLeftMostCol; c < cameraRightMostCol; c++) {
         if (level[i] != undefined) {
           if (EnemyList.brickTypeIsEnemy(level[i])) {
-            EnemyList.createEnemyByBrickType(level[i], x, y);
+            EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
             level[i] = BRICK_SPACE;
           }
           else if (PowerUpList.brickTypeIsPowerUp(level[i])) {
-            PowerUpList.createPowerUpByBrickType(level[i], x, y);
+            PowerUpList.createPowerUpByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
             level[i] = BRICK_SPACE;
           }
           else if (bricks[level[i]]) {
             gameContext.drawImage(bricks[level[i]], x, y);
           }
         }
+        if (debug_draw_bounds) {
+          if (r == ROWS - 1) {
+            drawLines(gameContext, '#fff', [
+              { x: x, y: 0 },
+              { x: x, y: gameCanvas.height }
+            ]);
+          }
+        }
+
         i++;
         x += GRID_WIDTH;
+      }
+      if (debug_draw_bounds) {
+        drawLines(gameContext, '#fff', [
+          { x: x, y: y },
+          { x: cameraRightMostCol, y: y }
+        ]);
       }
       y += GRID_HEIGHT;
     }
@@ -152,6 +168,7 @@ const BRICK_TOP1 = 1;
 const BRICK_TOP2 = 2;
 const BRICK_BOTTOM1 = 3;
 const BRICK_BOTTOM2 = 4;
+const BRICK_BOTTOM_TURRET = 5;
 
 const ENEMY_SIMPLE = 6;
 const ENEMY_SHOOTING = 7;
@@ -184,7 +201,7 @@ var level1 = {
     0,0,0,0,0,0,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
     0,0,0,0,0,0,0,0,0,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
     0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-    3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,4,3,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4
+    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
+    3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,4,3,3,5,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4
   ]
 };
