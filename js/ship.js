@@ -60,15 +60,25 @@ var Ship = new (function() {
 
 
   this.doDamage = function (amount) {
-      if (this.shieldAmount < amount) {
-          amountLeft = amount - this.shieldAmount;
-          this.health -= amountLeft;
-          this.shieldAmount=0;
-      } else if (this.shieldAmount > 0) { //remove remainder if damage is more than what shield is left.
-          this.shieldAmount -= amount;
-      } else {
-          this.health -= amount;
-      }
+    //   if (this.shieldAmount < amount) {
+    //       amountLeft = amount - this.shieldAmount;
+    //       this.health -= amountLeft;
+    //       this.shieldAmount=0;
+    //   } else if (this.shieldAmount > 0) { //remove remainder if damage is more than what shield is left.
+    //       this.shieldAmount -= amount;
+    //   } else {
+    //       this.health -= amount;
+    //   }
+
+    if (this.shieldAmount > 0) {
+        this.shieldAmount -= amount;
+        if (this.shieldAmount<0) {
+            this.health += this.shieldAmount;
+            this.shieldAmount = 0;
+        }
+    } else {
+        this.health -= amount;
+    }
 
     shakeScreen(5 * amount);
 
