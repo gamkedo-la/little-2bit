@@ -36,7 +36,8 @@ var Images = new (function() {
     bottom2: 'img/bottom2.png',
     bottom_turret: 'img/bottom-turret.png',
     top1: 'img/top1.png',
-    top2: 'img/top2.png'
+    top2: 'img/top2.png',
+    tilemap_demo: 'img/tilemap_template.png'
   };
 
   this.initialize = function(callback) {
