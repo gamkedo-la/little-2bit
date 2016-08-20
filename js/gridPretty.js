@@ -55,17 +55,23 @@ const SHL_X = 7;
 const SHL_C = 8;
 
 function shiftMask(shiftAmt) {
-  return (1<<shiftAmt);
+  return (1 << shiftAmt);
 }
-function shiftMaskAll(/*accept any number*/){
+
+function shiftMaskAll(/*accept any number*/) {
   var sumMask = 0;
-  for(var i=0; i<arguments.length; i++){
+  for (var i = 0; i < arguments.length; i++) {
     sumMask |= shiftMask(arguments[i]);
   }
+
   return sumMask;
-};
-function initArtMaskLookup() { // to map shift combinations into art sheet index
-  if(tilemaskToArtIdx != undefined) {
+}
+
+/**
+ * To map shift combinations into art sheet index
+ */
+function initArtMaskLookup() {
+  if (tilemaskToArtIdx != undefined) {
     return;
   }
 
@@ -81,64 +87,40 @@ function initArtMaskLookup() { // to map shift combinations into art sheet index
   maskShiftLookup[SHL_C] = shiftMask(SHL_C);
 
   tilemaskToArtIdx = [];
-  tilemaskToArtIdx[ shiftMaskAll(SHL_S,SHL_D,SHL_X,SHL_C) ] = TILE_SDXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S,SHL_D,SHL_Z,SHL_X,SHL_C) ] = TILE_ASDZXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S,SHL_Z,SHL_X) ] = TILE_ASZX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_S,SHL_D,SHL_X) ] = TILE_SDX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S,SHL_D) ] = TILE_ASD;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S,SHL_X) ] = TILE_ASX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X)  ] = TILE_QWEASDZX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S,SHL_D,SHL_X) ] = TILE_ASDX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_X,SHL_C) ] = TILE_QWEASDXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_S,SHL_X) ] = TILE_SX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_S,SHL_D) ] = TILE_SD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_SDXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_ASDZXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_Z, SHL_X)] = TILE_ASZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D, SHL_X)] = TILE_SDX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_D)] = TILE_ASD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_X)] = TILE_ASX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X)] = TILE_QWEASDZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_D, SHL_X)] = TILE_ASDX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_QWEASDXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_X)] = TILE_SX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D)] = TILE_SD;
 
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_E,
-                                 SHL_S,SHL_D,
-                                 SHL_X,SHL_C) ] = TILE_WESDXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X,SHL_C) ] = TILE_QWEASDZXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,
-                                 SHL_A,SHL_S,
-                                 SHL_Z,SHL_X) ] = TILE_QWASZX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,
-                                 SHL_S,
-                                 SHL_X) ] = TILE_WSX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_S) ] = TILE_S;
-  // TILE_FG_OVERLAP not part of the lookup index
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_S,SHL_D,SHL_X) ] = TILE_WSDX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_A,SHL_S,SHL_D,SHL_X) ] = TILE_WASDX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_A,SHL_S,SHL_X) ] = TILE_WASX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_A,SHL_S) ] = TILE_AS;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_S) ] = TILE_WS;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_E,SHL_S,SHL_D) ] = TILE_WESD;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_E,SHL_A,SHL_S,SHL_D) ] = TILE_QWEASD;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_A,SHL_S) ] = TILE_QWAS;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_S,SHL_D) ] = TILE_WSD;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_A,SHL_S) ] = TILE_WAS;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X,SHL_C) ] = TILE_QWASDZXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_A,SHL_S,SHL_D) ] = TILE_WASD;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X,SHL_C) ] = TILE_WEASDZXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_WESDXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_QWEASDZXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S, SHL_Z, SHL_X)] = TILE_QWASZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S, SHL_X)] = TILE_WSX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S)] = TILE_S;
 
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_X) ] = TILE_QWEASDX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_Q,SHL_W,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X) ] = TILE_QWASDZX;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,SHL_E,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_X, SHL_C) ] = TILE_WEASDXC;
-  tilemaskToArtIdx[ shiftMaskAll(SHL_W,
-                                 SHL_A,SHL_S,SHL_D,
-                                 SHL_Z,SHL_X,SHL_C) ] = TILE_WASDZXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S, SHL_D, SHL_X)] = TILE_WSDX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S, SHL_D, SHL_X)] = TILE_WASDX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S, SHL_X)] = TILE_WASX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S)] = TILE_AS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S)] = TILE_WS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_S, SHL_D)] = TILE_WESD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D)] = TILE_QWEASD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S)] = TILE_QWAS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S, SHL_D)] = TILE_WSD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S)] = TILE_WAS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_QWASDZXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S, SHL_D)] = TILE_WASD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_WEASDZXC;
+
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_X)] = TILE_QWEASDX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X)] = TILE_QWASDZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_A, SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_WEASDXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_WASDZXC;
 }
