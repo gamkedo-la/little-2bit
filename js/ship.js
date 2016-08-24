@@ -207,7 +207,7 @@ var Ship = new (function() {
       if (projectileLast > projectileRate) {
         projectileLast = 0;
         var muzzle = this.muzzleCoords();
-        shipProjectiles.spawn(projectileClass, muzzle.x, muzzle.y);
+//        shipProjectiles.spawn(projectileClass, muzzle.x, muzzle.y);
       }
     }
 
