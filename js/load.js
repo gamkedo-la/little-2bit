@@ -22,6 +22,8 @@ var Images = new (function() {
     powerUp_shield: 'img/ui-shield.png',
     shield_big: 'img/player_shield_big.png',
     shield_small: 'img/player_shield_small.png',
+    shield_big_glow: 'img/player_shield_big_glow.png',
+    shield_small_glow: 'img/player_shield_small_glow.png',
 
     particle_smoke: 'img/particle-smoke.png',
 
