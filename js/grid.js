@@ -7,7 +7,8 @@ var Grid = new (function() {
   var ROWS = 15;
 
   var level;
-  var bricks = [];
+  var tilemap;
+  var levelPrettyTileGrid;
 
   var canvasHalfWidth;
   var colsThatFitOnScreen;
@@ -24,18 +25,138 @@ var Grid = new (function() {
     colsThatFitOnScreen = Math.floor(gameCanvas.width / GRID_WIDTH);
     camPanX = 0.0;
 
-    bricks[BRICK_SPACE] = false;
-    bricks[BRICK_TOP1] = Images.top1;
-    bricks[BRICK_TOP2] = Images.top2;
-    bricks[BRICK_BOTTOM1] = Images.bottom1;
-    bricks[BRICK_BOTTOM2] = Images.bottom2;
-
     this.backgroundWidth = Images.stars.width;
 
     // @todo dynamic load level
     COLS = level1.cols;
     ROWS = level1.rows;
+    tilemap = Images[level1.tilemap];
     level = level1.map;
+    levelPrettyTileGrid = [];
+
+    initArtMaskLookup();
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var i = tileToIndex(c, r);
+
+        // adjacency around a given title is labelled like:
+        // QWE
+        // ASD // for describing adjacency around tile at position S
+        // ZXC
+
+        var bitMask = 0;
+        var directTouchCount = 0;
+        var cornerCount = 0;
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c - 1, r - 1)) { // Q
+          bitMask |= maskShiftLookup[SHL_Q];
+          cornerCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c, r - 1)) { // W
+          bitMask |= maskShiftLookup[SHL_W];
+          directTouchCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c + 1, r - 1)) { // E
+          bitMask |= maskShiftLookup[SHL_E];
+          cornerCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c - 1, r)) { // A
+          bitMask |= maskShiftLookup[SHL_A];
+          directTouchCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c, r)) { // S
+          bitMask |= maskShiftLookup[SHL_S];
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c + 1, r)) { // D
+          bitMask |= maskShiftLookup[SHL_D];
+          directTouchCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c - 1, r + 1)) { // Z
+          bitMask |= maskShiftLookup[SHL_Z];
+          cornerCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c, r + 1)) { // X
+          bitMask |= maskShiftLookup[SHL_X];
+          directTouchCount++;
+        }
+        if (this.isSolidTileTypeAtCR_WithBoundsSafety(c + 1, r + 1)) { // C
+          bitMask |= maskShiftLookup[SHL_C];
+          cornerCount++;
+        }
+
+        if ((bitMask & maskShiftLookup[SHL_S]) != 0) {
+          if (tilemaskToArtIdx[bitMask] != undefined) {
+            levelPrettyTileGrid[i] = tilemaskToArtIdx[bitMask];
+          }
+          else if (directTouchCount == 4) {
+            if (cornerCount > 0) {
+              levelPrettyTileGrid[i] = TILE_QWEASDZXC;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_WASDX;
+            }
+          }
+          else if (directTouchCount == 3) {
+            if ((bitMask & maskShiftLookup[SHL_W]) == 0) {
+              levelPrettyTileGrid[i] = TILE_ASDX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_A]) == 0) {
+              levelPrettyTileGrid[i] = TILE_WSDX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_D]) == 0) {
+              levelPrettyTileGrid[i] = TILE_WASX;
+            }
+            else /* if((bitMask & maskShiftLookup[SHL_X]) == 0) */ {
+              levelPrettyTileGrid[i] = TILE_WASD;
+            }
+          }
+          else if (directTouchCount == 2) {
+            if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
+              levelPrettyTileGrid[i] = TILE_ASD;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+              levelPrettyTileGrid[i] = TILE_WSX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
+              levelPrettyTileGrid[i] = TILE_WSD;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_D]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+              levelPrettyTileGrid[i] = TILE_SDX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+              levelPrettyTileGrid[i] = TILE_ASX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_W]) != 0) {
+              levelPrettyTileGrid[i] = TILE_WAS;
+            }
+            //levelPrettyTileGrid[i] = TILE_S;
+          }
+          else if (directTouchCount == 1) {
+            if ((bitMask & maskShiftLookup[SHL_W]) != 0) {
+              levelPrettyTileGrid[i] = TILE_WS;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_D]) != 0) {
+              levelPrettyTileGrid[i] = TILE_SD;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_X]) != 0) {
+              levelPrettyTileGrid[i] = TILE_SX;
+            }
+            else if ((bitMask & maskShiftLookup[SHL_A]) != 0) {
+              levelPrettyTileGrid[i] = TILE_AS;
+            }
+          }
+          else /* if(directTouchCount == 0) */ {
+            levelPrettyTileGrid[i] = TILE_S;
+          }
+
+          if (level[i] == BRICK_ALTSTYLE) {
+            levelPrettyTileGrid[i] += PRETTY_TILE_ART_COLS * PRETTY_TILE_ART_ROWS_PER_STYLE;
+          }
+        }
+        else {
+          levelPrettyTileGrid[i] = undefined; // skip
+        }
+      }
+    }
   };
 
   this.levelInfo = function() {
@@ -74,8 +195,17 @@ var Grid = new (function() {
     return (col + COLS * row);
   }
 
+  this.isSolidTileTypeAtCR_WithBoundsSafety = function(col, row) {
+    if(col < 0 || row < 0 || col >= COLS || row >= ROWS) {
+      return true; // treat out of bounds as solid
+    }
+    var type = level[tileToIndex(col, row)];
+    return type != BRICK_SPACE && !EnemyList.brickTypeIsEnemy(type) && !PowerUpList.brickTypeIsPowerUp(type);
+  };
+
   this.isSolidTileTypeAtCoords = function(x, y) {
-    return this.tileTypeAtCoords(x, y) != BRICK_SPACE;
+    var type = this.tileTypeAtCoords(x, y);
+    return type != BRICK_SPACE && !EnemyList.brickTypeIsEnemy(type);
   };
 
   this.tileTypeAtCoords = function(x, y) {
@@ -109,19 +239,40 @@ var Grid = new (function() {
       for (var c = cameraLeftMostCol; c < cameraRightMostCol; c++) {
         if (level[i] != undefined) {
           if (EnemyList.brickTypeIsEnemy(level[i])) {
-            EnemyList.createEnemyByBrickType(level[i], x, y);
+            EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
             level[i] = BRICK_SPACE;
           }
           else if (PowerUpList.brickTypeIsPowerUp(level[i])) {
-            PowerUpList.createPowerUpByBrickType(level[i], x, y);
+            PowerUpList.createPowerUpByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
             level[i] = BRICK_SPACE;
           }
-          else if (bricks[level[i]]) {
-            gameContext.drawImage(bricks[level[i]], x, y);
+          else if (levelPrettyTileGrid[i] != undefined) {
+            var tileArtSourceX = levelPrettyTileGrid[i] % PRETTY_TILE_ART_COLS * GRID_WIDTH;
+            var tileArtSourceY = Math.floor(levelPrettyTileGrid[i] / PRETTY_TILE_ART_COLS) * GRID_HEIGHT;
+            gameContext.drawImage(tilemap,
+                                  tileArtSourceX,tileArtSourceY,
+                                  GRID_WIDTH,GRID_HEIGHT,
+                                  x, y,
+                                  GRID_WIDTH,GRID_HEIGHT);
           }
         }
+        if (debug_draw_bounds) {
+          if (r == ROWS - 1) {
+            drawLines(gameContext, '#fff', [
+              { x: x, y: 0 },
+              { x: x, y: gameCanvas.height }
+            ]);
+          }
+        }
+
         i++;
         x += GRID_WIDTH;
+      }
+      if (debug_draw_bounds) {
+        drawLines(gameContext, '#fff', [
+          { x: x, y: y },
+          { x: cameraRightMostCol, y: y }
+        ]);
       }
       y += GRID_HEIGHT;
     }
@@ -148,15 +299,16 @@ var Grid = new (function() {
 })();
 
 const BRICK_SPACE = 0;
-const BRICK_TOP1 = 1;
-const BRICK_TOP2 = 2;
-const BRICK_BOTTOM1 = 3;
-const BRICK_BOTTOM2 = 4;
+const BRICK_DEFSTYLE = 1; // these will be automatically converted into different tile segments during level start
+const BRICK_ALTSTYLE = 2;
 
 const ENEMY_SIMPLE = 6;
 const ENEMY_SHOOTING = 7;
-const ENEMY_TURRET_SIMPLE = 8;
-const ENEMY_TURRET_ADVANCED = 9;
+const ENEMY_ADVANCED1 = 8;
+const ENEMY_ADVANCED2 = 9;
+const ENEMY_ADVANCED3 = 10;
+const ENEMY_TURRET_SIMPLE = 11;
+const ENEMY_TURRET_ADVANCED = 12;
 
 const POWERUP_ROCKET = 20;
 const POWERUP_DOUBLE_ROCKET = 21;
@@ -168,23 +320,24 @@ const POWERUP_SHIELD = 25;
 var level1 = {
   cols: 80,
   rows: 15,
+  tilemap: 'tilemap_demo',
   map: [
-  //0                   1                   2                   3                 3 4                   5                   6                   7                 7
+  //0                   1                   2                   3                   4                   5                   6                   7                 7
   //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
-    1,2,2,1,1,2,2,2,2,2,2,1,2,2,2,2,1,2,2,2,1,2,1,2,2,1,1,2,2,2,2,2,2,1,2,2,2,2,1,2,1,2,2,1,1,2,2,2,2,2,2,1,2,2,2,2,1,2,2,2,1,2,1,2,2,1,1,2,2,2,2,2,2,1,2,2,2,2,1,2,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    0,0,0,0,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-    0,0,0,0,0,0,0,0,0,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-    0,0,0,0,0,0,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
-    0,0,0,0,0,0,0,0,0,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,
-    0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,
-    3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,4,3,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4,3,3,3,3,3,3,3,3,3,3,4,4,3,4,4,3,3,3,4,4,4,4
+    1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,2,0,0,0,0,0,1,1,1,0,0,0,0,0,0,2,2,8,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,1,
+    0,0,0,0,0,2,0,2,0,0,0,0,0,1,1,1,1,0,1,0,2,2,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,1,
+    0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,7,0,2,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,0,0,0,0,24,0,1,1,1,0,2,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,0,0,0,0,0,0,1,0,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,0,1,0,0,0,20,0,0,0,2,0,0,0,0,0,1,1,1,1,2,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,1,
+    0,0,0,0,1,1,1,0,0,21,0,0,0,2,2,0,0,0,0,1,0,1,0,2,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,1,
+    0,0,0,0,1,0,1,0,0,0,2,2,2,2,2,0,0,22,0,1,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    0,0,0,0,1,0,1,0,0,0,0,0,2,0,0,0,0,0,11,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
   ]
 };

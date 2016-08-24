@@ -4,6 +4,10 @@ var Images = new (function() {
     ship: 'img/player_ship.png',
     simple_enemy: 'img/simple_enemy.png',
     shooting_enemy: 'img/enemy_ship.png',
+    simple_turret: 'img/turret_enemy1.png',
+    advanced_turret_body: 'img/advanced_turret_enemy_body.png',
+    advanced_turret_barrels: 'img/advanced_turret_enemy_barrels.png',
+    advanced_enemy: 'img/advanced_enemy1.png',
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
@@ -32,8 +36,10 @@ var Images = new (function() {
 
     bottom1: 'img/bottom1.png',
     bottom2: 'img/bottom2.png',
+    bottom_turret: 'img/bottom-turret.png',
     top1: 'img/top1.png',
-    top2: 'img/top2.png'
+    top2: 'img/top2.png',
+    tilemap_demo: 'img/tilemap_template.png'
   };
 
   this.initialize = function(callback) {
@@ -72,7 +78,8 @@ var Sounds = new (function() {
     rocket: 'sfx/rocket1.wav',
     explosion_ship: 'sfx/explosion2.wav',
     explosion_simple_enemy: 'sfx/explosion1.wav',
-    explosion_shooting_enemy: 'sfx/explosion1.wav'
+    explosion_shooting_enemy: 'sfx/explosion1.wav',
+    explosion_simple_turret: 'sfx/explosion1.wav'
   };
 
   this.initialize = function() {

@@ -62,16 +62,6 @@ var Ship = new (function() {
 
 
   this.doDamage = function (amount) {
-    //   if (this.shieldAmount < amount) {
-    //       amountLeft = amount - this.shieldAmount;
-    //       this.health -= amountLeft;
-    //       this.shieldAmount=0;
-    //   } else if (this.shieldAmount > 0) { //remove remainder if damage is more than what shield is left.
-    //       this.shieldAmount -= amount;
-    //   } else {
-    //       this.health -= amount;
-    //   }
-
     if (this.shieldAmount > 0) {
         this.shieldAmount -= amount;
         if (this.shieldAmount<0) {
@@ -157,11 +147,9 @@ var Ship = new (function() {
     }
   };
 
-    this.setShield = function() {
-        this.shieldAmount = SHIELD_LIFE_AMOUNT;
-    }
-
-
+  this.setShield = function() {
+      this.shieldAmount = SHIELD_LIFE_AMOUNT;
+  };
 
   this.update = function() {
     if (this.isDead) {
@@ -252,7 +240,7 @@ var Ship = new (function() {
         if (this.shieldAnimationTimer>SHIELD_ANIMATION*2) {
           this.shieldAnimationTimer = 0;
         }
-    }
+    };
 
 
 
@@ -274,7 +262,7 @@ var Ship = new (function() {
         }
       }
 
-        this.drawShield();
+      this.drawShield();
     }
 
     if (debug_draw_bounds) {

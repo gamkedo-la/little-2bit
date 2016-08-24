@@ -1,4 +1,4 @@
-const DEC2RAD = (Math.PI / -180);
+const DEC2RAD = (Math.PI / 180);
 
 if (!Object.keys) {
   Object.keys = function(obj) {

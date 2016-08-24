@@ -2,8 +2,8 @@ const COLLISION_CHECK_STEPS = 4;
 var ProjectileList = function() {
   var projectiles = [];
 
-  this.spawn = function(projectileClass, x, y) {
-    new projectileClass(this, x, y);
+  this.spawn = function(projectileClass, x, y, angle) {
+    new projectileClass(this, x, y, angle);
   };
 
   this.push = function(projectile) {
@@ -431,7 +431,7 @@ HomingRocket.prototype.constructor = HomingRocket;
 function EnergyBall(list, x, y, angle) {
   var damage = 0.5;
   var blastRange = 0;
-  var speed = -8;
+  var speed = 8;
   var vx = speed;
   var vy = 0;
   if (angle) {
