@@ -13,131 +13,17 @@ if (!Object.keys) {
   };
 }
 
-function sign(x) {
-  if (x == 0) {
-    return 0;
-  }
+function rotateToTarget(vx, vy, speed, rotationEase, shipCoords, thisCoords) {
+  var diffX = shipCoords.x - thisCoords.x;
+  var diffY = shipCoords.y - thisCoords.y;
+  var dist = Math.sqrt(diffX * diffX + diffY * diffY);
+  var newVX = (diffX / dist) * speed;
+  var newVY = (diffY / dist) * speed;
 
-  return x / Math.abs(x);
-}
-
-function l(x) {
-  return (Math.round(x * 100) / 100);
-}
-
-var debugT = 0;
-function rotateToTarget(angle, rotationEase, thisCoords, targetCoords) {
-  var ft = Math.PI * 2;
-  var targetAngle = Math.atan2(targetCoords.y - thisCoords.y, targetCoords.x - thisCoords.x);
-
-  targetAngle = (targetAngle + ft) % ft;
-  var sourceAngle = (angle + ft) % ft;
-
-  if (sourceAngle == targetAngle) {
-    return angle;
-  }
-
-  if (debugT++ > 0) {
-//    return angle;
-  }
-  var oldAngle = angle;
-
-
-//  var delta = angle - targetAngle;
-//  var deltaAbs = Math.abs(delta);
-//
-//  if (deltaAbs > Math.PI) {
-//    delta = deltaAbs - ft;
-//  }
-
-  var delta = (sourceAngle - targetAngle) % ft;
-  if (delta > Math.PI) {
-    delta -= ft;
-  }
-  if (l(delta) != 0) {
-    console.log({ s: l(sourceAngle), t: l(targetAngle), d: l(delta) });
-  }
-
-  angle += (sign(delta) * delta) / rotationEase;
-  angle %= ft;
-
-//  var sourceAngle = ((angle > 0) ? angle : (angle + ft)) % ft;
-//  targetAngle = ((targetAngle > 0) ? targetAngle : (targetAngle + ft)) % ft;
-//  var diffAngle = Math.abs(sourceAngle - targetAngle);
-//  if (diffAngle > 0.01) {
-//    var factor = (((sourceAngle - targetAngle + ft) % ft) > Math.PI ) ? 1 : -1;
-//    angle += factor * diffAngle / rotationEase;
-//    if (diffAngle > Math.PI) {
-//      console.table({
-//        ddn: ((sourceAngle - targetAngle + ft) % ft),
-//        dd: sourceAngle - targetAngle,
-//        f: factor,
-//        a: angle,
-//        oa: oldAngle,
-//        ta: targetAngle
-//      });
-//    }
-//  }
-
-//  var diff = Math.abs(angle - targetAngle);
-//
-//  if (diff > Math.PI) {
-//    diff = Math.PI * 2 - diff; //Normalize the difference in case it goes beyond a  full circle
-//  }
-
-//  if (Math.round(diff * 100) / 100 != 0) {
-//    angle += diff / rotationEase;
-//    angle %= (Math.PI*2);
-//  }
-
-
-//  targetAngle = targetAngle % ft;
-
-//  var angleDelta = (angle - targetAngle + ft) % ft;
-//  if (Math.abs(angleDelta) > 0.01) {
-////  angleDelta = Math.min(angleDelta - ft, angleDelta);
-//    var sign = (angleDelta > Math.PI) ? 1 : -1;
-//    angle = (angle + ((sign * angleDelta) / rotationEase)) % ft;
-//
-//    console.table({
-//      dd: Math.round((angle - targetAngle) * 100) / 100,
-//      adr: angleDelta,
-//      ad: Math.round(sign * angleDelta / DEC2RAD),
-//      ta: Math.round(targetAngle / DEC2RAD),
-//      a: Math.round(angle / DEC2RAD),
-//      oa: Math.round(oldAngle / DEC2RAD)
-//    });
-//  }
-
-//  if (Math.abs(targetAngle - angle) > Math.PI) {
-//    if (targetAngle > 0 && angle < 0) {
-//      angle -= (2 * Math.PI - targetAngle + angle) / rotationEase;
-//    }
-//    else if (angle > 0 && targetAngle < 0) {
-//      if (debugT++ > 10) {
-//        return angle;
-//      }
-//      console.table({
-//        a: angle,
-//        ta: targetAngle,
-//        c: (2 * Math.PI + targetAngle + angle),
-//        c2: (2 * Math.PI + targetAngle + angle) / rotationEase
-//      });
-//      angle += (2 * Math.PI + targetAngle + angle) / rotationEase;
-//    }
-//  }
-//  else if (targetAngle < angle) {
-//    angle -= Math.abs(targetAngle - angle) / rotationEase;
-//  }
-//  else {
-//    angle += Math.abs(angle - targetAngle) / rotationEase;
-//  }
-
-//  if (angle > Math.PI * 2) {
-//    angle = angle % (Math.PI * 2);
-//  }
-
-  return angle;
+  return {
+    vx: vx * rotationEase + newVX * (1.0 - rotationEase),
+    vy: vy * rotationEase + newVY * (1.0 - rotationEase)
+  };
 }
 
 function distanceBetweenPoints(point1, point2) {

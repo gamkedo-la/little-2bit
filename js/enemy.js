@@ -463,6 +463,7 @@ AdvancedEnemy1.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemy1.prototype.constructor = AdvancedEnemy1;
 
 function AdvancedEnemyShip(list, x, y, step) {
+  var vx = 5;
   var health = 4;
   var damage = 2;
   var image = Images.advanced_enemy1;
@@ -506,7 +507,7 @@ function AdvancedEnemyShip(list, x, y, step) {
     }
     var a = (step / maxSteps) * 2 * Math.PI;
     this.moveTo({
-      x: x - 5,
+      x: x - vx,
       y: startY - (rangeY * Math.sin(a))
     });
   };
@@ -528,21 +529,17 @@ AdvancedEnemyShip.prototype.constructor = AdvancedEnemyShip;
 
 brickTypeEnemyClasses[ENEMY_ADVANCED2] = AdvancedEnemy2;
 
-var e = 1;
 function AdvancedEnemy2(list, x, y) {
-  var speed = 2;
+  var speed = 5;
   var vx = -speed;
   var vy = 0;
-  var health = 4000;
+  var health = 4;
   var damage = 2;
   var image = Images.advanced_enemy2;
   var width = 40;
   var height = 30;
-  var angle = 2 * Math.PI;
-  var rotationEase = 4;
-
-  var d = document.getElementById('e' + e);
-  e++;
+  var angle = Math.PI;
+  var rotationEase = .3;
 
   var halfWidth = width / 2;
   var eighthWidth = width / 8;
@@ -557,35 +554,19 @@ function AdvancedEnemy2(list, x, y) {
     ];
   };
 
-  this._update = function() {
-    var shipCoords = Ship.coords();
-    var thisCoords = { x: x, y: y };
-//    angle = Math.atan2(shipCoords.y - y, shipCoords.x - x);
-//    if (angle < 0) {
-//      angle += Math.PI * 2;
-//    }
-//    angle = rotateToTarget(angle, rotationEase, thisCoords, shipCoords);
-
-    var xdiff = shipCoords.x - thisCoords.x;
-    var ydiff = shipCoords.y - thisCoords.y;
-    var dist = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
-    var newVX = (xdiff / dist) * speed;
-    var newVY = (ydiff / dist) * speed;
-
-    var smoothingK = 0; // closer to 1 will be laggier, closer to 0 (anything < 0.6) tighter
-    vx = vx * smoothingK + newVX * (1.0 - smoothingK);
-    vy = vy * smoothingK + newVY * (1.0 - smoothingK);
-//    console.log(speed, vx, vy, dist, newVX, newVY);
-//    angle = Math.atan2(vy, vx);
-    d.innerHTML = Math.round(angle / DEC2RAD);
+  this._update = function(x, y) {
+    var newVs = rotateToTarget(vx, vy, speed, rotationEase, Ship.coords(), { x: x, y: y });
+    vx = newVs.vx;
+    vy = newVs.vy;
+    angle = Math.atan2(vy, vx);
 
     this.move();
   };
 
   this._move = function(x, y) {
     this.moveTo({
-      x: x + vx,//speed * Math.cos(angle),
-      y: y + vy //speed * Math.sin(angle)
+      x: x + vx,
+      y: y + vy
     });
   };
 
@@ -596,26 +577,6 @@ function AdvancedEnemy2(list, x, y) {
 
   this._draw = function(frame, x, y, width, height) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);
-
-    drawLines(gameContext, 'white', [
-      {x: x, y: y},{
-        x: x + 35 * Math.cos(angle),
-        y: y + 35 * Math.sin(angle)
-      },
-      Ship.coords()
-    ]);
-  };
-
-  this.muzzle = function(x, y) {
-    return {
-      x: x + 15 * Math.cos(angle),
-      y: y + 15 * Math.sin(angle)
-    };
-  };
-
-  this._fireProjectile = function(x, y) {
-    var muzzle = this.muzzle(x, y);
-//    enemyProjectiles.spawn(EnergyBall, muzzle.x, muzzle.y, angle);
   };
 
   EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);

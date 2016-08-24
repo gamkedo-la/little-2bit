@@ -15,8 +15,8 @@ var screenShakeAmountHalf = 0;
 var debug = true;
 var debug_draw_bounds = false;
 var debug_single_step = false;
-var debug_stop_camera = true;
-var debug_stop_enemies = true;
+var debug_stop_camera = false;
+var debug_stop_enemies = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');

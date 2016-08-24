@@ -364,7 +364,7 @@ function HomingRocket(list, x, y) {
 
   var targetRange = 180;
   var target = false;
-  var rotationEase = 4;
+  var rotationEase = .3;
 
   this._move = function(x, y) {
     var thisCoords = { x: x, y: y };
@@ -375,11 +375,10 @@ function HomingRocket(list, x, y) {
 
     if (target) {
       // Rotate towards target
-      var targetCoords = target.coords();
-      angle = rotateToTarget(angle, rotationEase, thisCoords, targetCoords);
-
-      vx = speed * Math.cos(angle);
-      vy = speed * Math.sin(angle);
+      var newVs = rotateToTarget(vx, vy, speed, rotationEase, target.coords(), thisCoords);
+      vx = newVs.vx;
+      vy = newVs.vy;
+      angle = Math.atan2(vy, vx);
     }
 
     this.moveTo({
