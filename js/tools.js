@@ -13,6 +13,19 @@ if (!Object.keys) {
   };
 }
 
+function rotateToTarget(vx, vy, speed, rotationEase, shipCoords, thisCoords) {
+  var diffX = shipCoords.x - thisCoords.x;
+  var diffY = shipCoords.y - thisCoords.y;
+  var dist = Math.sqrt(diffX * diffX + diffY * diffY);
+  var newVX = (diffX / dist) * speed;
+  var newVY = (diffY / dist) * speed;
+
+  return {
+    vx: vx * rotationEase + newVX * (1.0 - rotationEase),
+    vy: vy * rotationEase + newVY * (1.0 - rotationEase)
+  };
+}
+
 function distanceBetweenPoints(point1, point2) {
   return Math.sqrt(distanceBetweenPointsSquared(point1, point2));
 }

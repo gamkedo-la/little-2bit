@@ -384,8 +384,8 @@ function TurretBase(list, x, y, vx, vy, health, damage, width, height, image_bod
 
   this.muzzle = function(x, y) {
     return {
-      x: x - 18 * Math.cos(angle),
-      y: y - 18 * Math.sin(angle)
+      x: x + 18 * Math.cos(angle),
+      y: y + 18 * Math.sin(angle)
     };
   };
 
@@ -449,8 +449,8 @@ function AimingTurret(list, x, y) {
 AimingTurret.prototype = Object.create(TurretBase.prototype);
 AimingTurret.prototype.constructor = AimingTurret;
 
-brickTypeEnemyClasses[ENEMY_ADVANCED1] = AdvancedEnemy;
-function AdvancedEnemy(list, x, y) {
+brickTypeEnemyClasses[ENEMY_ADVANCED1] = AdvancedEnemy1;
+function AdvancedEnemy1(list, x, y) {
   this._initialize = function() {
     for (var e = 0; e < 6; e++) {
       new AdvancedEnemyShip(list, x, y, -3 * e);
@@ -459,13 +459,14 @@ function AdvancedEnemy(list, x, y) {
 
   EnemyBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
 }
-AdvancedEnemy.prototype = Object.create(EnemyBase.prototype);
-AdvancedEnemy.prototype.constructor = AdvancedEnemy;
+AdvancedEnemy1.prototype = Object.create(EnemyBase.prototype);
+AdvancedEnemy1.prototype.constructor = AdvancedEnemy1;
 
 function AdvancedEnemyShip(list, x, y, step) {
+  var vx = 5;
   var health = 4;
   var damage = 2;
-  var image = Images.advanced_enemy;
+  var image = Images.advanced_enemy1;
   var width = 55;
   var height = 42;
 
@@ -506,7 +507,7 @@ function AdvancedEnemyShip(list, x, y, step) {
     }
     var a = (step / maxSteps) * 2 * Math.PI;
     this.moveTo({
-      x: x - 5,
+      x: x - vx,
       y: startY - (rangeY * Math.sin(a))
     });
   };
@@ -523,5 +524,63 @@ function AdvancedEnemyShip(list, x, y, step) {
   EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);
 }
 
-AdvancedEnemy.prototype = Object.create(EnemyBase.prototype);
-AdvancedEnemy.prototype.constructor = AdvancedEnemy;
+AdvancedEnemyShip.prototype = Object.create(EnemyBase.prototype);
+AdvancedEnemyShip.prototype.constructor = AdvancedEnemyShip;
+
+brickTypeEnemyClasses[ENEMY_ADVANCED2] = AdvancedEnemy2;
+
+function AdvancedEnemy2(list, x, y) {
+  var speed = 5;
+  var vx = -speed;
+  var vy = 0;
+  var health = 4;
+  var damage = 2;
+  var image = Images.advanced_enemy2;
+  var width = 40;
+  var height = 30;
+  var angle = Math.PI;
+  var rotationEase = .3;
+
+  var halfWidth = width / 2;
+  var eighthWidth = width / 8;
+  var halfHeight = height / 2;
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x - halfWidth, y: y },
+      { x: x - eighthWidth, y: y + halfHeight },
+      { x: x + halfWidth, y: y },
+      { x: x - eighthWidth, y: y - halfHeight }
+    ];
+  };
+
+  this._update = function(x, y) {
+    var newVs = rotateToTarget(vx, vy, speed, rotationEase, Ship.coords(), { x: x, y: y });
+    vx = newVs.vx;
+    vy = newVs.vy;
+    angle = Math.atan2(vy, vx);
+
+    this.move();
+  };
+
+  this._move = function(x, y) {
+    this.moveTo({
+      x: x + vx,
+      y: y + vy
+    });
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_simple_enemy.play();
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);
+  };
+
+  EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);
+}
+
+AdvancedEnemy2.prototype = Object.create(EnemyBase.prototype);
+AdvancedEnemy2.prototype.constructor = AdvancedEnemy2;

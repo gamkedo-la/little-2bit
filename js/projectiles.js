@@ -364,36 +364,21 @@ function HomingRocket(list, x, y) {
 
   var targetRange = 180;
   var target = false;
-  var rotationEase = 4;
+  var rotationEase = .3;
 
   this._move = function(x, y) {
+    var thisCoords = { x: x, y: y };
     if (!target) {
       // Find a target
-      target = EnemyList.findClosestEnemyInRange({ x: x, y: y }, targetRange);
+      target = EnemyList.findClosestEnemyInRange(thisCoords, targetRange);
     }
 
     if (target) {
       // Rotate towards target
-      var targetCoords = target.coords();
-      var targetAngle = Math.atan2(targetCoords.y - y, targetCoords.x - x);
-
-      if (Math.abs(targetAngle - angle) > Math.PI) {
-        if (targetAngle > 0 && angle < 0) {
-          angle -= (2 * Math.PI - targetAngle + angle) / rotationEase;
-        }
-        else if (angle > 0 && targetAngle < 0) {
-          angle += (2 * Math.PI - targetAngle + angle) / rotationEase;
-        }
-      }
-      else if (targetAngle < angle) {
-        angle -= Math.abs(targetAngle - angle) / rotationEase;
-      }
-      else {
-        angle += Math.abs(angle - targetAngle) / rotationEase;
-      }
-      
-      vx = speed * Math.cos(angle);
-      vy = speed * Math.sin(angle);
+      var newVs = rotateToTarget(vx, vy, speed, rotationEase, target.coords(), thisCoords);
+      vx = newVs.vx;
+      vy = newVs.vy;
+      angle = Math.atan2(vy, vx);
     }
 
     this.moveTo({
