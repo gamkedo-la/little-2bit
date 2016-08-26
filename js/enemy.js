@@ -60,7 +60,7 @@ var EnemyList = new (function() {
 
       enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].outOfBounds;
 
-      if (enemyList[i].isReadyToRemove) {
+      if (enemyList[i].isReadyToRemove && !enemyList[i].outOfBounds) {
         enemyList[i].explode();
         enemyList.splice(i, 1);
       }
@@ -272,7 +272,7 @@ function ShootingEnemy(list, x, y) {
       { x: x - quarterWidth, y: y + halfHeight },
       { x: x + quarterWidth, y: y + halfHeight },
       { x: x + halfWidth, y: y },
-      { x: x + quarterWidth, y: y - quarterHeight - eighthHeight},
+      { x: x + quarterWidth, y: y - quarterHeight - eighthHeight },
       { x: x, y: y - quarterHeight - eighthHeight }
     ];
   };
@@ -540,6 +540,11 @@ function AdvancedEnemy2(list, x, y) {
   var height = 30;
   var angle = Math.PI;
   var rotationEase = .3;
+  var isExploding = false;
+  var explodeRange = 80;
+  var explodeRangeSquared = explodeRange * explodeRange;
+  var explodeShake = 1;
+  var explodeTimer = 15;
 
   var halfWidth = width / 2;
   var eighthWidth = width / 8;
@@ -555,7 +560,23 @@ function AdvancedEnemy2(list, x, y) {
   };
 
   this._update = function(x, y) {
-    var newVs = rotateToTarget(vx, vy, speed, rotationEase, Ship.coords(), { x: x, y: y });
+    var thisCoords = { x: x, y: y };
+    var shipCoords = Ship.coords();
+    var distance = distanceBetweenPointsSquared(thisCoords, shipCoords);
+
+    if (isExploding) {
+      if (explodeTimer-- <= 0) {
+        Ship.doDamage(Math.round(damage * (explodeRangeSquared / distance) * 10) / 10);
+        this.isReadyToRemove = true;
+      }
+      return;
+    }
+
+    // Check distance to player
+    isExploding = (explodeRangeSquared >= distance);
+
+    // Move towards player
+    var newVs = rotateToTarget(vx, vy, speed, rotationEase, shipCoords, { x: x, y: y });
     vx = newVs.vx;
     vy = newVs.vy;
     angle = Math.atan2(vy, vx);
@@ -576,7 +597,17 @@ function AdvancedEnemy2(list, x, y) {
   };
 
   this._draw = function(frame, x, y, width, height) {
+    if (isExploding) {
+      explodeShake++;
+      x += Math.random() * explodeShake - explodeShake * 0.5;
+      y += Math.random() * explodeShake - explodeShake * 0.5;
+    }
+
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);
+
+    if (debug_draw_bounds) {
+      drawStrokeCircle(gameContext, x, y, explodeRange, '#f00');
+    }
   };
 
   EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);
