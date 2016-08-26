@@ -3,47 +3,49 @@ var MenuCredits = new (function() {
   var credits = [
     '    The Journey of Little 2-bit    ',
     '',
-	'',
-	'',
-	'***INCOMING MESSAGE***',
-	'',
+    '',
+    '',
+    '***INCOMING TRANSMISSION***',
+    '',
     'MEMORANDUM',
-	'',
+    '',
     'To: [Employee_11-16G]',
     'From: Management',
     'Subject: Operation 2-bit--',
     'we’re expanding!',
     '',
-	'Our monumental growth has afforded',
-	'us the prospect of expanding our',
-	'single B.I.T. hub into a second.',
-	'This will ensure our reach extends',
-	'to customers in the furthest depths',
-	'of the galaxy.',
-	'',
-	'The cargo in your L2-b must be',
-	'delivered to the inhabitants of our',
-	'hub’s new location within 12 hours.',
-	'Failure will result in your ',
-	'immediate termination from ',
-	'Bulk Intergalactic Transporting.',
-	'',
-	'And remember, you are the face of',
-	'this 2-bit operation, so make us',
-	'proud!',
-	'',
-	'',
-	'***END TRANSMISSION***',
-	'',
-	'',
-	'',
+    'Our monumental growth has afforded',
+    'us the prospect of expanding our',
+    'single B.I.T. hub into a second.',
+    'This will ensure our reach extends',
+    'to customers in the furthest depths',
+    'of the galaxy.',
+    '',
+    'The cargo in your L2-b must be',
+    'delivered to the inhabitants of our',
+    'hub’s new location within 12 hours.',
+    'Failure will result in your ',
+    'immediate termination from ',
+    'Bulk Intergalactic Transporting.',
+    '',
+    'And remember, you are the face of',
+    'this 2-bit operation, so make us',
+    'proud!',
+    '',
+    '',
+    '***END TRANSMISSION***',
+    '',
+    '',
+    '',
     creditsSeperator,
     '',
-    'Spad-XIII - project lead, code',
-    'Another name - some other roles',
-    'Second name - some other roles',
-    'Third name - some other roles',
-    'Fourth name - some other roles'
+    'Spad-XIII -- project lead',
+    'Jeremy -- rocket art',
+    'cmarkle -- story, energy ball art',
+    'rocket art, space ship art',
+    'flannelbeard -- player shields',
+    'aciago -- turrets art',
+    'chris_deleon -- tile map code'
   ];
 
   var showLines = 1;
@@ -68,7 +70,7 @@ var MenuCredits = new (function() {
     }
 
     gameContext.font = gameFontSmall;
-    x = gameCanvas.width - 25 - gameContext.measureText(creditsSeperator).width;
+    x = gameCanvas.width - gameContext.measureText(creditsSeperator).width;
   };
 
   this.draw = function() {
@@ -95,7 +97,7 @@ var MenuCredits = new (function() {
   var MenuCreditLine = function(text) {
     this.remove = false;
 
-    var x = gameCanvas.width / 4 * 3;
+//    var x = gameCanvas.width / 4 * 3;
     var y = startY;
     var alpha = 0.2;
 
