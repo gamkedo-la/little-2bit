@@ -58,10 +58,12 @@ var EnemyList = new (function() {
 
       shipProjectiles.checkCollision(enemyList[i]);
 
-      enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].outOfBounds;
+      enemyList[i].isReadyToRemove = enemyList[i].isReadyToRemove || enemyList[i].isOutOfBounds;
 
-      if (enemyList[i].isReadyToRemove && !enemyList[i].outOfBounds) {
-        enemyList[i].explode();
+      if (enemyList[i].isReadyToRemove) {
+        if (!enemyList[i].isOutOfBounds) {
+          enemyList[i].explode();
+        }
         enemyList.splice(i, 1);
       }
     }
@@ -70,6 +72,14 @@ var EnemyList = new (function() {
   this.draw = function() {
     for (var i = 0; i < enemyList.length; i++) {
       enemyList[i].draw();
+    }
+  };
+
+  var enemyTypes = [];
+  this.drawTileByBrickType = function(type, x, y) {
+    if (!enemyTypes[type]) {
+      var Enemy = brickTypeEnemyClasses[type];
+      enemyTypes[type] = new Enemy(this, x, y);
     }
   };
 })();
@@ -95,7 +105,7 @@ function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, pro
   }
 
   this.damage = damage;
-  this.outOfBounds = false;
+  this.isOutOfBounds = false;
   this.isReadyToRemove = false;
 
   if (this._initialize) {
@@ -128,7 +138,7 @@ function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, pro
   };
 
   this.explode = function() {
-    if (!this.outOfBounds) {
+    if (!this.isOutOfBounds) {
       this._explode(x, y);
     }
   };
@@ -179,7 +189,7 @@ function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, pro
     }
 
     var levelInfo = Grid.levelInfo();
-    this.outOfBounds = (levelInfo.leftBound < initialX && initialX < levelInfo.rightBound) && (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width * 2 || -height > y || y > levelInfo.height + height);
+    this.isOutOfBounds = !debug_editor && (levelInfo.leftBound < initialX && initialX < levelInfo.rightBound) && (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width * 2 || -height > y || y > levelInfo.height + height);
   };
 
   this.draw = function() {

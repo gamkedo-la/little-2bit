@@ -35,6 +35,10 @@ var Grid = new (function() {
     levelPrettyTileGrid = [];
 
     initArtMaskLookup();
+    this.processGrid();
+  };
+
+  this.processGrid = function() {
     for (var r = 0; r < ROWS; r++) {
       for (var c = 0; c < COLS; c++) {
         var i = tileToIndex(c, r);
@@ -195,8 +199,15 @@ var Grid = new (function() {
     return (col + COLS * row);
   }
 
+  function coordsToIndex(x, y) {
+    var col = Math.floor(x / GRID_WIDTH);
+    var row = Math.floor(y / GRID_HEIGHT);
+
+    return (col + COLS * row);
+  }
+
   this.isSolidTileTypeAtCR_WithBoundsSafety = function(col, row) {
-    if(col < 0 || row < 0 || col >= COLS || row >= ROWS) {
+    if (col < 0 || row < 0 || col >= COLS || row >= ROWS) {
       return true; // treat out of bounds as solid
     }
     var type = level[tileToIndex(col, row)];
@@ -205,18 +216,15 @@ var Grid = new (function() {
 
   this.isSolidTileTypeAtCoords = function(x, y) {
     var type = this.tileTypeAtCoords(x, y);
-    return type != BRICK_SPACE && !EnemyList.brickTypeIsEnemy(type);
+    return type != BRICK_SPACE && !EnemyList.brickTypeIsEnemy(type) && !PowerUpList.brickTypeIsPowerUp(type);
   };
 
   this.tileTypeAtCoords = function(x, y) {
-    var col = Math.floor(x / GRID_WIDTH);
-    var row = Math.floor(y / GRID_HEIGHT);
-
-    return level[tileToIndex(col, row)];
+    return level[coordsToIndex(x, y)];
   };
 
   this.coordsToTileCoords = function(x, y) {
-    var col = Math.floor(x / GRID_WIDTH);
+    var col = Math.floor((x + camPanX) / GRID_WIDTH);
     var row = Math.floor(y / GRID_HEIGHT);
 
     return {
@@ -238,13 +246,20 @@ var Grid = new (function() {
       i = tileToIndex(cameraLeftMostCol, r);
       for (var c = cameraLeftMostCol; c < cameraRightMostCol; c++) {
         if (level[i] != undefined) {
-          if (EnemyList.brickTypeIsEnemy(level[i])) {
-            EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
-            level[i] = BRICK_SPACE;
+          if (Editor.hasTileImage(level[i])) {
+            Editor.drawTileImage(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
+          }
+          else if (EnemyList.brickTypeIsEnemy(level[i])) {
+            if (!debug_editor) {
+              EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
+              level[i] = BRICK_SPACE;
+            }
           }
           else if (PowerUpList.brickTypeIsPowerUp(level[i])) {
-            PowerUpList.createPowerUpByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
-            level[i] = BRICK_SPACE;
+            if (!debug_editor) {
+              PowerUpList.createPowerUpByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
+              level[i] = BRICK_SPACE;
+            }
           }
           else if (levelPrettyTileGrid[i] != undefined) {
             var tileArtSourceX = levelPrettyTileGrid[i] % PRETTY_TILE_ART_COLS * GRID_WIDTH;
@@ -295,6 +310,21 @@ var Grid = new (function() {
 
   this.cameraPanX = function() {
     return camPanX;
+  };
+
+  this.addCameraPanX = function(v) {
+    camPanX += v;
+  };
+
+  this.setTile = function(x, y, type) {
+    var index = coordsToIndex(x, y);
+    if (level[index] != type) {
+      level[index] = type;
+    }
+    else {
+      level[index] = BRICK_SPACE;
+    }
+    this.processGrid();
   };
 })();
 

@@ -27,9 +27,9 @@ var PowerUpList = new (function() {
     for (i = powerUpList.length - 1; i >= 0; i--) {
       var boundingBox = powerUpList[i].boundingBox();
       var levelInfo = Grid.levelInfo();
-      powerUpList[i].outOfBounds = (levelInfo.leftBound > boundingBox.right || boundingBox.left > levelInfo.rightBound || 0 > boundingBox.bottom || boundingBox.top > levelInfo.height);
+      powerUpList[i].isOutOfBounds = (levelInfo.leftBound > boundingBox.right || boundingBox.left > levelInfo.rightBound || 0 > boundingBox.bottom || boundingBox.top > levelInfo.height);
 
-      powerUpList[i].isReadyToRemove = powerUpList[i].isReadyToRemove || powerUpList[i].outOfBounds;
+      powerUpList[i].isReadyToRemove = powerUpList[i].isReadyToRemove || powerUpList[i].isOutOfBounds;
     }
 
     for (i = powerUpList.length - 1; i >= 0; i--) {
@@ -44,6 +44,10 @@ var PowerUpList = new (function() {
       powerUpList[i].draw();
     }
   };
+
+  this.drawTileByBrickType = function(type, x, y) {
+
+  };
 })();
 
 function PowerUpBase(x, y, width, height, image) {
@@ -54,7 +58,7 @@ function PowerUpBase(x, y, width, height, image) {
   var frameDelay = 1;
   var maxFrames = image.width / width;
 
-  this.outOfBounds = false;
+  this.isOutOfBounds = false;
   this.isReadyToRemove = false;
 
   this.boundingBox = function() {

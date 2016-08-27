@@ -18,6 +18,26 @@ const KEY_S = 83;
 const KEY_A = 65;
 const KEY_D = 68;
 
+const KEY_R = 82;
+const KEY_T = 84;
+const KEY_G = 71;
+const KEY_Y = 89;
+const KEY_H = 72;
+const KEY_U = 85;
+const KEY_I = 73;
+const KEY_J = 74;
+
+const KEY_1 = 49;
+const KEY_2 = 50;
+const KEY_3 = 51;
+const KEY_4 = 52;
+const KEY_5 = 53;
+const KEY_6 = 54;
+const KEY_B = 66;
+const KEY_L = 76;
+const KEY_O = 79;
+const KEY_P = 80;
+
 function setupInput() {
   document.addEventListener('keydown', keyPressed);
   document.addEventListener('keyup', keyReleased);
@@ -32,6 +52,10 @@ function keyReleased(event) {
 }
 
 function keySet(event, setTo) {
+  if (debug_editor) {
+    return;
+  }
+
   if (event.keyCode == KEY_A || event.keyCode == KEY_LEFT_ARROW) {
     Ship.keyHeld_W = setTo;
     event.preventDefault();

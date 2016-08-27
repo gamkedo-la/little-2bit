@@ -18,7 +18,7 @@ var ProjectileList = function() {
     for (var p = projectiles.length - 1; p >= 0; p--) {
       projectiles[p].move();
       var coords = projectiles[p].coords();
-      if (!projectiles[p].outOfBounds && Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
+      if (!projectiles[p].isOutOfBounds && Grid.isSolidTileTypeAtCoords(coords.x, coords.y)) {
         // Approximately figure out where it hit the wall
         var collision_check_step = -1 / COLLISION_CHECK_STEPS;
         for (var s = 1; s < COLLISION_CHECK_STEPS; s++) {
@@ -31,7 +31,7 @@ var ProjectileList = function() {
         projectiles[p].isReadyToRemove = true;
       }
 
-      if (projectiles[p].isReadyToRemove || projectiles[p].outOfBounds || Ship.isDead) {
+      if (projectiles[p].isReadyToRemove || projectiles[p].isOutOfBounds || Ship.isDead) {
         projectiles[p].explode();
         projectiles.splice(p, 1);
       }
@@ -108,7 +108,7 @@ var ProjectileList = function() {
 function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, image) {
   this.isReadyToRemove = false;
   this.hitObject = false;
-  this.outOfBounds = false;
+  this.isOutOfBounds = false;
   this.damage = damage;
   this.blastRange = blastRange;
 
@@ -150,7 +150,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     }
 
     var levelInfo = Grid.levelInfo();
-    this.outOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
+    this.isOutOfBounds = (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width || -height > y || y > levelInfo.height + height);
   };
 
   this.moveTo = function(coords) {
@@ -159,7 +159,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
   };
 
   this.explode = function() {
-    if (!this.outOfBounds) {
+    if (!this.isOutOfBounds) {
       this._explode(x, y);
     }
   };

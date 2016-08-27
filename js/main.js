@@ -13,6 +13,7 @@ var screenShakeAmountHalf = 0;
 
 // Debug
 var debug = true;
+var debug_editor = false;
 var debug_draw_bounds = false;
 var debug_single_step = false;
 var debug_stop_camera = false;
@@ -38,6 +39,7 @@ function gameStart() {
   UI.initialize();
   Grid.initialize();
   Ship.initialize();
+  Editor.initialize();
 
   shipProjectiles = new ProjectileList();
   enemyProjectiles = new ProjectileList();
@@ -74,37 +76,42 @@ function gameStart() {
       6: 'Homing Rocket',
       b: 'Draw bounds',
       o: 'Stop enemy movement',
-      p: 'Stop camera movement'
+      p: 'Stop camera movement',
+      l: 'Level editor'
     });
+    console.log('Keys for tile types in level editor: T G Y H U J I');
 
     document.addEventListener('keyup', function(event) {
       event.preventDefault();
       switch (event.keyCode) {
-        case 49: // 1
+        case KEY_1:
           Ship.setProjectile(Laser);
           break;
-        case 50: // 2
+        case KEY_2:
           Ship.setProjectile(DoubleLaser);
           break;
-        case 51: // 3
+        case KEY_3:
           Ship.setProjectile(TripleLaser);
           break;
-        case 52: // 4
+        case KEY_4:
           Ship.setProjectile(Rocket);
           break;
-        case 53: // 5
+        case KEY_5:
           Ship.setProjectile(DoubleRocket);
           break;
-        case 54: // 6
+        case KEY_6:
           Ship.setProjectile(HomingRocket);
           break;
-        case 66: // b
+        case KEY_B:
           debug_draw_bounds = !debug_draw_bounds;
           break;
-        case 79: // o
+        case KEY_L:
+          Editor.toggle();
+          break;
+        case KEY_O:
           debug_stop_enemies = !debug_stop_enemies;
           break;
-        case 80: // p
+        case KEY_P:
           debug_stop_camera = !debug_stop_camera;
           break;
         default:
@@ -112,6 +119,9 @@ function gameStart() {
       }
     });
   }
+
+  // debug
+//  Editor.toggle();
 }
 
 function shakeScreen(amount) {
@@ -154,6 +164,7 @@ function gameLoop() {
   ParticleList.draw();
   EnemyList.draw();
   Ship.draw();
+  Editor.draw();
 
   gameContext.restore();
 

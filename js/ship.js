@@ -152,7 +152,7 @@ var Ship = new (function() {
   };
 
   this.update = function() {
-    if (this.isDead) {
+    if (this.isDead || debug_editor) {
       return;
     }
 
