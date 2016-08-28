@@ -5,6 +5,7 @@ var Editor = new (function() {
 
   var tileKeysMapping = [];
   var tileImages = [];
+  var outputCode;
 
   this.initialize = function() {
     tileKeysMapping[KEY_T] = [BRICK_DEFSTYLE, BRICK_ALTSTYLE];
@@ -29,6 +30,12 @@ var Editor = new (function() {
     tileImages[POWERUP_DOUBLE_LASER] = [Images.powerUp_double_laser];
     tileImages[POWERUP_TRIPLE_LASER] = [Images.powerUp_triple_laser];
     tileImages[POWERUP_SHIELD] = [Images.powerUp_shield];
+
+    outputCode = document.createElement('textarea');
+    outputCode.style.width = '95%';
+    outputCode.rows = 20;
+    outputCode.style.display = 'none';
+    document.body.appendChild(outputCode);
   };
 
   this.toggle = function() {
@@ -38,14 +45,21 @@ var Editor = new (function() {
       document.addEventListener('keyup', this.keyUp);
       document.addEventListener('keydown', this.keyDown);
       document.addEventListener('mousemove', this.mouseMove);
+      this.outputLevelCode();
     }
     else {
       document.removeEventListener('keyup', this.keyUp);
       document.removeEventListener('keydown', this.keyDown);
       document.removeEventListener('mousemove', this.mouseMove);
+      outputCode.style.display = 'none';
     }
 
     this.resetLevel();
+  };
+
+  this.outputLevelCode = function() {
+    outputCode.style.display = 'block';
+    outputCode.value = 'levels[1] = ' + JSON.stringify(Grid.loadedLevel) + ';';
   };
 
   this.mouseMove = function(event) {
@@ -103,6 +117,9 @@ var Editor = new (function() {
         case KEY_A:
           keyDown_A = false;
           break;
+          // @todo append column to level
+          // @todo clear level?
+          // @todo output level code
       }
     }
   };
@@ -117,6 +134,8 @@ var Editor = new (function() {
 
   this.placeTile = function(type) {
     Grid.setTile(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y, type);
+
+    this.outputLevelCode();
   };
 
   this.update = function() {
