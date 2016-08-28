@@ -2,8 +2,6 @@ var mouseCoords = {};
 
 var Editor = new (function() {
   var editor = this;
-  var enemies = [];
-  var powerUps = [];
 
   var tileKeysMapping = [];
   var tileImages = [];
@@ -46,6 +44,8 @@ var Editor = new (function() {
       document.removeEventListener('keydown', this.keyDown);
       document.removeEventListener('mousemove', this.mouseMove);
     }
+
+    this.resetLevel();
   };
 
   this.mouseMove = function(event) {
@@ -57,15 +57,16 @@ var Editor = new (function() {
     };
   };
 
+  var keyDown_D = false;
+  var keyDown_A = false;
+
   this.keyDown = function(event) {
     switch (event.keyCode) {
       case KEY_D:
-        Grid.addCameraPanX(CAMERA_SPEED);
-        event.preventDefault();
+        keyDown_D = true;
         break;
       case KEY_A:
-        Grid.addCameraPanX(-CAMERA_SPEED);
-        event.preventDefault();
+        keyDown_A = true;
         break;
     }
   };
@@ -96,16 +97,35 @@ var Editor = new (function() {
         case KEY_R:
           editor.resetLevel();
           break;
+        case KEY_D:
+          keyDown_D = false;
+          break;
+        case KEY_A:
+          keyDown_A = false;
+          break;
       }
     }
   };
 
   this.resetLevel = function() {
     Grid.addCameraPanX(-Grid.cameraPanX());
+    Ship.reset();
+    EnemyList.clear();
+    PowerUpList.clear();
+    Grid.reloadLevel();
   };
 
   this.placeTile = function(type) {
     Grid.setTile(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y, type);
+  };
+
+  this.update = function() {
+    if (keyDown_D) {
+      Grid.addCameraPanX(CAMERA_SPEED*2);
+    }
+    else if (keyDown_A) {
+      Grid.addCameraPanX(-CAMERA_SPEED*2);
+    }
   };
 
   this.draw = function() {

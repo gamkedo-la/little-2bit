@@ -41,8 +41,7 @@ var Ship = new (function() {
   this.initialize = function() {
     var levelInfo = Grid.levelInfo();
 
-    x = 100;
-    y = levelInfo.height / 2;
+    this.reset();
 
     halfWidth = width / 2;
     quarterWidth = width / 4;
@@ -60,6 +59,11 @@ var Ship = new (function() {
     this.setProjectile(SHIP_DEFAULT_PROJECTILE);
   };
 
+  this.reset = function() {
+    var levelInfo = Grid.levelInfo();
+    x = 100;
+    y = levelInfo.height / 2;
+  };
 
   this.doDamage = function (amount) {
     if (this.shieldAmount > 0) {

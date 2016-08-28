@@ -16,8 +16,8 @@ var debug = true;
 var debug_editor = false;
 var debug_draw_bounds = false;
 var debug_single_step = false;
-var debug_stop_camera = false;
-var debug_stop_enemies = false;
+var debug_stop_camera = true;
+var debug_stop_enemies = true;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
@@ -138,6 +138,7 @@ function gameLoop() {
   EnemyList.update();
   Ship.update();
   ParticleList.update();
+  Editor.update();
 
   gameContext.save();
   gameContext.translate(-Grid.cameraPanX(), 0);

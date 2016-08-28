@@ -6,7 +6,9 @@ var Grid = new (function() {
   var COLS = 20;
   var ROWS = 15;
 
+  var loadedLevel;
   var level;
+  var editorLevel;
   var tilemap;
   var levelPrettyTileGrid;
 
@@ -26,19 +28,29 @@ var Grid = new (function() {
     camPanX = 0.0;
 
     this.backgroundWidth = Images.stars.width;
+    initArtMaskLookup();
 
     // @todo dynamic load level
-    COLS = level1.cols;
-    ROWS = level1.rows;
-    tilemap = Images[level1.tilemap];
-    level = level1.map;
-    levelPrettyTileGrid = [];
+    this.loadLevel(level1);
+  };
 
-    initArtMaskLookup();
+  this.reloadLevel = function() {
+    this.loadLevel(loadedLevel);
+  };
+
+  this.loadLevel = function(_level) {
+    loadedLevel = _level;
+    COLS = _level.cols;
+    ROWS = _level.rows;
+    tilemap = Images[_level.tilemap];
+    level = _level.map.slice(); // Copy just the values, not a reference
+    editorLevel = _level.map;
+
     this.processGrid();
   };
 
   this.processGrid = function() {
+    levelPrettyTileGrid = [];
     for (var r = 0; r < ROWS; r++) {
       for (var c = 0; c < COLS; c++) {
         var i = tileToIndex(c, r);
@@ -296,15 +308,7 @@ var Grid = new (function() {
   function cameraFollow(keyHeld_E) {
     var shipCoords = Ship.coords();
     if (keyHeld_E && shipCoords.x > camPanX + canvasHalfWidth - PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X) {
-      camPanX += Ship.speedX / 2;
-    }
-
-    if (camPanX < 0) {
-      camPanX = 0;
-    }
-    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
-    if (camPanX > maxPanRight) {
-      camPanX = maxPanRight;
+      this.addCameraPanX(Ship.speedX / 2);
     }
   }
 
@@ -314,17 +318,25 @@ var Grid = new (function() {
 
   this.addCameraPanX = function(v) {
     camPanX += v;
+
+    if (camPanX < 0) {
+      camPanX = 0;
+    }
+    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
+    if (camPanX > maxPanRight) {
+      camPanX = maxPanRight;
+    }
   };
 
   this.setTile = function(x, y, type) {
     var index = coordsToIndex(x, y);
-    if (level[index] != type) {
-      level[index] = type;
+    if (loadedLevel.map[index] != type) {
+      loadedLevel.map[index] = type;
     }
     else {
-      level[index] = BRICK_SPACE;
+      loadedLevel.map[index] = BRICK_SPACE;
     }
-    this.processGrid();
+    this.reloadLevel();
   };
 })();
 
