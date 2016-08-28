@@ -203,7 +203,7 @@ var Grid = new (function() {
     if (!Ship.isDead) {
       camPanX += this.cameraSpeed();
       this.backgroundX = Math.floor(Grid.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
-      cameraFollow(this.keyHeld_E);
+      this.cameraFollow(this.keyHeld_E);
     }
   };
 
@@ -305,12 +305,12 @@ var Grid = new (function() {
     }
   };
 
-  function cameraFollow(keyHeld_E) {
+  this.cameraFollow = function(keyHeld_E) {
     var shipCoords = Ship.coords();
     if (keyHeld_E && shipCoords.x > camPanX + canvasHalfWidth - PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X) {
       this.addCameraPanX(Ship.speedX / 2);
     }
-  }
+  };
 
   this.cameraPanX = function() {
     return camPanX;
