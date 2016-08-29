@@ -32,7 +32,6 @@ var Grid = new (function() {
     initArtMaskLookup();
 
     // @todo dynamic load level
-    console.log('loading', levelId, levels[levelId]);
     this.loadLevel(levels[levelId]);
   };
 

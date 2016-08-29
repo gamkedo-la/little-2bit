@@ -73,7 +73,7 @@ var Editor = new (function() {
 
   this.outputLevelCode = function() {
     outputCode.style.display = 'block';
-    outputCode.value = 'levels[1] = ' + JSON.stringify(Grid.loadedLevel) + ';';
+    outputCode.value = JSON.stringify(Grid.loadedLevel);
   };
 
   this.mouseMove = function(event) {
@@ -151,7 +151,7 @@ var Editor = new (function() {
     Ship.reset();
     EnemyList.clear();
     PowerUpList.clear();
-    Grid.reloadLevel();
+    Grid.loadLevel(JSON.parse(outputCode.value));
   };
 
   this.appendColumn = function() {
