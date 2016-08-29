@@ -16,8 +16,8 @@ var debug = true;
 var debug_editor = false;
 var debug_draw_bounds = false;
 var debug_single_step = false;
-var debug_stop_camera = true;
-var debug_stop_enemies = true;
+var debug_stop_camera = false;
+var debug_stop_enemies = false;
 
 window.onload = function () {
   gameCanvas = document.getElementById('gameCanvas');
@@ -28,16 +28,16 @@ window.onload = function () {
   Sounds.initialize();
   // Skip menu for now, until we have more levels :)
 //  Images.initialize(Menu.initialize);
-  Images.initialize(gameStart);
+  Images.initialize(gameStart.bind(this, 0));
 };
 
-function gameStart() {
+function gameStart(levelId) {
   setupInput();
 
   Menu.deactive();
 
   UI.initialize();
-  Grid.initialize();
+  Grid.initialize(levelId);
   Ship.initialize();
   Editor.initialize();
 
@@ -79,7 +79,6 @@ function gameStart() {
       p: 'Stop camera movement',
       l: 'Level editor'
     });
-    console.log('Keys for tile types in level editor: T G Y H U J I');
 
     document.addEventListener('keyup', function(event) {
       event.preventDefault();

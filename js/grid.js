@@ -23,7 +23,7 @@ var Grid = new (function() {
 
   const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 100;
 
-  this.initialize = function() {
+  this.initialize = function(levelId) {
     canvasHalfWidth = gameCanvas.width / 2;
     colsThatFitOnScreen = Math.floor(gameCanvas.width / GRID_WIDTH);
     camPanX = 0.0;
@@ -32,7 +32,8 @@ var Grid = new (function() {
     initArtMaskLookup();
 
     // @todo dynamic load level
-    this.loadLevel(levels[1]);
+    console.log('loading', levelId, levels[levelId]);
+    this.loadLevel(levels[levelId]);
   };
 
   this.reloadLevel = function() {

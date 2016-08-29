@@ -17,10 +17,9 @@ var Menu = new (function() {
     gameCanvas.addEventListener('mousemove', mouseMove);
     gameCanvas.addEventListener('mouseup', mouseReleased);
 
-    buttons.push(new MenuButton('Level 1', gameStart));
-    buttons.push(new MenuButton('Level 2', gameStart));
-    buttons.push(new MenuButton('Level 3', gameStart));
-    buttons.push(new MenuButton('Level 4', gameStart));
+    for (var b = 0; b < levels.length; b++) {
+      buttons.push(new MenuButton('Level ' + (b + 1), gameStart.bind(this, b)));
+    }
 
     MenuCredits.initialize();
 

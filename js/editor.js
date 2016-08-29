@@ -36,6 +36,20 @@ var Editor = new (function() {
     outputCode.rows = 20;
     outputCode.style.display = 'none';
     document.body.appendChild(outputCode);
+
+    console.log('Keys for the level editor:');
+    console.table({
+      0: 'Clear level',
+      n: 'Append column',
+      m: 'Remove last column',
+      t: 'Tiles: default, alternative style',
+      g: 'Enemy: Simple, shooting',
+      h: 'Enemy: Advanced 1, advanced 2',
+      j: 'Enemy: Simple turret, advanced turret',
+      y: 'Power up: double laser, triple laser',
+      u: 'Power up: rocket, double rocket, homing rocket',
+      i: 'Powerups: shield'
+    });
   };
 
   this.toggle = function() {
@@ -207,7 +221,9 @@ var Editor = new (function() {
     var cell = Grid.coordsToTileCoords(mouseCoords.x, mouseCoords.y);
     drawStrokeRect(gameContext, cell.x + 1, cell.y + 1, GRID_WIDTH - 2, GRID_HEIGHT - 2, 'white', 2);
     var i = Grid.coordsToIndex(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y);
-    drawText(gameContext, cell.x+2, cell.y+25, 'white', i);
+    gameContext.textAlign = 'center';
+    gameContext.textBaseline = 'middle';
+    drawText(gameContext, cell.x + GRID_WIDTH / 2, cell.y + GRID_HEIGHT / 2, 'white', i);
   };
 
   this.hasTileImage = function(type) {
