@@ -117,9 +117,17 @@ var Editor = new (function() {
         case KEY_A:
           keyDown_A = false;
           break;
-          // @todo append column to level
-          // @todo clear level?
-          // @todo output level code
+        case KEY_N:
+          editor.appendColumn();
+          break;
+        case KEY_M:
+          editor.removeLastColumn();
+          break;
+        case KEY_0:
+          if (confirm('Actually clear whole level?')) {
+            editor.clearLevel();
+          }
+          break;
       }
     }
   };
@@ -130,6 +138,50 @@ var Editor = new (function() {
     EnemyList.clear();
     PowerUpList.clear();
     Grid.reloadLevel();
+  };
+
+  this.appendColumn = function() {
+    var index = 0;
+    var cols = Grid.loadedLevel.cols;
+    Grid.loadedLevel.cols++;
+
+    for (var i = Grid.loadedLevel.rows; i > 0; i--) {
+      index = i * cols;
+      Grid.loadedLevel.map.splice(index, 0, BRICK_SPACE);
+    }
+
+    Grid.reloadLevel();
+    this.outputLevelCode();
+  };
+
+  this.removeLastColumn = function() {
+    var index = 0;
+    var cols = Grid.loadedLevel.cols;
+    if (Grid.loadedLevel.cols <= GRID_MIN_COLS) {
+      alert('Cannot remove any more columns');
+      return;
+    }
+
+    Grid.loadedLevel.cols--;
+
+    for (var i = Grid.loadedLevel.rows; i >= 0; i--) {
+      index = cols + i * cols - 1;
+      console.log('remove', index);
+      Grid.loadedLevel.map.splice(index, 1);
+    }
+
+    Grid.reloadLevel();
+    this.outputLevelCode();
+    Grid.addCameraPanX(0);
+  };
+
+  this.clearLevel = function() {
+    for (var r = 0; r < Grid.loadedLevel.map.length; r++) {
+      Grid.loadedLevel.map[r] = BRICK_SPACE;
+    }
+
+    Grid.reloadLevel();
+    this.outputLevelCode();
   };
 
   this.placeTile = function(type) {
@@ -154,6 +206,8 @@ var Editor = new (function() {
 
     var cell = Grid.coordsToTileCoords(mouseCoords.x, mouseCoords.y);
     drawStrokeRect(gameContext, cell.x + 1, cell.y + 1, GRID_WIDTH - 2, GRID_HEIGHT - 2, 'white', 2);
+    var i = Grid.coordsToIndex(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y);
+    drawText(gameContext, cell.x+2, cell.y+25, 'white', i);
   };
 
   this.hasTileImage = function(type) {

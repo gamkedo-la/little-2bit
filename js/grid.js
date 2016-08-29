@@ -1,6 +1,7 @@
 const CAMERA_SPEED = 4;
 const GRID_WIDTH = 40;
 const GRID_HEIGHT = 40;
+const GRID_MIN_COLS = 20;
 
 var Grid = new (function() {
   var COLS = 20;
@@ -211,12 +212,12 @@ var Grid = new (function() {
     return (col + COLS * row);
   }
 
-  function coordsToIndex(x, y) {
+  this.coordsToIndex = function(x, y) {
     var col = Math.floor(x / GRID_WIDTH);
     var row = Math.floor(y / GRID_HEIGHT);
 
     return (col + COLS * row);
-  }
+  };
 
   this.isSolidTileTypeAtCR_WithBoundsSafety = function(col, row) {
     if (col < 0 || row < 0 || col >= COLS || row >= ROWS) {
@@ -232,7 +233,7 @@ var Grid = new (function() {
   };
 
   this.tileTypeAtCoords = function(x, y) {
-    return level[coordsToIndex(x, y)];
+    return level[this.coordsToIndex(x, y)];
   };
 
   this.coordsToTileCoords = function(x, y) {
@@ -329,7 +330,7 @@ var Grid = new (function() {
   };
 
   this.setTile = function(x, y, type) {
-    var index = coordsToIndex(x, y);
+    var index = this.coordsToIndex(x, y);
     this.loadedLevel.map[index] = type;
     this.reloadLevel();
   };

@@ -26,6 +26,9 @@ const KEY_H = 72;
 const KEY_U = 85;
 const KEY_I = 73;
 const KEY_J = 74;
+const KEY_N = 78;
+const KEY_M = 77;
+const KEY_0 = 48;
 
 const KEY_1 = 49;
 const KEY_2 = 50;
