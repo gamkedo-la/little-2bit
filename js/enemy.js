@@ -84,7 +84,7 @@ var EnemyList = new (function() {
   };
 })();
 
-function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, projectileClass, projectileAngle) {
+function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, height, image, projectileClass, projectileAngle) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
@@ -92,8 +92,8 @@ function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, pro
   var frameDelay = 2;
   var maxFrames = image.width / width;
 
-  var initialX = x;
-  var initialY = y;
+  var x = initialX;
+  var y = initialY;
 
   if (projectileClass) {
     var projectileType = projectileClass.prototype.constructor.name;
@@ -217,7 +217,7 @@ function EnemyBase(list, x, y, vx, vy, health, damage, width, height, image, pro
 var brickTypeEnemyClasses = [];
 
 brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
-function SimpleEnemy(list, x, y) {
+function SimpleEnemy(list, initialX, initialY) {
   var vx = -5;
   var vy = 0;
   var health = 4;
@@ -252,14 +252,14 @@ function SimpleEnemy(list, x, y) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, list, x, y, vx, vy, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image);
 }
 
 SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
 SimpleEnemy.prototype.constructor = SimpleEnemy;
 
 brickTypeEnemyClasses[ENEMY_SHOOTING] = ShootingEnemy;
-function ShootingEnemy(list, x, y) {
+function ShootingEnemy(list, initialX, initialY) {
   var vx = -3;
   var vy = 0;
   var health = 10;
@@ -303,32 +303,32 @@ function ShootingEnemy(list, x, y) {
     };
   };
 
-  EnemyBase.call(this, list, x, y, vx, vy, health, damage, width, height, image, EnergyBall, 180);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, EnergyBall, 180);
 }
 
 ShootingEnemy.prototype = Object.create(EnemyBase.prototype);
 ShootingEnemy.prototype.constructor = ShootingEnemy;
 
-function TurretBase(list, x, y, vx, vy, health, damage, width, height, image_body, image_barrels, projectileClass, aimsAtShip) {
+function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, projectileClass, aimsAtShip) {
   // Set orientation
   var angle = 0;
   var angleBody = 0;
-  if (Grid.isSolidTileTypeAtCoords(x, y + GRID_HEIGHT)) {
+  if (Grid.isSolidTileTypeAtCoords(initialX, initialY + GRID_HEIGHT)) {
     // Has solid beneath it, point up
     angle = 270;
     angleBody = 0;
   }
-  else if (Grid.isSolidTileTypeAtCoords(x - GRID_WIDTH, y)) {
+  else if (Grid.isSolidTileTypeAtCoords(initialX - GRID_WIDTH, initialY)) {
     // Has solid on left side, point right
     angle = 0;
     angleBody = 90;
   }
-  else if (Grid.isSolidTileTypeAtCoords(x + GRID_WIDTH, y)) {
+  else if (Grid.isSolidTileTypeAtCoords(initialX + GRID_WIDTH, initialY)) {
     // Has solid on right side, point left
     angle = 180;
     angleBody = 270;
   }
-  else if (Grid.isSolidTileTypeAtCoords(x, y - GRID_HEIGHT)) {
+  else if (Grid.isSolidTileTypeAtCoords(initialX, initialY - GRID_HEIGHT)) {
     // Has solid above it, point down
     angle = 90;
     angleBody = 180;
@@ -421,13 +421,13 @@ function TurretBase(list, x, y, vx, vy, health, damage, width, height, image_bod
     enemyProjectiles.spawn(projectileClass, muzzle.x, muzzle.y, angle);
   };
 
-  EnemyBase.call(this, list, x, y, vx, vy, health, damage, width, height, image_body, projectileClass, angle);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, projectileClass, angle);
 }
 TurretBase.prototype = Object.create(EnemyBase.prototype);
 TurretBase.prototype.constructor = TurretBase;
 
 brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleTurret;
-function SimpleTurret(list, x, y) {
+function SimpleTurret(list, initialX, initialY) {
   var vx = 0;
   var vy = 0;
   var health = 4;
@@ -436,14 +436,14 @@ function SimpleTurret(list, x, y) {
   var width = 40;
   var height = 40;
 
-  TurretBase.call(this, list, x, y, vx, vy, health, damage, width, height, image, null, EnergyBall, false);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, null, EnergyBall, false);
 }
 
 SimpleTurret.prototype = Object.create(TurretBase.prototype);
 SimpleTurret.prototype.constructor = SimpleTurret;
 
 brickTypeEnemyClasses[ENEMY_TURRET_ADVANCED] = AimingTurret;
-function AimingTurret(list, x, y) {
+function AimingTurret(list, initialX, initialY) {
   var vx = 0;
   var vy = 0;
   var health = 4;
@@ -453,26 +453,26 @@ function AimingTurret(list, x, y) {
   var width = 40;
   var height = 40;
 
-  TurretBase.call(this, list, x, y, vx, vy, health, damage, width, height, image_body, image_barrels, EnergyBall, true);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, EnergyBall, true);
 }
 
 AimingTurret.prototype = Object.create(TurretBase.prototype);
 AimingTurret.prototype.constructor = AimingTurret;
 
 brickTypeEnemyClasses[ENEMY_ADVANCED1] = AdvancedEnemy1;
-function AdvancedEnemy1(list, x, y) {
+function AdvancedEnemy1(list, initialX, initialY) {
   this._initialize = function() {
     for (var e = 0; e < 6; e++) {
-      new AdvancedEnemyShip(list, x, y, -3 * e);
+      new AdvancedEnemyShip(list, initialX, initialY, -3 * e);
     }
   };
 
-  EnemyBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, 0, 0, 0, 0, 0);
 }
 AdvancedEnemy1.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemy1.prototype.constructor = AdvancedEnemy1;
 
-function AdvancedEnemyShip(list, x, y, step) {
+function AdvancedEnemyShip(list, initialX, initialY, step) {
   var vx = 5;
   var health = 4;
   var damage = 2;
@@ -481,7 +481,7 @@ function AdvancedEnemyShip(list, x, y, step) {
   var height = 42;
 
   var maxSteps = 60;
-  var startY = y;
+  var startY = initialY;
   var rangeY = 50;
 
   var halfWidth = width / 2;
@@ -495,8 +495,8 @@ function AdvancedEnemyShip(list, x, y, step) {
   // Part of a chain of ships?
   if (step < 0) {
     var a = (step / maxSteps) * 2 * Math.PI;
-    x = x - (step * 20);
-    y = startY - (rangeY * Math.sin(a));
+    initialX = initialX - (step * 20);
+    initialY = startY - (rangeY * Math.sin(a));
 
     step = maxSteps + step;
   }
@@ -531,7 +531,7 @@ function AdvancedEnemyShip(list, x, y, step) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
 }
 
 AdvancedEnemyShip.prototype = Object.create(EnemyBase.prototype);
@@ -539,7 +539,7 @@ AdvancedEnemyShip.prototype.constructor = AdvancedEnemyShip;
 
 brickTypeEnemyClasses[ENEMY_ADVANCED2] = AdvancedEnemy2;
 
-function AdvancedEnemy2(list, x, y) {
+function AdvancedEnemy2(list, initialX, initialY) {
   var speed = 5;
   var vx = -speed;
   var vy = 0;
@@ -620,7 +620,7 @@ function AdvancedEnemy2(list, x, y) {
     }
   };
 
-  EnemyBase.call(this, list, x, y, 0, 0, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
 }
 
 AdvancedEnemy2.prototype = Object.create(EnemyBase.prototype);
