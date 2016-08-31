@@ -109,7 +109,7 @@ function gameStart(levelId) {
 
   Grid.loadLevelId(levelId);
 
-  if (debug_single_step) {
+  if (debug && debug_single_step) {
     gameLoop();
     console.log('Single Step gameLoop!');
     console.log('middle mouse = spawn Laser');
@@ -127,11 +127,7 @@ function gameStart(levelId) {
   }
   else {
     gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
-    console.log('Starting game!');
   }
-
-  // debug
-//  Editor.toggle();
 }
 
 function shakeScreen(amount) {
