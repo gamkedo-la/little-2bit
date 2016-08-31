@@ -70,6 +70,9 @@ var Grid = new (function() {
     tilemap = Images[this.loadedLevel.tilemap];
     level = this.loadedLevel.map.slice(); // Copy just the values, not a reference
 
+    camPanX = this.backgroundX = 0;
+    Ship.reset();
+
     this.processGrid();
   };
 
@@ -226,7 +229,7 @@ var Grid = new (function() {
   this.update = function() {
     if (!Ship.isDead) {
       camPanX += this.cameraSpeed();
-      this.backgroundX = Math.floor(Grid.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
+      this.backgroundX = Math.floor(this.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
       this.cameraFollow(this.keyHeld_E);
     }
   };

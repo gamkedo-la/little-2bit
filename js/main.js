@@ -89,7 +89,7 @@ function gameInitialize() {
         case KEY_P:
           debug_stop_camera = !debug_stop_camera;
           break;
-        case 90: // z
+        case KEY_Z:
           Grid.nextLevel();
           break;
         default:

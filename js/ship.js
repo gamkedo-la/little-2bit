@@ -39,10 +39,6 @@ var Ship = new (function() {
   var frameDelay = SHIP_FRAME_DELAY;
 
   this.initialize = function() {
-    var levelInfo = Grid.levelInfo();
-
-    this.reset();
-
     halfWidth = width / 2;
     quarterWidth = width / 4;
     eighthWidth = width / 8;
@@ -50,19 +46,24 @@ var Ship = new (function() {
     quarterHeight = height / 4;
     eighthHeight = height / 8;
     minX = halfWidth;
-    maxX = levelInfo.width - halfWidth;
     minY = halfHeight;
-    maxY = levelInfo.height - halfHeight;
 
     maxFrames = Math.floor(Images.ship.width / width);
 
-    this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+    this.reset();
   };
 
   this.reset = function() {
     var levelInfo = Grid.levelInfo();
     x = 100;
     y = levelInfo.height / 2;
+    maxX = levelInfo.width - halfWidth;
+    maxY = levelInfo.height - halfHeight;
+
+    this.health = MAXHEALTH;
+    this.isDead = false;
+
+    this.setProjectile(SHIP_DEFAULT_PROJECTILE);
   };
 
   this.doDamage = function (amount) {

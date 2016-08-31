@@ -40,6 +40,7 @@ const KEY_B = 66;
 const KEY_L = 76;
 const KEY_O = 79;
 const KEY_P = 80;
+const KEY_Z = 90;
 
 function setupInput() {
   document.addEventListener('keydown', keyPressed);
