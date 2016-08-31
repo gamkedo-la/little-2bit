@@ -72,6 +72,24 @@ var MenuCredits = new (function() {
     ''
   ];
 
+  var gameOverText = [
+    '***INCOMING TRANSMISSION***',
+    '',
+    '',
+    'Game Over',
+    '',
+    '***END TRANSMISSION***',
+    '',
+    '',
+    creditsSeperator,
+    '',
+    '',
+    'The Journey of Little 2-bit',
+    '',
+    'A game made at Gamkedo.club',
+    ''
+  ];
+
   var menuCreditsText = [];
 
   var showLines = 1;
@@ -117,6 +135,10 @@ var MenuCredits = new (function() {
 
   this.enableVictoryText = function() {
     this.setText(victoryText);
+  };
+
+  this.enableGameOverText = function() {
+    this.setText(gameOverText);
   };
 
   this.draw = function() {
