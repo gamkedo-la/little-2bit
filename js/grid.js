@@ -7,9 +7,9 @@ var Grid = new (function() {
   var COLS = 20;
   var ROWS = 15;
 
+  this.loadedLevelId = undefined;
   this.loadedLevel = undefined;
   var level;
-  var editorLevel;
   var tilemap;
   var levelPrettyTileGrid;
 
@@ -23,29 +23,52 @@ var Grid = new (function() {
 
   const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 100;
 
-  this.initialize = function(levelId) {
+  this.initialize = function() {
     canvasHalfWidth = gameCanvas.width / 2;
     colsThatFitOnScreen = Math.floor(gameCanvas.width / GRID_WIDTH);
     camPanX = 0.0;
 
     this.backgroundWidth = Images.stars.width;
     initArtMaskLookup();
-
-    // @todo dynamic load level
-    this.loadLevel(levels[levelId]);
   };
 
-  this.reloadLevel = function() {
+  this.refreshLevel = function() {
     this.loadLevel(this.loadedLevel);
   };
 
+  this.nextLevel = function() {
+    if (!levels[this.loadedLevelId+1]) {
+      MenuCredits.enableVictoryText();
+      Menu.activate();
+      return;
+    }
+    this.loadedLevelId++;
+    this.loadLevel();
+  };
+
+  this.loadLevelId = function(_levelId) {
+    this.loadedLevelId = _levelId;
+    this.loadLevel();
+  };
+
   this.loadLevel = function(_level) {
+    if (!_level) {
+      _level = levels[this.loadedLevelId];
+    }
+
+    if (shipProjectiles) {
+      EnemyList.clear();
+      shipProjectiles.clear();
+      enemyProjectiles.clear();
+      PowerUpList.clear();
+      ParticleList.clear();
+    }
+
     this.loadedLevel = _level;
-    COLS = _level.cols;
-    ROWS = _level.rows;
-    tilemap = Images[_level.tilemap];
-    level = _level.map.slice(); // Copy just the values, not a reference
-    editorLevel = _level.map;
+    COLS = this.loadedLevel.cols;
+    ROWS = this.loadedLevel.rows;
+    tilemap = Images[this.loadedLevel.tilemap];
+    level = this.loadedLevel.map.slice(); // Copy just the values, not a reference
 
     this.processGrid();
   };
@@ -327,11 +350,5 @@ var Grid = new (function() {
     if (camPanX > maxPanRight) {
       camPanX = maxPanRight;
     }
-  };
-
-  this.setTile = function(x, y, type) {
-    var index = this.coordsToIndex(x, y);
-    this.loadedLevel.map[index] = type;
-    this.reloadLevel();
   };
 })();

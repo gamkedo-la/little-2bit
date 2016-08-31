@@ -43,6 +43,10 @@ var UI = new (function() {
     projectileImg = Images[imageName];
   };
 
+  this.clear = function() {
+    uiContext.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
+  };
+
   this.draw = function() {
     uiContext.drawImage(Images.stars, -backgroundX, 0);
     uiContext.drawImage(Images.stars, -backgroundX + Grid.backgroundWidth, 0);

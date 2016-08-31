@@ -7,26 +7,34 @@ var Menu = new (function() {
   var menuFps = 20;
 
   this.initialize = function() {
-    if (gameInterval) {
-      clearInterval(gameInterval);
-      gameInterval = undefined;
-    }
-
-    Menu.active = true;
-
-    gameCanvas.addEventListener('mousemove', mouseMove);
-    gameCanvas.addEventListener('mouseup', mouseReleased);
-
     for (var b = 0; b < levels.length; b++) {
       buttons.push(new MenuButton('Level ' + (b + 1), gameStart.bind(this, b)));
     }
 
     MenuCredits.initialize();
 
-    menuLoop = setInterval(draw, 1000 / menuFps);
+    Menu.activate();
   };
 
-  this.deactive = function() {
+  this.activate = function() {
+    if (gameInterval) {
+      clearInterval(gameInterval);
+      gameInterval = undefined;
+      UI.clear();
+    }
+
+    gameCanvas.addEventListener('mousemove', mouseMove);
+    gameCanvas.addEventListener('mouseup', mouseReleased);
+
+    Menu.active = true;
+    MenuCredits.clear();
+
+    if (!menuLoop) {
+      menuLoop = setInterval(draw, 1000 / menuFps);
+    }
+  };
+
+  this.deactivate = function() {
     Menu.active = false;
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);

@@ -1,7 +1,26 @@
 var MenuCredits = new (function() {
   var creditsSeperator = '              ----------            ';
+  var title = [
+  ];
+  var creditsSpacer = [
+    '',
+    '',
+    creditsSeperator,
+    '',
+    ''
+  ];
   var credits = [
-    '    The Journey of Little 2-bit    ',
+    'Spad-XIII -- project lead',
+    'Jeremy -- rocket art',
+    'cmarkle -- story, energy ball art',
+    'rocket art, space ship art',
+    'flannelbeard -- player shields',
+    'aciago -- turrets art',
+    'Chris DeLeon -- tile map code'
+  ];
+
+  var introText = [
+    'The Journey of Little 2-bit',
     '',
     '',
     '',
@@ -32,21 +51,28 @@ var MenuCredits = new (function() {
     'this 2-bit operation, so make us',
     'proud!',
     '',
+    '***END TRANSMISSION***'
+  ];
+
+  var victoryText = [
+    '***INCOMING TRANSMISSION***',
+    '',
+    '',
+    'You did it!',
     '',
     '***END TRANSMISSION***',
     '',
     '',
-    '',
     creditsSeperator,
     '',
-    'Spad-XIII -- project lead',
-    'Jeremy -- rocket art',
-    'cmarkle -- story, energy ball art',
-    'rocket art, space ship art',
-    'flannelbeard -- player shields',
-    'aciago -- turrets art',
-    'chris_deleon -- tile map code'
+    '',
+    'The Journey of Little 2-bit',
+    '',
+    'A game made at Gamkedo.club',
+    ''
   ];
+
+  var menuCreditsText = [];
 
   var showLines = 1;
   var loopCounter = 30;
@@ -59,29 +85,50 @@ var MenuCredits = new (function() {
   var lines = [];
 
   this.initialize = function() {
-    lines.push(new MenuCreditLine(credits[0]));
-
-    // Add some blank lines at the bottom of the credits
-    for (var i = 0; i < 6; i++) {
-      credits.push('');
-      if (i == 2) {
-        credits.push(creditsSeperator);
-      }
-    }
+    this.enableMenuCreditsText();
 
     gameContext.font = gameFontSmall;
     x = gameCanvas.width - gameContext.measureText(creditsSeperator).width;
   };
 
+  this.clear = function() {
+    lines = [];
+    showLines = 1;
+
+    this.showFirstLine();
+  };
+
+  this.setText = function(text) {
+    menuCreditsText = [];
+    menuCreditsText = menuCreditsText.concat(title, text, creditsSpacer, credits, creditsSpacer, ['', '']);
+
+    this.showFirstLine();
+  };
+
+  this.showFirstLine = function() {
+    if (lines.length == 0) {
+      lines.push(new MenuCreditLine(menuCreditsText[0]));
+    }
+  };
+
+  this.enableMenuCreditsText = function() {
+    this.setText(introText);
+  };
+
+  this.enableVictoryText = function() {
+    this.setText(victoryText);
+  };
+
   this.draw = function() {
     if (loopCounter-- <= 0) {
       loopCounter = 30;
-      if (showLines >= credits.length) {
+      if (showLines >= menuCreditsText.length) {
         showLines = 0;
+        this.enableMenuCreditsText();
       }
 
-      if (credits[showLines]) {
-        lines.push(new MenuCreditLine(credits[showLines]));
+      if (menuCreditsText[showLines]) {
+        lines.push(new MenuCreditLine(menuCreditsText[showLines]));
       }
       showLines++;
     }
@@ -97,7 +144,6 @@ var MenuCredits = new (function() {
   var MenuCreditLine = function(text) {
     this.remove = false;
 
-//    var x = gameCanvas.width / 4 * 3;
     var y = startY;
     var alpha = 0.2;
 

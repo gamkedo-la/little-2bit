@@ -164,7 +164,7 @@ var Editor = new (function() {
       Grid.loadedLevel.map.splice(index, 0, BRICK_SPACE);
     }
 
-    Grid.reloadLevel();
+    Grid.refreshLevel();
     this.outputLevelCode();
   };
 
@@ -184,7 +184,7 @@ var Editor = new (function() {
       Grid.loadedLevel.map.splice(index, 1);
     }
 
-    Grid.reloadLevel();
+    Grid.refreshLevel();
     this.outputLevelCode();
     Grid.addCameraPanX(0);
   };
@@ -194,12 +194,14 @@ var Editor = new (function() {
       Grid.loadedLevel.map[r] = BRICK_SPACE;
     }
 
-    Grid.reloadLevel();
+    Grid.refreshLevel();
     this.outputLevelCode();
   };
 
   this.placeTile = function(type) {
-    Grid.setTile(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y, type);
+    var index = Grid.coordsToIndex(mouseCoords.x + Grid.cameraPanX(), mouseCoords.y);
+    Grid.loadedLevel.map[index] = type;
+    Grid.refreshLevel();
 
     this.outputLevelCode();
   };

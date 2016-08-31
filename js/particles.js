@@ -123,6 +123,10 @@ PFX_CONFIG[PFX_SMOKE] = {
 var ParticleList = new (function() {
   var particleList = [];
 
+  this.clear = function() {
+    particleList = [];
+  };
+
   function randomRange(initial) {
     return (initial * 0.7) + (Math.random() * initial * 0.5);
   }

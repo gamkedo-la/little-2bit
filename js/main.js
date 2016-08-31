@@ -1,5 +1,6 @@
 var gameCanvas, gameContext, uiCanvas, uiContext;
 var framesPerSecond = 30;
+var gameInitialized = false;
 var gameInterval;
 var gameFont = 'bold 20pt Verdana';
 var gameFontSmall = '16pt Verdana';
@@ -26,44 +27,19 @@ window.onload = function () {
   uiContext = uiCanvas.getContext('2d');
 
   Sounds.initialize();
-  // Skip menu for now, until we have more levels :)
-//  Images.initialize(Menu.initialize);
-  Images.initialize(gameStart.bind(this, 0));
+  Images.initialize(Menu.initialize);
 };
 
-function gameStart(levelId) {
+function gameInitialize() {
   setupInput();
 
-  Menu.deactive();
-
   UI.initialize();
-  Grid.initialize(levelId);
+  Grid.initialize();
   Ship.initialize();
   Editor.initialize();
 
   shipProjectiles = new ProjectileList();
   enemyProjectiles = new ProjectileList();
-
-  if (debug_single_step) {
-    gameLoop();
-    console.log('Single Step gameLoop!');
-    console.log('middle mouse = spawn Laser');
-    console.log('left mouse = single gameLoop step');
-    document.addEventListener('mousedown', function(event) {
-      if (event.button == 1) {
-        var c = Ship.coords();
-        shipProjectiles.spawn(Laser, c.x, c.y);
-      }
-      else {
-        gameLoop();
-      }
-      event.preventDefault();
-    });
-  }
-  else {
-    gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
-    console.log('Starting game!');
-  }
 
   if (debug) {
     console.log('Debug mode enabled! Action keys:');
@@ -113,10 +89,45 @@ function gameStart(levelId) {
         case KEY_P:
           debug_stop_camera = !debug_stop_camera;
           break;
+        case 90: // z
+          Grid.nextLevel();
+          break;
         default:
           console.log('Pressed', event.keyCode);
       }
     });
+  }
+}
+
+function gameStart(levelId) {
+  if (!gameInitialized) {
+    gameInitialized = true;
+    gameInitialize();
+  }
+
+  Menu.deactivate();
+
+  Grid.loadLevelId(levelId);
+
+  if (debug_single_step) {
+    gameLoop();
+    console.log('Single Step gameLoop!');
+    console.log('middle mouse = spawn Laser');
+    console.log('left mouse = single gameLoop step');
+    document.addEventListener('mousedown', function(event) {
+      if (event.button == 1) {
+        var c = Ship.coords();
+        shipProjectiles.spawn(Laser, c.x, c.y);
+      }
+      else {
+        gameLoop();
+      }
+      event.preventDefault();
+    });
+  }
+  else {
+    gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
+    console.log('Starting game!');
   }
 
   // debug
