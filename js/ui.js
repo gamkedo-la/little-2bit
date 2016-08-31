@@ -54,23 +54,34 @@ var UI = new (function() {
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');
 
-    // Health-bar
-    drawText(uiContext, 25, 45, '#fff', 'Health');
-    for (var h = 0; h < MAXHEALTH; h++) {
-      if (!Ship.isDead && h < Ship.health) {
-        drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#f00');
-      }
-      else {
-        drawFillRect(uiContext, 100 + h * 10, 32, 8, 13, '#ccc');
-      }
-    }
-
-    if (projectileImg) {
-      drawText(uiContext, 325, 45, '#fff', 'Weapon');
-      uiContext.drawImage(projectileImg, 415, 25);
-    }
-
     soundButton.draw(this.sound);
+
+    if (Ship.isDead) {
+      return;
+    }
+
+    // Projectile
+    drawText(uiContext, 25, 45, '#fff', 'Weapon');
+    if (projectileImg) {
+      uiContext.drawImage(projectileImg, 115, 25);
+    }
+
+    // Health-bar
+    drawText(uiContext, 165, 45, '#fff', 'Health');
+    var c;
+    for (var h = 0; h < MAXHEALTH; h++) {
+      c = '#ccc';
+      if (h < Ship.health) {
+        c = '#f00';
+      }
+      drawFillRect(uiContext, 245 + h * 10, 32, 8, 13, c);
+    }
+
+    // Lives-bar
+    for (var l = 0; l < Ship.lives; l++) {
+      drawText(uiContext, 455, 45, '#fff', 'Lives');
+      drawBitmapCenteredWithRotation(uiContext, Images.ui_heart, 520 + l * Images.ui_heart.width + 5, 38);
+    }
   };
 })();
 

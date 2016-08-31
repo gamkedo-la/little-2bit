@@ -13,6 +13,7 @@ var Images = new (function() {
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
     energy_ball: 'img/enemy_shot.png',
+    ui_heart: 'img/ui-heart.png',
     ui_rocket: 'img/ui-rocket.png',
     ui_double_rocket: 'img/ui-double-rocket.png',
     ui_homing_rocket: 'img/ui-homing-rocket.png',

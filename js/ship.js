@@ -27,6 +27,7 @@ var Ship = new (function() {
   var halfHeight, quarterHeight, eighthHeight;
 
   this.health = MAXHEALTH;
+  this.lives = 3;
 
   var projectileType;
   var projectileClass;
