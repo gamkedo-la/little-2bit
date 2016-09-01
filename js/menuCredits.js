@@ -16,6 +16,8 @@ var MenuCredits = new (function() {
     'rocket art, space ship art',
     'flannelbeard -- player shields',
     'aciago -- turrets art',
+    'mickyzo -- single/double/triple laser,',
+    'player hit/explosion sounds',
     'Chris DeLeon -- tile map code'
   ];
 
