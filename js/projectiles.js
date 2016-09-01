@@ -250,7 +250,7 @@ const PROJECTILE_INFO = {
   }
 };
 
-function Laser(list, x, y, angle) {
+function Laser(list, x, y, angle, noSound) {
   var damage = 3;
   var blastRange = 0;
   var speed = 20;
@@ -287,35 +287,41 @@ function Laser(list, x, y, angle) {
 
   ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
 
-  Sounds.laser.play();
+  if (!noSound) {
+    Sounds.laser.play();
+  }
 }
 Laser.prototype = Object.create(ProjectileBase.prototype);
 Laser.prototype.constructor = Laser;
 
 function DoubleLaser(list, x, y) {
   this._initialize = function() {
-    new Laser(list, x, y - 8);
-    new Laser(list, x, y + 8);
+    new Laser(list, x, y - 8, true);
+    new Laser(list, x, y + 8, true);
   };
 
   ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
+
+  Sounds.double_laser.play();
 }
 DoubleLaser.prototype = Object.create(ProjectileBase.prototype);
 DoubleLaser.prototype.constructor = DoubleLaser;
 
 function TripleLaser(list, x, y) {
   this._initialize = function() {
-    new Laser(list, x, y, 0.4);
-    new Laser(list, x, y);
-    new Laser(list, x, y, -0.4);
+    new Laser(list, x, y, 0.4, true);
+    new Laser(list, x, y, 0, true);
+    new Laser(list, x, y, -0.4, true);
   };
 
   ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
+
+  Sounds.triple_laser.play();
 }
 TripleLaser.prototype = Object.create(ProjectileBase.prototype);
 TripleLaser.prototype.constructor = TripleLaser;
 
-function Rocket(list, x, y) {
+function Rocket(list, x, y, noSound) {
   var damage = 6;
   var blastRange = 90;
   var vx = 15;
@@ -335,18 +341,22 @@ function Rocket(list, x, y) {
 
   ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
 
-  Sounds.rocket.play();
+  if (!noSound) {
+    Sounds.rocket.play();
+  }
 }
 Rocket.prototype = Object.create(ProjectileBase.prototype);
 Rocket.prototype.constructor = Rocket;
 
 function DoubleRocket(list, x, y) {
   this._initialize = function() {
-    new Rocket(list, x, y - 14);
-    new Rocket(list, x, y + 14);
+    new Rocket(list, x, y - 14, true);
+    new Rocket(list, x, y + 14, true);
   };
 
   ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
+
+  Sounds.double_rocket.play();
 }
 DoubleRocket.prototype = Object.create(ProjectileBase.prototype);
 DoubleRocket.prototype.constructor = DoubleRocket;
@@ -406,7 +416,7 @@ function HomingRocket(list, x, y) {
 
   ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
 
-  Sounds.rocket.play();
+  Sounds.homing_rocket.play();
 }
 HomingRocket.prototype = Object.create(ProjectileBase.prototype);
 HomingRocket.prototype.constructor = HomingRocket;

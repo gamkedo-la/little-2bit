@@ -47,7 +47,7 @@ var Images = new (function() {
   this.initialize = function(callback) {
     var numToLoad = Object.keys(images).length;
 
-    for (key in images) {
+    for (var key in images) {
       if (images.hasOwnProperty(key)) {
         this[key] = loadImage(images[key]);
       }
@@ -74,18 +74,29 @@ var Images = new (function() {
 
 var Sounds = new (function() {
   var sounds = {
-    ship_hit: 'sfx/ship_hit.wav',
-    laser: 'sfx/laser.wav',
-    energy_ball: 'sfx/energy_ball.wav',
+    ship_hit: 'sfx/2bit hit.wav',
+    laser: 'sfx/Laser MPC.wav',
+    double_laser: 'sfx/double laser clean.wav',
+    triple_laser: 'sfx/triple laser v2 clean.wav',
     rocket: 'sfx/rocket1.wav',
-    explosion_ship: 'sfx/explosion2.wav',
+    double_rocket: 'sfx/double rocket.wav',
+    homing_rocket: 'sfx/homing rocket.wav',
+    bomb1: 'sfx/explosion1.wav',
+    bomb2: 'sfx/explosion1.wav',
+    energy_ball: 'sfx/energy ball.wav',
+    countdown_advanced_enemy2: 'sfx/countdown advanced enemy2.wav',
+    explosion_ship: 'sfx/2bit explodes.wav',
     explosion_simple_enemy: 'sfx/explosion1.wav',
-    explosion_shooting_enemy: 'sfx/explosion1.wav',
-    explosion_simple_turret: 'sfx/explosion1.wav'
+    explosion_shooting_enemy: 'sfx/explosion2.wav',
+    explosion_simple_turret: 'sfx/explosion1.wav',
+    explosion_advanced_turret: 'sfx/explosion1.wav',
+    explosion_advanced_enemy1: 'sfx/explosion1.wav',
+    explosion_advanced_enemy2: 'sfx/explosion1.wav',
+    explosion_advanced_enemy3: 'sfx/explosion2.wav'
   };
 
   this.initialize = function() {
-    for (key in sounds) {
+    for (var key in sounds) {
       if (sounds.hasOwnProperty(key)) {
         this[key] = new Sound(sounds[key]);
       }

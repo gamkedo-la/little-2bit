@@ -360,11 +360,6 @@ function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, hei
     ];
   };
 
-  this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
-    Sounds.explosion_simple_turret.play();
-  };
-
   this._draw = function(frame, x, y, width, height) {
     if (!aimsAtShip) {
       drawBitmapFrameCenteredWithRotation(gameContext, image_body, frame, x, y, width, height, angleBody);
@@ -436,6 +431,11 @@ function SimpleTurret(list, initialX, initialY) {
   var width = 40;
   var height = 40;
 
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_simple_turret.play();
+  };
+
   TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, null, EnergyBall, false);
 }
 
@@ -452,6 +452,11 @@ function AimingTurret(list, initialX, initialY) {
   var image_barrels = Images.advanced_turret_barrels;
   var width = 40;
   var height = 40;
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_advanced_turret.play();
+  };
 
   TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, EnergyBall, true);
 }
@@ -524,7 +529,7 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
 
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
-    Sounds.explosion_simple_enemy.play();
+    Sounds.explosion_advanced_enemy1.play();
   };
 
   this._draw = function(frame, x, y, width, height) {
@@ -603,7 +608,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
 
   this._explode = function(x, y) {
     ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
-    Sounds.explosion_simple_enemy.play();
+    Sounds.explosion_advanced_enemy2.play();
   };
 
   this._draw = function(frame, x, y, width, height) {
@@ -611,6 +616,9 @@ function AdvancedEnemy2(list, initialX, initialY) {
       explodeShake++;
       x += Math.random() * explodeShake - explodeShake * 0.5;
       y += Math.random() * explodeShake - explodeShake * 0.5;
+      if (explodeTimer % 4 == 0) {
+        Sounds.countdown_advanced_enemy2.play();
+      }
     }
 
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);

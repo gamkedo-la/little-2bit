@@ -44,6 +44,7 @@ var Grid = new (function() {
     }
     this.loadedLevelId++;
     this.loadLevel();
+    this.reset();
   };
 
   this.loadLevelId = function(_levelId) {
@@ -55,7 +56,20 @@ var Grid = new (function() {
     if (!_level) {
       _level = levels[this.loadedLevelId];
     }
+    COLS = _level.cols;
+    ROWS = _level.rows;
+    tilemap = Images[_level.tilemap];
+    level = _level.map.slice(); // Copy just the values, not a reference
 
+    if (!this.loadedLevel) {
+      this.reset();
+    }
+    this.loadedLevel = _level;
+
+    this.processGrid();
+  };
+
+  this.reset = function() {
     if (shipProjectiles) {
       EnemyList.clear();
       shipProjectiles.clear();
@@ -64,16 +78,8 @@ var Grid = new (function() {
       ParticleList.clear();
     }
 
-    this.loadedLevel = _level;
-    COLS = this.loadedLevel.cols;
-    ROWS = this.loadedLevel.rows;
-    tilemap = Images[this.loadedLevel.tilemap];
-    level = this.loadedLevel.map.slice(); // Copy just the values, not a reference
-
     camPanX = this.backgroundX = 0;
     Ship.reset();
-
-    this.processGrid();
   };
 
   this.processGrid = function() {

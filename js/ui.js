@@ -56,10 +56,6 @@ var UI = new (function() {
 
     soundButton.draw(this.sound);
 
-    if (Ship.isDead) {
-      return;
-    }
-
     // Projectile
     drawText(uiContext, 25, 45, '#fff', 'Weapon');
     if (projectileImg) {
