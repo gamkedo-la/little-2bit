@@ -68,7 +68,7 @@ var Ship = new (function() {
     x = 100;
     y = levelInfo.height / 2;
     maxX = levelInfo.width - halfWidth;
-    maxY = levelInfo.height - halfHeight;
+    maxY = levelInfo.height - halfHeight - eighthHeight;
 
     this.health = MAXHEALTH;
     this.isDead = false;
