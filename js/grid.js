@@ -7,6 +7,11 @@ var Grid = new (function() {
   var COLS = 20;
   var ROWS = 15;
 
+  this.isReady = false;
+  var startTime;
+  var startDelay = 500; // milliseconds
+  var startCountDown = 4;
+
   this.loadedLevelId = undefined;
   this.loadedLevel = undefined;
   var level;
@@ -67,6 +72,9 @@ var Grid = new (function() {
     this.loadedLevel = _level;
 
     this.processGrid();
+
+    startTime = Date.now() + startDelay * 2;
+    startCountDown = 4;
   };
 
   this.reset = function() {
@@ -78,8 +86,17 @@ var Grid = new (function() {
       ParticleList.clear();
     }
 
+    // @todo reset to last respawn position?
+
     camPanX = this.backgroundX = 0;
     Ship.reset();
+    this.isReady = false;
+  };
+
+  this.start = function() {
+    if (startTime < Date.now()) {
+      this.isReady = true;
+    }
   };
 
   this.processGrid = function() {
@@ -220,7 +237,7 @@ var Grid = new (function() {
   };
 
   this.cameraSpeed = function() {
-    if (debug_stop_camera) {
+    if (!this.isReady || debug_stop_camera) {
       return 0;
     }
 
@@ -233,7 +250,11 @@ var Grid = new (function() {
   };
 
   this.update = function() {
-    if (!Ship.isDead) {
+    if (!this.isReady && startCountDown <= 0) {
+      this.start();
+    }
+
+    if (this.isReady && !Ship.isDead) {
       camPanX += this.cameraSpeed();
       this.backgroundX = Math.floor(this.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
       this.cameraFollow(this.keyHeld_E);
@@ -335,6 +356,22 @@ var Grid = new (function() {
         ]);
       }
       y += GRID_HEIGHT;
+    }
+
+    if (!this.isReady) {
+      if (startTime < Date.now()) {
+        startCountDown--;
+        startTime = Date.now() + startDelay;
+      }
+      if (startCountDown == 4) {
+        drawTextHugeCentered('Ready?');
+      }
+      else if (startCountDown <= 0) {
+        drawTextHugeCentered('Go!');
+      }
+      else {
+        drawTextHugeCentered(startCountDown);
+      }
     }
   };
 

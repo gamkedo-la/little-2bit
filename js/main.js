@@ -2,6 +2,7 @@ var gameCanvas, gameContext, uiCanvas, uiContext;
 var framesPerSecond = 30;
 var gameInitialized = false;
 var gameInterval;
+var gameFontHuge = '50pt Verdana';
 var gameFont = 'bold 20pt Verdana';
 var gameFontSmall = '16pt Verdana';
 var fontColor = '#ddd';
@@ -107,6 +108,7 @@ function gameStart(levelId) {
 
   Menu.deactivate();
 
+  Ship.restart();
   Grid.loadLevelId(levelId);
 
   if (debug && debug_single_step) {

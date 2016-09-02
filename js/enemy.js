@@ -53,6 +53,9 @@ var EnemyList = new (function() {
   };
 
   this.update = function() {
+    if (!Grid.isReady) {
+      return;
+    }
     for (var i = enemyList.length - 1; i >= 0; i--) {
       enemyList[i].update();
 
@@ -70,6 +73,9 @@ var EnemyList = new (function() {
   };
 
   this.draw = function() {
+    if (!Grid.isReady) {
+      return;
+    }
     for (var i = 0; i < enemyList.length; i++) {
       enemyList[i].draw();
     }

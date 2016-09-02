@@ -1,3 +1,4 @@
+const START_LIVES = 3;
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
@@ -27,7 +28,10 @@ var Ship = new (function() {
   var halfHeight, quarterHeight, eighthHeight;
 
   this.health = MAXHEALTH;
-  this.lives = 3;
+  this.lives = START_LIVES;
+
+  var respawnTime;
+  var respawnDelay = 2000; // milliseconds
 
   var projectileType;
   var projectileClass;
@@ -54,6 +58,11 @@ var Ship = new (function() {
     this.reset();
   };
 
+  this.restart = function() {
+    this.lives = START_LIVES;
+    this.reset();
+  };
+
   this.reset = function() {
     var levelInfo = Grid.levelInfo();
     x = 100;
@@ -65,6 +74,20 @@ var Ship = new (function() {
     this.isDead = false;
 
     this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+  };
+
+  this.respawn = function() {
+    if (respawnTime > Date.now()) {
+      return;
+    }
+    if (this.lives) {
+      Grid.reset();
+      Grid.refreshLevel();
+    }
+    else {
+      MenuCredits.enableGameOverText();
+      Menu.activate();
+    }
   };
 
   this.doDamage = function (amount) {
@@ -87,7 +110,15 @@ var Ship = new (function() {
       Sounds.ship_hit.play();
     }
 
-    this.isDead = (this.health <= 0);
+    if (this.health <= 0) {
+      this.die();
+    }
+  };
+
+  this.die = function() {
+    this.lives--;
+    this.isDead = true;
+    respawnTime = Date.now() + respawnDelay;
   };
 
   this.boundingBox = function() {
@@ -136,7 +167,7 @@ var Ship = new (function() {
         if (debug) {
           drawFillCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
         }
-        this.isDead = true;
+        this.die();
         break;
       }
     }
@@ -163,7 +194,7 @@ var Ship = new (function() {
   };
 
   this.update = function() {
-    if (this.isDead || debug_editor) {
+    if (this.isDead || !Grid.isReady || debug_editor) {
       return;
     }
 
@@ -274,6 +305,9 @@ var Ship = new (function() {
       }
 
       this.drawShield();
+    }
+    else {
+      drawTextHugeCentered('Oh noes!?');
     }
 
     if (debug_draw_bounds) {

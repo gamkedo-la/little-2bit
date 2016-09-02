@@ -100,3 +100,10 @@ function drawTextAlpha(canvasContext, textX, textY, fillColor, showWords, alpha)
   drawText(canvasContext, textX, textY, fillColor, showWords);
   canvasContext.restore();
 }
+
+function drawTextHugeCentered(text) {
+  gameContext.font = gameFontHuge;
+  gameContext.textBaseline = 'middle';
+  gameContext.textAlign = 'center';
+  drawText(gameContext, Grid.cameraPanX() + gameCanvas.width / 2, gameCanvas.height / 2, '#fff', text);
+}
