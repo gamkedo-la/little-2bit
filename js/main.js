@@ -2,6 +2,7 @@ var gameCanvas, gameContext, uiCanvas, uiContext;
 var framesPerSecond = 30;
 var gameInitialized = false;
 var gameInterval;
+var gameInitTime, gameTime;
 var gameFontHuge = '50pt Verdana';
 var gameFont = 'bold 20pt Verdana';
 var gameFontSmall = '16pt Verdana';
@@ -128,6 +129,7 @@ function gameStart(levelId) {
     });
   }
   else {
+    gameInitTime = Date.now();
     gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
   }
 }
@@ -138,6 +140,9 @@ function shakeScreen(amount) {
 }
 
 function gameLoop() {
+  gameTime = Date.now - gameInitTime;
+  TWEEN.update();
+
   UI.update();
   Grid.update();
   PowerUpList.update();

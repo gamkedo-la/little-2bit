@@ -39,14 +39,39 @@ var PowerUpList = new (function() {
     }
   };
 
-  this.draw = function() {
-    for (var i = 0; i < powerUpList.length; i++) {
-      powerUpList[i].draw();
-    }
+  var offsetY = 0;
+  var maxOffset = 10;
+
+  var tweenCurrent = {
+    offsetY: offsetY
+  };
+  var tweenUpdate = function() {
+    offsetY = tweenCurrent.offsetY;
   };
 
-  this.drawTileByBrickType = function(type, x, y) {
+  var easing = TWEEN.Easing.Quadratic.InOut;
+  var tweenHead	= new TWEEN.Tween(tweenCurrent)
+    .to({offsetY: maxOffset}, 800)
+    .easing(easing)
+    .onUpdate(tweenUpdate);
 
+  var tweenBack = new TWEEN.Tween(tweenCurrent)
+    .to({offsetY: -maxOffset}, 800)
+    .easing(easing)
+    .onUpdate(tweenUpdate);
+
+  tweenHead.chain(tweenBack);
+  tweenBack.chain(tweenHead);
+  tweenHead.start();
+
+  this.draw = function() {
+    if (!Grid.isReady) {
+      return;
+    }
+
+    for (var i = 0; i < powerUpList.length; i++) {
+      powerUpList[i].draw(offsetY);
+    }
   };
 })();
 
@@ -90,8 +115,8 @@ function PowerUpBase(x, y, width, height, image) {
     this._pickUp();
   };
 
-  this.draw = function() {
-    gameContext.drawImage(image, width * frame, 0, width, height, x - halfWidth, y - halfHeight, width, height);
+  this.draw = function(offsetY) {
+    gameContext.drawImage(image, width * frame, 0, width, height, x - halfWidth, y - halfHeight + offsetY, width, height);
 
     if (frameDelay-- <= 0) {
       frameDelay = 1;
