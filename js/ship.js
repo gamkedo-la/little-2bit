@@ -18,7 +18,7 @@ var Ship = new (function() {
   this.damage = 50;
 
   this.shieldAmount = 0;
-  this.shieldAnimationTimer = 0;
+  var shieldAnimationTimer = 0;
 
   var x, y;
   var minX, minY, maxX, maxY;
@@ -90,15 +90,17 @@ var Ship = new (function() {
     }
   };
 
-  this.doDamage = function (amount) {
+  this.doDamage = function(amount) {
     if (this.shieldAmount > 0) {
-        this.shieldAmount -= amount;
-        if (this.shieldAmount<0) {
-            this.health += this.shieldAmount;
-            this.shieldAmount = 0;
-        }
-    } else {
-        this.health -= amount;
+      this.shieldAmount -= amount;
+
+      if (this.shieldAmount < 0) {
+        this.health += this.shieldAmount;
+        this.shieldAmount = 0;
+      }
+    }
+    else {
+      this.health -= amount;
     }
 
     shakeScreen(5 * amount);
@@ -190,7 +192,7 @@ var Ship = new (function() {
   };
 
   this.setShield = function() {
-      this.shieldAmount = SHIELD_LIFE_AMOUNT;
+    this.shieldAmount = SHIELD_LIFE_AMOUNT;
   };
 
   this.update = function() {
@@ -261,30 +263,22 @@ var Ship = new (function() {
     }
   };
 
-    this.drawShield = function() {
+  this.drawShield = function() {
+    var shieldImage = 'shield_small';
+    if (this.shieldAmount >= SHIELD_LIFE_AMOUNT / 2) {
+      shieldImage = 'shield_big';
+    }
+    if (shieldAnimationTimer >= SHIELD_ANIMATION) {
+      shieldImage += '_glow';
+    }
 
-        if (this.shieldAmount>=SHIELD_LIFE_AMOUNT/2) {
-            if (this.shieldAnimationTimer < SHIELD_ANIMATION) {
-                drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_big, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT);
-            } else {
-                drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_big_glow, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT);
-            }
-        } else if (this.shieldAmount>0) {
-            if (this.shieldAnimationTimer < SHIELD_ANIMATION) {
-                drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_small, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT);
-            } else {
-                drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images.shield_small_glow, frame, x+5, y, 108, 65, 0,this.shieldAmount/SHIELD_LIFE_AMOUNT);
-            }
-            
-        }
+    drawBitmapFrameCenteredWithRotationAndAlpha(gameContext, Images[shieldImage], frame, x + 5, y, 108, 65, 0, this.shieldAmount / SHIELD_LIFE_AMOUNT);
 
-        this.shieldAnimationTimer++;
-        if (this.shieldAnimationTimer>SHIELD_ANIMATION*2) {
-          this.shieldAnimationTimer = 0;
-        }
-    };
-
-
+    shieldAnimationTimer++;
+    if (shieldAnimationTimer > SHIELD_ANIMATION * 2) {
+      shieldAnimationTimer = 0;
+    }
+  };
 
   this.draw = function() {
     if (!this.isDead) {
