@@ -73,33 +73,42 @@ var Images = new (function() {
 })();
 
 var Sounds = new (function() {
+  var audioFormat = '.wav';
+  var audio = new Audio();
+  if (audio.canPlayType('audio/ogg')) {
+    audioFormat = '.ogg';
+  }
+  else if (audio.canPlayType('audio/mp3')) {
+    audioFormat = '.mp3';
+  }
+  
   var sounds = {
-    ship_hit: 'sfx/2bit hit.wav',
-    shield_hit: 'sfx/shield hit.wav',
-    laser: 'sfx/Laser MPC.wav',
-    double_laser: 'sfx/double laser clean.wav',
-    triple_laser: 'sfx/triple laser v2 clean.wav',
-    rocket: 'sfx/rocket 1.wav',
-    double_rocket: 'sfx/double rocket.wav',
-    homing_rocket: 'sfx/homing rocket.wav',
-    bomb1: 'sfx/explosion1.wav',
-    bomb2: 'sfx/explosion1.wav',
-    energy_ball: 'sfx/energy ball.wav',
-    countdown_advanced_enemy2: 'sfx/countdown advanced enemy2.wav',
-    explosion_ship: 'sfx/2bit explodes.wav',
-    explosion_simple_enemy: 'sfx/explosion1.wav',
-    explosion_shooting_enemy: 'sfx/explosion2.wav',
-    explosion_simple_turret: 'sfx/explosion1.wav',
-    explosion_advanced_turret: 'sfx/explosion1.wav',
-    explosion_advanced_enemy1: 'sfx/explosion1.wav',
-    explosion_advanced_enemy2: 'sfx/explosion1.wav',
-    explosion_advanced_enemy3: 'sfx/explosion2.wav'
+    ship_hit: 'sfx/2bit hit',
+    shield_hit: 'sfx/shield hit',
+    laser: 'sfx/Laser MPC',
+    double_laser: 'sfx/double laser clean',
+    triple_laser: 'sfx/triple laser v2 clean',
+    rocket: 'sfx/rocket 1',
+    double_rocket: 'sfx/double rocket',
+    homing_rocket: 'sfx/homing rocket',
+    bomb1: 'sfx/explosion1',
+    bomb2: 'sfx/explosion1',
+    energy_ball: 'sfx/energy ball',
+    countdown_advanced_enemy2: 'sfx/countdown advanced enemy2',
+    explosion_ship: 'sfx/2bit explodes',
+    explosion_simple_enemy: 'sfx/explosion1',
+    explosion_shooting_enemy: 'sfx/explosion2',
+    explosion_simple_turret: 'sfx/explosion1',
+    explosion_advanced_turret: 'sfx/explosion1',
+    explosion_advanced_enemy1: 'sfx/explosion1',
+    explosion_advanced_enemy2: 'sfx/explosion1',
+    explosion_advanced_enemy3: 'sfx/explosion2'
   };
 
   this.initialize = function() {
     for (var key in sounds) {
       if (sounds.hasOwnProperty(key)) {
-        this[key] = new Sound(sounds[key]);
+        this[key] = new Sound(sounds[key] + audioFormat);
       }
     }
   };

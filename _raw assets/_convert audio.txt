@@ -1,0 +1,5 @@
+convert to mp3:
+ for f in *.wav; do lame -V 6 $f; done;
+ 
+ convert to ogg:
+  oggenc -q 3 *.wav
