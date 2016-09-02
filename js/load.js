@@ -75,10 +75,11 @@ var Images = new (function() {
 var Sounds = new (function() {
   var sounds = {
     ship_hit: 'sfx/2bit hit.wav',
+    shield_hit: 'sfx/shield hit.wav',
     laser: 'sfx/Laser MPC.wav',
     double_laser: 'sfx/double laser clean.wav',
     triple_laser: 'sfx/triple laser v2 clean.wav',
-    rocket: 'sfx/rocket1.wav',
+    rocket: 'sfx/rocket 1.wav',
     double_rocket: 'sfx/double rocket.wav',
     homing_rocket: 'sfx/homing rocket.wav',
     bomb1: 'sfx/explosion1.wav',

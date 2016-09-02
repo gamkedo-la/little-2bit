@@ -80,7 +80,12 @@ var Ship = new (function() {
 
     shakeScreen(5 * amount);
 
-    Sounds.ship_hit.play();
+    if (this.shieldAmount > 0) {
+      Sounds.shield_hit.play();
+    }
+    else {
+      Sounds.ship_hit.play();
+    }
 
     this.isDead = (this.health <= 0);
   };
