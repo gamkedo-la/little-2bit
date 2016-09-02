@@ -48,9 +48,6 @@ function setupInput() {
 }
 
 function keyPressed(event) {
-  if (!Grid.isReady) {
-    Grid.start();
-  }
   if (Ship.isDead && !Menu.active) {
     Ship.respawn();
   }

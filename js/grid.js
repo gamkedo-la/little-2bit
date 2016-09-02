@@ -72,9 +72,6 @@ var Grid = new (function() {
     this.loadedLevel = _level;
 
     this.processGrid();
-
-    startTime = Date.now() + startDelay * 2;
-    startCountDown = 4;
   };
 
   this.reset = function() {
@@ -91,6 +88,9 @@ var Grid = new (function() {
     camPanX = this.backgroundX = 0;
     Ship.reset();
     this.isReady = false;
+
+    startTime = Date.now() + startDelay * 2;
+    startCountDown = 4;
   };
 
   this.start = function() {
