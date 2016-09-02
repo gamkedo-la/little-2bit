@@ -296,8 +296,8 @@ Laser.prototype.constructor = Laser;
 
 function DoubleLaser(list, x, y) {
   this._initialize = function() {
-    new Laser(list, x, y - 8, true);
-    new Laser(list, x, y + 8, true);
+    new Laser(list, x, y - 8, 0, true);
+    new Laser(list, x, y + 8, 0, true);
   };
 
   ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
