@@ -11,6 +11,9 @@ var Grid = new (function() {
   var startTime;
   var startDelay = 500; // milliseconds
   var startCountDown = 4;
+  var statusText = '';
+  var levelCompleteTime = false;
+  var levelCompleteDelay = 4000; // milliseconds
 
   this.loadedLevelId = undefined;
   this.loadedLevel = undefined;
@@ -47,6 +50,7 @@ var Grid = new (function() {
       Menu.activate();
       return;
     }
+
     this.loadedLevelId++;
     this.loadLevel();
     this.reset();
@@ -91,12 +95,6 @@ var Grid = new (function() {
 
     startTime = Date.now() + startDelay * 2;
     startCountDown = 4;
-  };
-
-  this.start = function() {
-    if (startTime < Date.now()) {
-      this.isReady = true;
-    }
   };
 
   this.processGrid = function() {
@@ -242,22 +240,54 @@ var Grid = new (function() {
     }
 
     // @todo check if a boss is active
-    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
-    if (camPanX >= maxPanRight) {
+    if (this.isAtEndOfLevel()) {
       return 0;
     }
     return CAMERA_SPEED;
   };
 
+  this.isAtEndOfLevel = function() {
+    var maxPanRight = COLS * GRID_WIDTH - gameCanvas.width;
+    return (camPanX >= maxPanRight);
+  };
+
   this.update = function() {
-    if (!this.isReady && startCountDown <= 0) {
-      this.start();
+    if (!this.isReady && !levelCompleteTime) {
+      if (startTime < Date.now()) {
+        startCountDown--;
+        startTime = Date.now() + startDelay;
+      }
+      if (startCountDown == 4) {
+        statusText = 'Ready?';
+      }
+      else if (startCountDown <= 0) {
+        statusText = 'Go!';
+      }
+      else {
+        statusText = startCountDown;
+      }
+      if (startCountDown <= 0) {
+        this.isReady = true;
+        statusText = '';
+      }
     }
 
     if (this.isReady && !Ship.isDead) {
       camPanX += this.cameraSpeed();
       this.backgroundX = Math.floor(this.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
       this.cameraFollow(this.keyHeld_E);
+    }
+
+    if (this.isAtEndOfLevel() && EnemyList.isEmpty() && !Ship.isDead) {
+      if (!levelCompleteTime) {
+        levelCompleteTime = Date.now() + levelCompleteDelay;
+        statusText = 'Level complete!';
+        this.isReady = false;
+      }
+      else if (levelCompleteTime <= Date.now()) {
+        levelCompleteTime = false;
+        this.nextLevel();
+      }
     }
   };
 
@@ -358,20 +388,8 @@ var Grid = new (function() {
       y += GRID_HEIGHT;
     }
 
-    if (!this.isReady) {
-      if (startTime < Date.now()) {
-        startCountDown--;
-        startTime = Date.now() + startDelay;
-      }
-      if (startCountDown == 4) {
-        drawTextHugeCentered('Ready?');
-      }
-      else if (startCountDown <= 0) {
-        drawTextHugeCentered('Go!');
-      }
-      else {
-        drawTextHugeCentered(startCountDown);
-      }
+    if (!this.isReady && statusText) {
+      drawTextHugeCentered(statusText);
     }
   };
 

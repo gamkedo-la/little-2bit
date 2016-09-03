@@ -18,6 +18,10 @@ var EnemyList = new (function() {
     enemyList = [];
   };
 
+  this.isEmpty = function() {
+    return enemyList.length == 0;
+  };
+
   this.findClosestEnemyInRange = function(point, range) {
     var enemy,
       rangeSquared = range * range,
@@ -195,7 +199,7 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
     }
 
     var levelInfo = Grid.levelInfo();
-    this.isOutOfBounds = !debug_editor && (levelInfo.leftBound < initialX && initialX < levelInfo.rightBound) && (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width * 2 || -height > y || y > levelInfo.height + height);
+    this.isOutOfBounds = !debug_editor && (x < levelInfo.rightBound || initialX < levelInfo.rightBound) && (levelInfo.leftBound - width > x || x > levelInfo.rightBound + width * 2 || -height > y || y > levelInfo.height + height);
   };
 
   this.draw = function() {

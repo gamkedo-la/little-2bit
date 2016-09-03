@@ -143,7 +143,6 @@ function gameLoop() {
   gameTime = Date.now - gameInitTime;
   TWEEN.update();
 
-  UI.update();
   Grid.update();
   PowerUpList.update();
   shipProjectiles.update();
@@ -151,7 +150,12 @@ function gameLoop() {
   EnemyList.update();
   Ship.update();
   ParticleList.update();
+  UI.update();
   Editor.update();
+
+  if (!gameInterval) {
+    return;
+  }
 
   gameContext.save();
   gameContext.translate(-Grid.cameraPanX(), 0);
