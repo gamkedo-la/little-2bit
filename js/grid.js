@@ -278,11 +278,13 @@ var Grid = new (function() {
       this.cameraFollow(this.keyHeld_E);
     }
 
-    if (this.isAtEndOfLevel() && EnemyList.isEmpty() && !Ship.isDead) {
+    if (!debug_editor && this.isAtEndOfLevel() && EnemyList.isEmpty() && !Ship.isDead) {
       if (!levelCompleteTime) {
         levelCompleteTime = Date.now() + levelCompleteDelay;
         statusText = 'Level complete!';
         this.isReady = false;
+        shipProjectiles.clear();
+        enemyProjectiles.clear();
       }
       else if (levelCompleteTime <= Date.now()) {
         levelCompleteTime = false;
