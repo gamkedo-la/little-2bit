@@ -70,6 +70,7 @@ var Ship = new (function() {
     maxX = levelInfo.width - halfWidth;
     maxY = levelInfo.height - halfHeight - eighthHeight;
 
+    this.shieldAmount = 0;
     this.health = MAXHEALTH;
     this.isDead = false;
 
@@ -120,6 +121,7 @@ var Ship = new (function() {
   this.die = function() {
     this.lives--;
     this.isDead = true;
+    this.shieldAmount = 0;
     respawnTime = Date.now() + respawnDelay;
   };
 
