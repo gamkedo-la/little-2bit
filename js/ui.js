@@ -19,8 +19,6 @@ var UI = new (function() {
     center.x = uiCanvas.width / 2;
     center.y = uiCanvas.height / 2;
 
-    this.sound = !debug;
-
     soundButton = new UIButton(uiCanvas.width - 20, uiCanvas.height / 2, Images.button_sound_on, Images.button_sound_off, UI.toggleSound);
 
     uiCanvas.addEventListener('mouseup', mouseReleased);

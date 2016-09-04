@@ -219,19 +219,18 @@ function PowerUpTripleLaser(x, y) {
 PowerUpTripleLaser.prototype = Object.create(PowerUpBase.prototype);
 PowerUpTripleLaser.prototype.constructor = PowerUpTripleLaser;
 
-//shield powerup
 brickTypePowerUps[POWERUP_SHIELD] = PowerUpShield;
-
 function PowerUpShield(x, y) {
-    var width = 40;
-    var height = 24;
-    var image = Images.powerUp_shield;
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_shield;
 
-    this._pickUp = function() {
-        Ship.setShield();
-    };
+  this._pickUp = function() {
+    Sounds.powerup_shield_pickup.play();
+    Ship.setShield();
+  };
 
-    PowerUpBase.call(this, x, y, width, height, image);
+  PowerUpBase.call(this, x, y, width, height, image);
 }
 
 PowerUpShield.prototype = Object.create(PowerUpBase.prototype);

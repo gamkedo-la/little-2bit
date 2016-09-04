@@ -86,8 +86,8 @@ var Sounds = new (function() {
     ship_hit: 'sfx/2bit hit',
     shield_hit: 'sfx/shield hit',
     laser: 'sfx/Laser MPC',
-    double_laser: 'sfx/double laser clean',
-    triple_laser: 'sfx/triple laser v2 clean',
+    double_laser: 'sfx/double laser MPC',
+    triple_laser: 'sfx/triple laser MPC',
     rocket: 'sfx/rocket 1',
     double_rocket: 'sfx/double rocket',
     homing_rocket: 'sfx/homing rocket',
@@ -102,7 +102,8 @@ var Sounds = new (function() {
     explosion_advanced_turret: 'sfx/explosion1',
     explosion_advanced_enemy1: 'sfx/explosion1',
     explosion_advanced_enemy2: 'sfx/explosion1',
-    explosion_advanced_enemy3: 'sfx/explosion2'
+    explosion_advanced_enemy3: 'sfx/explosion2',
+    powerup_shield_pickup: 'sfx/shield power up'
   };
 
   this.initialize = function() {
