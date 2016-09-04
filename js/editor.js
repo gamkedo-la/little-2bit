@@ -40,6 +40,8 @@ var Editor = new (function() {
     console.log('Keys for the level editor:');
     console.table({
       0: 'Clear level',
+      a: 'Move left',
+      d: 'Move right',
       n: 'Append column',
       m: 'Remove last column',
       t: 'Tiles: default, alternative style',
