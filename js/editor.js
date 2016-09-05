@@ -10,7 +10,7 @@ var Editor = new (function() {
   this.initialize = function() {
     tileKeysMapping[KEY_T] = [BRICK_DEFSTYLE, BRICK_ALTSTYLE];
     tileKeysMapping[KEY_G] = [ENEMY_SIMPLE, ENEMY_SHOOTING];
-    tileKeysMapping[KEY_H] = [ENEMY_ADVANCED1, ENEMY_ADVANCED2/*, ENEMY_ADVANCED3*/];
+    tileKeysMapping[KEY_H] = [ENEMY_ADVANCED1, ENEMY_ADVANCED2, ENEMY_ADVANCED3];
     tileKeysMapping[KEY_J] = [ENEMY_TURRET_SIMPLE, ENEMY_TURRET_ADVANCED];
     tileKeysMapping[KEY_Y] = [POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
     tileKeysMapping[KEY_U] = [POWERUP_ROCKET, POWERUP_DOUBLE_ROCKET, POWERUP_HOMING_ROCKET];
@@ -20,7 +20,7 @@ var Editor = new (function() {
     tileImages[ENEMY_SHOOTING] = [Images.shooting_enemy, 70, 60];
     tileImages[ENEMY_ADVANCED1] = [Images.advanced_enemy1];
     tileImages[ENEMY_ADVANCED2] = [Images.advanced_enemy2];
-//  tileImages[ENEMY_ADVANCED3] = [Images.advanced_enemy3];
+    tileImages[ENEMY_ADVANCED3] = [Images.advanced_enemy3];
     tileImages[ENEMY_TURRET_SIMPLE] = [Images.simple_turret];
     tileImages[ENEMY_TURRET_ADVANCED] = [Images.advanced_turret_body];
 

@@ -339,6 +339,7 @@ var Grid = new (function() {
     var cameraRightMostCol = cameraLeftMostCol + colsThatFitOnScreen + 2;
 
     var i = 0, x = 0, y = 0;
+    var reProcessGrid = false;
     for (var r = 0; r < ROWS; r++) {
       x = cameraLeftMostCol * GRID_WIDTH;
       i = tileToIndex(cameraLeftMostCol, r);
@@ -349,24 +350,19 @@ var Grid = new (function() {
           }
           else if (EnemyList.brickTypeIsEnemy(level[i])) {
             if (!debug_editor) {
-              EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
-              level[i] = BRICK_SPACE;
+              level[i] = EnemyList.createEnemyByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
+              reProcessGrid = true;
             }
           }
           else if (PowerUpList.brickTypeIsPowerUp(level[i])) {
             if (!debug_editor) {
               PowerUpList.createPowerUpByBrickType(level[i], x + (GRID_WIDTH / 2), y + (GRID_HEIGHT / 2));
               level[i] = BRICK_SPACE;
+              reProcessGrid = true;
             }
           }
           else if (levelPrettyTileGrid[i] != undefined) {
-            var tileArtSourceX = levelPrettyTileGrid[i] % PRETTY_TILE_ART_COLS * GRID_WIDTH;
-            var tileArtSourceY = Math.floor(levelPrettyTileGrid[i] / PRETTY_TILE_ART_COLS) * GRID_HEIGHT;
-            gameContext.drawImage(tilemap,
-                                  tileArtSourceX,tileArtSourceY,
-                                  GRID_WIDTH,GRID_HEIGHT,
-                                  x, y,
-                                  GRID_WIDTH,GRID_HEIGHT);
+            this.drawPrettyGridTile(i, x, y);
           }
         }
         if (debug_draw_bounds) {
@@ -390,9 +386,27 @@ var Grid = new (function() {
       y += GRID_HEIGHT;
     }
 
+    if (reProcessGrid) {
+      this.processGrid();
+    }
+
     if (!this.isReady && statusText) {
       drawTextHugeCentered(statusText);
     }
+  };
+
+  this.drawPrettyGridTile = function(index, x, y) {
+    if (levelPrettyTileGrid[index] == undefined) {
+      return;
+    }
+
+    var tileArtSourceX = levelPrettyTileGrid[index] % PRETTY_TILE_ART_COLS * GRID_WIDTH;
+    var tileArtSourceY = Math.floor(levelPrettyTileGrid[index] / PRETTY_TILE_ART_COLS) * GRID_HEIGHT;
+    gameContext.drawImage(tilemap,
+      tileArtSourceX,tileArtSourceY,
+      GRID_WIDTH,GRID_HEIGHT,
+      x, y,
+      GRID_WIDTH,GRID_HEIGHT);
   };
 
   this.cameraFollow = function(keyHeld_E) {

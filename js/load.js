@@ -9,6 +9,7 @@ var Images = new (function() {
     advanced_turret_barrels: 'img/advanced_turret_enemy_barrels.png',
     advanced_enemy1: 'img/advanced_enemy1.png',
     advanced_enemy2: 'img/advanced_enemy2.png',
+    advanced_enemy3: 'img/advanced_enemy3.png',
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
