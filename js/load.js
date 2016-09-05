@@ -85,9 +85,9 @@ var Sounds = new (function() {
   var sounds = {
     ship_hit: 'sfx/2bit hit',
     shield_hit: 'sfx/shield hit',
-    laser: 'sfx/Laser MPC',
+    laser: 'sfx/laser low short MPC',
     double_laser: 'sfx/double laser MPC',
-    triple_laser: 'sfx/triple laser MPC',
+    triple_laser: 'sfx/triple laser NEW MPC',
     rocket: 'sfx/rocket 1',
     double_rocket: 'sfx/double rocket',
     homing_rocket: 'sfx/homing rocket',
