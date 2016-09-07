@@ -728,7 +728,7 @@ function AdvancedEnemy3(list, initialX, initialY) {
   this._draw = function(frame, x, y, width, height) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);
     if (!shot) {
-//      Grid.drawPrettyGridTile(gridIndex, tileX, tileY);
+      Grid.drawPrettyGridTile(gridIndex, tileX, tileY);
     }
   };
 
