@@ -32,7 +32,7 @@ var Boss = function(phase, list, initialX, initialY) {
   var dashShaking = false;
   var dashing = false;
   var retreating = false;
-  var dashSpeedX = 16;
+  var dashSpeedX = 32;
   var dashShake = 1;
 
   var dashCountdown = DASH_TIMER;
@@ -48,9 +48,9 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   var damages = {
-    1: 2,
-    2: 3,
-    3: 4
+    1: 7,
+    2: 8,
+    3: 9
   };
 
   var maxYSpeeds = {
@@ -123,7 +123,7 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   this.doDamage = function(_damage) {
-    health -= _damage;
+//    health -= _damage;
     if (health <= 0) {
       phase--;
       if (phase <= 0) {
@@ -187,7 +187,7 @@ var Boss = function(phase, list, initialX, initialY) {
     }
     else {
       if (dashCountdown <= 0) {
-        dashCountdown = DASH_TIMER / 3;
+        dashCountdown = 13;
         dashShaking = true;
         dashShake = 1;
       }
