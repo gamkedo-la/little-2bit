@@ -15,6 +15,7 @@ var Editor = new (function() {
     tileKeysMapping[KEY_Y] = [POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
     tileKeysMapping[KEY_U] = [POWERUP_ROCKET, POWERUP_DOUBLE_ROCKET, POWERUP_HOMING_ROCKET];
     tileKeysMapping[KEY_I] = [POWERUP_SHIELD];
+    tileKeysMapping[KEY_K] = [BOSS_1, BOSS_2, BOSS_3];
 
     tileImages[ENEMY_SIMPLE] = [Images.simple_enemy];
     tileImages[ENEMY_SHOOTING] = [Images.shooting_enemy, 70, 60];
@@ -23,6 +24,10 @@ var Editor = new (function() {
     tileImages[ENEMY_ADVANCED3] = [Images.advanced_enemy3];
     tileImages[ENEMY_TURRET_SIMPLE] = [Images.simple_turret];
     tileImages[ENEMY_TURRET_ADVANCED] = [Images.advanced_turret_body];
+
+    tileImages[BOSS_1] = [Images.boss1];
+    tileImages[BOSS_2] = [Images.boss2];
+    tileImages[BOSS_3] = [Images.boss3];
 
     tileImages[POWERUP_ROCKET] = [Images.powerUp_rocket];
     tileImages[POWERUP_DOUBLE_ROCKET] = [Images.powerUp_double_rocket];

@@ -28,6 +28,20 @@ var EnemyList = new (function() {
     return enemyList.length == 0;
   };
 
+  this.hasBoss = function() {
+    var levelInfo = Grid.levelInfo();
+    for (var i = 0; i < enemyList.length; i++) {
+      if (enemyList[i].isBoss) {
+        var b = enemyList[i].boundingBox();
+        if (b.right < levelInfo.rightBound) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
+
   this.findClosestEnemyInRange = function(point, range) {
     var enemy,
       rangeSquared = range * range,
@@ -88,14 +102,6 @@ var EnemyList = new (function() {
     }
     for (var i = 0; i < enemyList.length; i++) {
       enemyList[i].draw();
-    }
-  };
-
-  var enemyTypes = [];
-  this.drawTileByBrickType = function(type, x, y) {
-    if (!enemyTypes[type]) {
-      var Enemy = brickTypeEnemyClasses[type];
-      enemyTypes[type] = new Enemy(this, x, y);
     }
   };
 })();

@@ -10,6 +10,11 @@ var Images = new (function() {
     advanced_enemy1: 'img/advanced_enemy1.png',
     advanced_enemy2: 'img/advanced_enemy2.png',
     advanced_enemy3: 'img/advanced_enemy3.png',
+
+    boss1: 'img/boss-1.png',
+    boss2: 'img/boss-2.png',
+    boss3: 'img/boss-3.png',
+
     corners: 'img/corners.png',
     rocket: 'img/rocket.png',
     laser: 'img/laser.png',
@@ -104,6 +109,7 @@ var Sounds = new (function() {
     explosion_advanced_enemy1: 'sfx/explosion1',
     explosion_advanced_enemy2: 'sfx/explosion1',
     explosion_advanced_enemy3: 'sfx/explosion2',
+    explosion_boss: 'sfx/explosion2',
     powerup_shield_pickup: 'sfx/shield power up'
   };
 

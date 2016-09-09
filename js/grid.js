@@ -239,10 +239,10 @@ var Grid = new (function() {
       return 0;
     }
 
-    // @todo check if a boss is active
-    if (this.isAtEndOfLevel()) {
+    if (this.isAtEndOfLevel() || EnemyList.hasBoss()) {
       return 0;
     }
+
     return CAMERA_SPEED;
   };
 
@@ -410,6 +410,10 @@ var Grid = new (function() {
   };
 
   this.cameraFollow = function(keyHeld_E) {
+    if (EnemyList.hasBoss()) {
+      return;
+    }
+
     var shipCoords = Ship.coords();
     if (keyHeld_E && shipCoords.x > camPanX + canvasHalfWidth - PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X) {
       this.addCameraPanX(Ship.speedX / 2);
