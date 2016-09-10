@@ -95,7 +95,7 @@ function gameInitialize() {
           Grid.nextLevel();
           break;
         default:
-          console.log('Pressed', event.keyCode);
+//          console.log('Pressed', event.keyCode);
       }
     });
   }
