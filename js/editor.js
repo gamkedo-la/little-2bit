@@ -40,15 +40,27 @@ var Editor = new (function() {
     console.log('Keys for the level editor:');
     console.table({
       0: 'Clear level',
-      n: 'Append column',
-      m: 'Remove last column',
-      t: 'Tiles: default, alternative style',
-      g: 'Enemy: Simple, shooting',
-      h: 'Enemy: Advanced 1, advanced 2',
-      j: 'Enemy: Simple turret, advanced turret',
-      y: 'Power up: double laser, triple laser',
-      u: 'Power up: rocket, double rocket, homing rocket',
-      i: 'Powerups: shield'
+      n: 'Append column', //adds new column to end of level
+      m: 'Remove last column', //can shorten the level or remove columns
+      t: 'Tiles: default, alternative style', // hit t twice to switch to
+      // other tiles
+      g: 'Enemy: Simple, shooting', // simple enemy - moves, doesn't shoot,
+      // shooting enemy does both
+      h: 'Enemy: Advanced 1, advanced 2', // advanced 1 - five yellow
+      // enemies that move in wave, advanced 2 - tracks the player and
+      // explodes when in proximity
+      j: 'Enemy: Simple turret, advanced turret', // simple turret -
+      // attachs to wall, shoots
+      // one direction, advanced turret - attachs to wall, always shoot at the
+      // player
+      y: 'Power up: double laser, triple laser', // double laser - gives
+      // player ship two laser weapons, shoots straight forward, triple
+      // laser - shotgun blast laster with three beams
+      u: 'Power up: rocket, double rocket, homing rocket', //
+      i: 'Powerups: shield' // simple shield powerup for the player ship,
+      // shield has 5 HP, 10
+      // hits enemy weapons, 3 collisions with enemy ships negates shield,
+      // otherwise collisions with walls is instakill, for now.
     });
   };
 
