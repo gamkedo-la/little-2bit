@@ -199,7 +199,6 @@ var Editor = new (function() {
 
     for (var i = Grid.loadedLevel.rows; i >= 0; i--) {
       index = cols + i * cols - 1;
-      console.log('remove', index);
       Grid.loadedLevel.map.splice(index, 1);
     }
 

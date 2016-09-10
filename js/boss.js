@@ -26,8 +26,8 @@ var Boss = function(phase, list, initialX, initialY) {
   var maxYSpeed;
 
   const DASH_TIMER = 75;
-  const SHOOT_TIMER = 25;
-  const SPAWN_TIMER = 20;
+  const SHOOT_TIMER = 30;
+  const SPAWN_TIMER = 26;
 
   var dashShaking = false;
   var dashing = false;
@@ -42,9 +42,9 @@ var Boss = function(phase, list, initialX, initialY) {
 
   // @todo tweak!
   var healths = {
-    1: 130,
-    2: 155,
-    3: 180
+    1: 100,
+    2: 125,
+    3: 150
   };
 
   var damages = {

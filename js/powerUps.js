@@ -25,9 +25,7 @@ var PowerUpList = new (function() {
   this.update = function() {
     var i;
     for (i = powerUpList.length - 1; i >= 0; i--) {
-      var boundingBox = powerUpList[i].boundingBox();
-      var levelInfo = Grid.levelInfo();
-      powerUpList[i].isOutOfBounds = (levelInfo.leftBound > boundingBox.right || boundingBox.left > levelInfo.rightBound || 0 > boundingBox.bottom || boundingBox.top > levelInfo.height);
+      powerUpList[i].update();
 
       powerUpList[i].isReadyToRemove = powerUpList[i].isReadyToRemove || powerUpList[i].isOutOfBounds;
     }
@@ -113,6 +111,12 @@ function PowerUpBase(x, y, width, height, image) {
   this.pickUp = function() {
     this.isReadyToRemove = true;
     this._pickUp();
+  };
+
+  this.update = function() {
+    var boundingBox = this.boundingBox();
+    var levelInfo = Grid.levelInfo();
+    this.isOutOfBounds = !debug_editor && (x < levelInfo.rightBound) && (levelInfo.leftBound > boundingBox.right || boundingBox.left > levelInfo.rightBound || 0 > boundingBox.bottom || boundingBox.top > levelInfo.height);
   };
 
   this.draw = function(offsetY) {
