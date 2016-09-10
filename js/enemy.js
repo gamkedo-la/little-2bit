@@ -6,8 +6,14 @@ var EnemyList = new (function() {
   };
 
   this.createEnemyByBrickType = function(type, x, y) {
-    var Enemy = brickTypeEnemyClasses[type];
-    new Enemy(this, x, y);
+    var EnemyClass = brickTypeEnemyClasses[type];
+    var enemy = new EnemyClass(this, x, y);
+
+    if (enemy.replaceBrickType) {
+      return enemy.replaceBrickType();
+    }
+
+    return BRICK_SPACE;
   };
 
   this.push = function(enemy) {
@@ -20,6 +26,20 @@ var EnemyList = new (function() {
 
   this.isEmpty = function() {
     return enemyList.length == 0;
+  };
+
+  this.hasBoss = function() {
+    var levelInfo = Grid.levelInfo();
+    for (var i = 0; i < enemyList.length; i++) {
+      if (enemyList[i].isBoss) {
+        var b = enemyList[i].boundingBox();
+        if (b.right < levelInfo.rightBound) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   this.findClosestEnemyInRange = function(point, range) {
@@ -82,14 +102,6 @@ var EnemyList = new (function() {
     }
     for (var i = 0; i < enemyList.length; i++) {
       enemyList[i].draw();
-    }
-  };
-
-  var enemyTypes = [];
-  this.drawTileByBrickType = function(type, x, y) {
-    if (!enemyTypes[type]) {
-      var Enemy = brickTypeEnemyClasses[type];
-      enemyTypes[type] = new Enemy(this, x, y);
     }
   };
 })();
@@ -553,7 +565,6 @@ AdvancedEnemyShip.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemyShip.prototype.constructor = AdvancedEnemyShip;
 
 brickTypeEnemyClasses[ENEMY_ADVANCED2] = AdvancedEnemy2;
-
 function AdvancedEnemy2(list, initialX, initialY) {
   var speed = 5;
   var vx = -speed;
@@ -643,3 +654,92 @@ function AdvancedEnemy2(list, initialX, initialY) {
 
 AdvancedEnemy2.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemy2.prototype.constructor = AdvancedEnemy2;
+
+brickTypeEnemyClasses[ENEMY_ADVANCED3] = AdvancedEnemy3;
+function AdvancedEnemy3(list, initialX, initialY) {
+  var speed = 10;
+  var vx = 0;
+  var vy = speed;
+  var health = 4;
+  var damage = 2;
+  var image = Images.advanced_enemy3;
+  var width = 40;
+  var height = 60;
+  var angle = 0;
+  var triggerRange = 120;
+  var shot = false;
+  var levelInfo = Grid.levelInfo();
+  var gridIndex = Grid.coordsToIndex(initialX, initialY);
+
+  var row = Math.floor(gridIndex / levelInfo.cols);
+  var col = gridIndex - (row * levelInfo.cols);
+  var tileX = col * GRID_WIDTH;
+  var tileY = row * GRID_HEIGHT;
+
+  var halfWidth = width / 2;
+  var halfHeight = height / 2;
+  var quarterHeight = height / 4;
+
+  if (initialY > levelInfo.height / 2) {
+    vy = -vy;
+    angle += Math.PI;
+
+    halfHeight = -halfHeight;
+    quarterHeight = -quarterHeight;
+  }
+
+  this._bounds = function(x, y) {
+    return [
+      { x: x, y: y + halfHeight },
+      { x: x + halfWidth, y: y - halfHeight + quarterHeight },
+      { x: x - halfWidth, y: y - halfHeight + quarterHeight }
+    ];
+  };
+
+  this._update = function(x, y) {
+    var shipCoords = Ship.coords();
+
+    if (shipCoords.x >= initialX - triggerRange) {
+      shot = true;
+      // @todo play a sound?
+    }
+
+    if (shot) {
+      this.move();
+    }
+  };
+
+  this._move = function(x, y) {
+    this.moveTo({
+      x: x + vx,
+      y: y + vy
+    });
+  };
+
+  this.replaceBrickType = function() {
+    var left = Grid.tileTypeAtCoords(initialX - GRID_WIDTH, initialY);
+
+    if (left != BRICK_SPACE) {
+      return left;
+    }
+
+    return Grid.tileTypeAtCoords(initialX + GRID_WIDTH, initialY);
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
+    Sounds.explosion_advanced_enemy3.play();
+  };
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle + Math.PI);
+    if (!shot) {
+      Grid.drawPrettyGridTile(gridIndex, tileX, tileY);
+    }
+  };
+
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
+}
+
+AdvancedEnemy3.prototype = Object.create(EnemyBase.prototype);
+AdvancedEnemy3.prototype.constructor = AdvancedEnemy3;

@@ -10,19 +10,24 @@ var Editor = new (function() {
   this.initialize = function() {
     tileKeysMapping[KEY_T] = [BRICK_DEFSTYLE, BRICK_ALTSTYLE];
     tileKeysMapping[KEY_G] = [ENEMY_SIMPLE, ENEMY_SHOOTING];
-    tileKeysMapping[KEY_H] = [ENEMY_ADVANCED1, ENEMY_ADVANCED2/*, ENEMY_ADVANCED3*/];
+    tileKeysMapping[KEY_H] = [ENEMY_ADVANCED1, ENEMY_ADVANCED2, ENEMY_ADVANCED3];
     tileKeysMapping[KEY_J] = [ENEMY_TURRET_SIMPLE, ENEMY_TURRET_ADVANCED];
     tileKeysMapping[KEY_Y] = [POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
     tileKeysMapping[KEY_U] = [POWERUP_ROCKET, POWERUP_DOUBLE_ROCKET, POWERUP_HOMING_ROCKET];
     tileKeysMapping[KEY_I] = [POWERUP_SHIELD];
+    tileKeysMapping[KEY_K] = [BOSS_1, BOSS_2, BOSS_3];
 
     tileImages[ENEMY_SIMPLE] = [Images.simple_enemy];
     tileImages[ENEMY_SHOOTING] = [Images.shooting_enemy, 70, 60];
     tileImages[ENEMY_ADVANCED1] = [Images.advanced_enemy1];
     tileImages[ENEMY_ADVANCED2] = [Images.advanced_enemy2];
-//  tileImages[ENEMY_ADVANCED3] = [Images.advanced_enemy3];
+    tileImages[ENEMY_ADVANCED3] = [Images.advanced_enemy3];
     tileImages[ENEMY_TURRET_SIMPLE] = [Images.simple_turret];
     tileImages[ENEMY_TURRET_ADVANCED] = [Images.advanced_turret_body];
+
+    tileImages[BOSS_1] = [Images.boss1];
+    tileImages[BOSS_2] = [Images.boss2];
+    tileImages[BOSS_3] = [Images.boss3];
 
     tileImages[POWERUP_ROCKET] = [Images.powerUp_rocket];
     tileImages[POWERUP_DOUBLE_ROCKET] = [Images.powerUp_double_rocket];
@@ -40,6 +45,7 @@ var Editor = new (function() {
     console.log('Keys for the level editor:');
     console.table({
       0: 'Clear level',
+<<<<<<< HEAD
       n: 'Append column', //adds new column to end of level
       m: 'Remove last column', //can shorten the level or remove columns
       t: 'Tiles: default, alternative style', // hit t twice to switch to
@@ -61,6 +67,19 @@ var Editor = new (function() {
       // shield has 5 HP, 10
       // hits enemy weapons, 3 collisions with enemy ships negates shield,
       // otherwise collisions with walls is instakill, for now.
+=======
+      a: 'Move left',
+      d: 'Move right',
+      n: 'Append column',
+      m: 'Remove last column',
+      t: 'Tiles: default, alternative style',
+      g: 'Enemy: Simple, shooting',
+      h: 'Enemy: Advanced 1, advanced 2',
+      j: 'Enemy: Simple turret, advanced turret',
+      y: 'Power up: double laser, triple laser',
+      u: 'Power up: rocket, double rocket, homing rocket',
+      i: 'Powerups: shield'
+>>>>>>> 39ea27b8d8c227655bd3c33787ec5e0cc293c983
     });
   };
 
