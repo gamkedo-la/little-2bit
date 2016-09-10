@@ -45,7 +45,8 @@ var Editor = new (function() {
     console.log('Keys for the level editor:');
     console.table({
       0: 'Clear level',
-<<<<<<< HEAD
+      a: 'Move left',
+      d: 'Move right',
       n: 'Append column', //adds new column to end of level
       m: 'Remove last column', //can shorten the level or remove columns
       t: 'Tiles: default, alternative style', // hit t twice to switch to
@@ -67,19 +68,6 @@ var Editor = new (function() {
       // shield has 5 HP, 10
       // hits enemy weapons, 3 collisions with enemy ships negates shield,
       // otherwise collisions with walls is instakill, for now.
-=======
-      a: 'Move left',
-      d: 'Move right',
-      n: 'Append column',
-      m: 'Remove last column',
-      t: 'Tiles: default, alternative style',
-      g: 'Enemy: Simple, shooting',
-      h: 'Enemy: Advanced 1, advanced 2',
-      j: 'Enemy: Simple turret, advanced turret',
-      y: 'Power up: double laser, triple laser',
-      u: 'Power up: rocket, double rocket, homing rocket',
-      i: 'Powerups: shield'
->>>>>>> 39ea27b8d8c227655bd3c33787ec5e0cc293c983
     });
   };
 
