@@ -239,3 +239,39 @@ function PowerUpShield(x, y) {
 
 PowerUpShield.prototype = Object.create(PowerUpBase.prototype);
 PowerUpShield.prototype.constructor = PowerUpShield;
+
+brickTypePowerUps[POWERUP_HEALTH] = PowerUpHealth;
+function PowerUpHealth(x, y) {
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_health;
+
+  var health = 6;
+
+  this._pickUp = function() {
+    Sounds.powerup_health_pickup.play();
+    Ship.addHealth(health);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
+}
+
+PowerUpHealth.prototype = Object.create(PowerUpBase.prototype);
+PowerUpHealth.prototype.constructor = PowerUpHealth;
+
+brickTypePowerUps[POWERUP_LIFE] = PowerUpLife;
+function PowerUpLife(x, y) {
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_life;
+
+  this._pickUp = function() {
+    Sounds.powerup_life_pickup.play();
+    Ship.addLife();
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
+}
+
+PowerUpLife.prototype = Object.create(PowerUpBase.prototype);
+PowerUpLife.prototype.constructor = PowerUpLife;

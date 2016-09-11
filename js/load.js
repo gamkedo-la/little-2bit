@@ -32,6 +32,8 @@ var Images = new (function() {
     powerUp_double_laser: 'img/ui-double-laser.png',
     powerUp_triple_laser: 'img/ui-triple-laser.png',
     powerUp_shield: 'img/ui-shield.png',
+    powerUp_health: 'img/ui-health.png',
+    powerUp_life: 'img/ui-life.png',
     shield_big: 'img/player_shield_big.png',
     shield_small: 'img/player_shield_small.png',
     shield_big_glow: 'img/player_shield_big_glow.png',
@@ -47,6 +49,7 @@ var Images = new (function() {
     bottom_turret: 'img/bottom-turret.png',
     top1: 'img/top1.png',
     top2: 'img/top2.png',
+    tilemap_cave: 'img/tilemap.png',
     tilemap_demo: 'img/tilemap_template.png'
   };
 
@@ -110,7 +113,9 @@ var Sounds = new (function() {
     explosion_advanced_enemy2: 'sfx/explosion1',
     explosion_advanced_enemy3: 'sfx/explosion2',
     explosion_boss: 'sfx/explosion2',
-    powerup_shield_pickup: 'sfx/shield power up'
+    powerup_shield_pickup: 'sfx/shield power up',
+    powerup_health_pickup: 'sfx/health power up',
+    powerup_life_pickup: 'sfx/life power up'
   };
 
   this.initialize = function() {

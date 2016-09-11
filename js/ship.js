@@ -1,4 +1,5 @@
 const START_LIVES = 3;
+const MAXLIVES = 6;
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
@@ -195,6 +196,14 @@ var Ship = new (function() {
 
   this.setShield = function() {
     this.shieldAmount = SHIELD_LIFE_AMOUNT;
+  };
+
+  this.addHealth = function(amount) {
+    this.health = Math.min(this.health + amount, MAXHEALTH);
+  };
+
+  this.addLife = function() {
+    this.lives = Math.min(this.lives + 1, MAXLIVES);
   };
 
   this.update = function() {

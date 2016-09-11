@@ -14,7 +14,7 @@ var Editor = new (function() {
     tileKeysMapping[KEY_J] = [ENEMY_TURRET_SIMPLE, ENEMY_TURRET_ADVANCED];
     tileKeysMapping[KEY_Y] = [POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
     tileKeysMapping[KEY_U] = [POWERUP_ROCKET, POWERUP_DOUBLE_ROCKET, POWERUP_HOMING_ROCKET];
-    tileKeysMapping[KEY_I] = [POWERUP_SHIELD];
+    tileKeysMapping[KEY_I] = [POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_LIFE];
     tileKeysMapping[KEY_K] = [BOSS_1, BOSS_2, BOSS_3];
 
     tileImages[ENEMY_SIMPLE] = [Images.simple_enemy];
@@ -35,6 +35,8 @@ var Editor = new (function() {
     tileImages[POWERUP_DOUBLE_LASER] = [Images.powerUp_double_laser];
     tileImages[POWERUP_TRIPLE_LASER] = [Images.powerUp_triple_laser];
     tileImages[POWERUP_SHIELD] = [Images.powerUp_shield];
+    tileImages[POWERUP_HEALTH] = [Images.powerUp_health];
+    tileImages[POWERUP_LIFE] = [Images.powerUp_life];
 
     outputCode = document.createElement('textarea');
     outputCode.style.width = '95%';
