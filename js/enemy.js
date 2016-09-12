@@ -165,23 +165,42 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
     }
   };
 
+  this.step = function(ratio) {
+    if (ratio == undefined) {
+      ratio = 1;
+    }
+
+    if (this._step) {
+      return this._step(x, y, ratio);
+    }
+
+    return {
+      x: x + vx * ratio,
+      y: y + vy * ratio
+    };
+  };
+
   this.move = function() {
     if (debug_stop_enemies) {
       return;
     }
 
     if (this._move) {
-      this._move(x, y);
+      return this._move(x, y);
     }
     else {
-      x += vx;
-      y += vy;
+      return this.moveTo(this.step(1));
     }
   };
 
   this.moveTo = function(coords) {
     x = coords.x;
     y = coords.y;
+
+    return {
+      x: x,
+      y: y
+    };
   };
 
   this.fireProjectile = function() {
@@ -191,6 +210,21 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
     else {
       var muzzle = this.muzzle(x, y);
       new projectileClass(enemyProjectiles, muzzle.x, muzzle.y, projectileAngle * DEC2RAD);
+    }
+  };
+
+  this.checkWallCollision = function() {
+    if (!this.isOutOfBounds && Grid.isSolidTileTypeAtCoords(x, y)) {
+      // Approximately figure out where it hit the wall
+      var collision_check_step = -1 / COLLISION_CHECK_STEPS;
+      for (var s = 1; s <= COLLISION_CHECK_STEPS; s++) {
+        var prev = this.step(collision_check_step * s);
+        if (!Grid.isSolidTileTypeAtCoords(prev.x, prev.y)) {
+          this.moveTo(prev);
+          break;
+        }
+      }
+     this.isReadyToRemove = true;
     }
   };
 
@@ -537,13 +571,14 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
     ];
   };
 
+  // @todo convert to _step function?
   this._move = function(x, y) {
     step++;
     if (step > maxSteps) {
       step = 1;
     }
     var a = (step / maxSteps) * 2 * Math.PI;
-    this.moveTo({
+    return this.moveTo({
       x: x - vx,
       y: startY - (rangeY * Math.sin(a))
     });
@@ -618,13 +653,18 @@ function AdvancedEnemy2(list, initialX, initialY) {
     angle = Math.atan2(vy, vx);
 
     this.move();
+    this.checkWallCollision();
   };
 
-  this._move = function(x, y) {
-    this.moveTo({
-      x: x + vx,
-      y: y + vy
-    });
+  this._step = function(x, y, ratio) {
+    if (ratio == undefined) {
+      ratio = 1;
+    }
+
+    return {
+      x: x + vx * ratio,
+      y: y + vy * ratio
+    };
   };
 
   this._explode = function(x, y) {
@@ -705,15 +745,23 @@ function AdvancedEnemy3(list, initialX, initialY) {
     }
 
     if (shot) {
-      this.move();
+      var newCoords = this.move();
+      var tileCoords = Grid.coordsToTileCoords(newCoords.x, newCoords.y);
+      if (tileCoords.x != tileX && tileCoords.y != tileY) {
+        this.checkWallCollision();
+      }
     }
   };
 
-  this._move = function(x, y) {
-    this.moveTo({
-      x: x + vx,
-      y: y + vy
-    });
+  this._step = function(x, y, ratio) {
+    if (ratio == undefined) {
+      ratio = 1;
+    }
+
+    return {
+      x: x + vx * ratio,
+      y: y + vy * ratio
+    };
   };
 
   this.replaceBrickType = function() {

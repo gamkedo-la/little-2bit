@@ -23,8 +23,8 @@ var ProjectileList = function() {
         var collision_check_step = -1 / COLLISION_CHECK_STEPS;
         for (var s = 1; s < COLLISION_CHECK_STEPS; s++) {
           var prev = projectiles[p].step(collision_check_step * s);
-          projectiles[p].moveTo(prev);
           if (!Grid.isSolidTileTypeAtCoords(prev.x, prev.y)) {
+            projectiles[p].moveTo(prev);
             break;
           }
         }
@@ -132,7 +132,7 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     }
 
     if (this._step) {
-      return this._step(ratio);
+      return this._step(x, y, ratio);
     }
 
     return {
