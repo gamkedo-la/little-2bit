@@ -99,6 +99,7 @@ var Sounds = new (function() {
     bomb2: 'sfx/explosion1',
     energy_ball: 'sfx/energy ball',
     countdown_advanced_enemy2: 'sfx/countdown advanced enemy2',
+    advanced_enemy3_moves: 'sfx/advanced enemy3 moves',
     explosion_ship: 'sfx/2bit explodes',
     explosion_simple_enemy: 'sfx/simple enemy explosion v2',
     explosion_shooting_enemy: 'sfx/shooting enemy explosion',

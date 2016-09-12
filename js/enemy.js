@@ -699,9 +699,9 @@ function AdvancedEnemy3(list, initialX, initialY) {
   this._update = function(x, y) {
     var shipCoords = Ship.coords();
 
-    if (shipCoords.x >= initialX - triggerRange) {
+    if (!shot && shipCoords.x >= initialX - triggerRange) {
       shot = true;
-      // @todo play a sound?
+      Sounds.advanced_enemy3_moves.play();
     }
 
     if (shot) {
