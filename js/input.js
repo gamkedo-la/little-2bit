@@ -84,4 +84,8 @@ function keySet(event, setTo) {
     Ship.keyHeld_S = setTo;
     event.preventDefault();
   }
+
+  if (Ship.isDead) {
+    Ship.keyHeld = setTo;
+  }
 }

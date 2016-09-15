@@ -13,6 +13,8 @@ var Ship = new (function() {
   this.keyHeld_W = false;
   this.keyHeld_E = false;
 
+  this.keyHeld = false;
+
   this.isDead = false;
   this.speedX = 10;
   this.speedY = 8;
@@ -31,6 +33,7 @@ var Ship = new (function() {
   this.health = MAXHEALTH;
   this.lives = START_LIVES;
 
+  var respawnAuto = false;
   var respawnTime;
   var respawnDelay = 2000; // milliseconds
 
@@ -79,7 +82,12 @@ var Ship = new (function() {
   };
 
   this.respawn = function() {
-    if (respawnTime > Date.now()) {
+    if ((!respawnAuto || !this.keyHeld) && (respawnTime > Date.now())) {
+      return;
+    }
+    if (!respawnAuto) {
+      respawnAuto = true;
+      respawnTime = Date.now() + respawnDelay;
       return;
     }
     if (this.lives) {
@@ -123,6 +131,7 @@ var Ship = new (function() {
     this.lives--;
     this.isDead = true;
     this.shieldAmount = 0;
+    respawnAuto = false;
     respawnTime = Date.now() + respawnDelay;
   };
 
@@ -208,6 +217,9 @@ var Ship = new (function() {
 
   this.update = function() {
     if (this.isDead || !Grid.isReady || debug_editor) {
+      if (this.isDead) {
+        this.respawn();
+      }
       return;
     }
 
