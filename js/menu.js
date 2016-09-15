@@ -90,7 +90,6 @@ var Menu = new (function() {
   }
 
   function mouseMove(event) {
-    console.log('move!');
     var rect = gameCanvas.getBoundingClientRect();
     var root = document.documentElement;
     mouseX = event.clientX - rect.left - root.scrollLeft;
