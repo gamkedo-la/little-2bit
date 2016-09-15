@@ -89,8 +89,8 @@ var Boss = function(phase, list, initialX, initialY) {
     thirdWidth = currentImage.width / 3;
     quarterWidth = currentImage.width / 4;
     halfHeight = currentImage.height / 2;
-    muzzlePosX = (currentImage.width / 8) * 3;
-    muzzlePosY = (currentImage.height / 8) * 3;
+    muzzlePosX = (_phase == 3) ? 43 : 29;
+    muzzlePosY = (_phase == 3) ? 80 : 40;
     health = healths[phase];
     this.damage = damages[phase];
     maxYSpeed = maxYSpeeds[phase];
