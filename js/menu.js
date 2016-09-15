@@ -6,9 +6,15 @@ var Menu = new (function() {
   var menuLoop;
   var menuFps = 20;
 
+  var activeButton = undefined;
+
   this.initialize = function() {
     for (var b = 0; b < levels.length; b++) {
       buttons.push(new MenuButton('Level ' + (b + 1), gameStart.bind(this, b)));
+    }
+
+    if (buttons[0]) {
+      activeButton = buttons[0];
     }
 
     MenuCredits.initialize();
@@ -25,6 +31,7 @@ var Menu = new (function() {
 
     gameCanvas.addEventListener('mousemove', mouseMove);
     gameCanvas.addEventListener('mouseup', mouseReleased);
+    document.addEventListener('keydown', keyDown);
 
     Menu.active = true;
     MenuCredits.clear();
@@ -38,6 +45,7 @@ var Menu = new (function() {
     Menu.active = false;
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
+    document.removeEventListener('keydown', keyDown);
 
     if (menuLoop) {
       clearInterval(menuLoop);
@@ -60,7 +68,29 @@ var Menu = new (function() {
     drawBitmapCenteredWithRotation(gameContext, Images.corners, gameCanvas.width / 2, gameCanvas.height / 2);
   };
 
+  function keyDown(event) {
+    var activeIndex = buttons.indexOf(activeButton);
+    switch (event.keyCode) {
+      case KEY_UP_ARROW:
+      case KEY_W:
+        if (activeIndex > 0) {
+          activeButton = buttons[activeIndex - 1];
+        }
+        break;
+      case KEY_DOWN_ARROW:
+      case KEY_S:
+        if (activeIndex < buttons.length - 1) {
+          activeButton = buttons[activeIndex + 1];
+        }
+        break;
+      case KEY_ENTER:
+      case KEY_SPACE:
+        activeButton.activate();
+    }
+  }
+
   function mouseMove(event) {
+    console.log('move!');
     var rect = gameCanvas.getBoundingClientRect();
     var root = document.documentElement;
     mouseX = event.clientX - rect.left - root.scrollLeft;
@@ -86,12 +116,17 @@ var Menu = new (function() {
 
     this.draw = function() {
       var color = fontColor;
-      if (this.hover()) {
+      if (this.isActive()) {
         color = fontColorHighlight;
+        activeButton = this;
       }
 
       gameContext.font = gameFont;
       drawText(gameContext, x, y, color, text);
+    };
+
+    this.isActive = function() {
+      return (this == activeButton) || this.hover();
     };
 
     this.hover = function() {
@@ -99,9 +134,13 @@ var Menu = new (function() {
         y + heightOffset > mouseY && mouseY > y - height + heightOffset;
     };
 
+    this.activate = function() {
+      callback();
+    };
+
     this.checkClick = function() {
       if (this.hover()) {
-        callback();
+        this.activate();
         return true;
       }
       return false;

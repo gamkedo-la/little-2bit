@@ -13,6 +13,9 @@ const KEY_UP_ARROW = 38;
 const KEY_RIGHT_ARROW = 39;
 const KEY_DOWN_ARROW = 40;
 
+const KEY_ENTER = 13;
+const KEY_SPACE = 32;
+
 const KEY_W = 87;
 const KEY_S = 83;
 const KEY_A = 65;
