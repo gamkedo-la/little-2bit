@@ -14,6 +14,10 @@ var PowerUpList = new (function() {
     powerUpList = [];
   };
 
+  this.isEmpty = function() {
+    return powerUpList.length == 0;
+  };
+
   this.checkCollision = function(ship) {
     for (var i = 0; i < powerUpList.length; i++) {
       if (checkCollisionShapes(ship, powerUpList[i])) {
@@ -190,6 +194,19 @@ function PowerUpHomingRocket(x, y) {
 
 PowerUpHomingRocket.prototype = Object.create(PowerUpBase.prototype);
 PowerUpHomingRocket.prototype.constructor = PowerUpHomingRocket;
+
+brickTypePowerUps[POWERUP_LASER] = PowerUpLaser;
+function PowerUpLaser(x, y) {
+  var width = 40;
+  var height = 24;
+  var image = Images.powerUp_laser;
+
+  this._pickUp = function() {
+    Ship.setProjectile(Laser);
+  };
+
+  PowerUpBase.call(this, x, y, width, height, image);
+}
 
 brickTypePowerUps[POWERUP_DOUBLE_LASER] = PowerUpDoubleLaser;
 function PowerUpDoubleLaser(x, y) {

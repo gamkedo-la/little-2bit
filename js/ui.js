@@ -37,8 +37,11 @@ var UI = new (function() {
   this.update = function() {
     backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
 
-    var imageName = PROJECTILE_INFO[Ship.currentProjectile().prototype.constructor.name].uiImageName;
-    projectileImg = Images[imageName];
+    var projectileClass = Ship.currentProjectile();
+    if (projectileClass) {
+      var imageName = PROJECTILE_INFO[projectileClass.prototype.constructor.name].uiImageName;
+      projectileImg = Images[imageName];
+    }
   };
 
   this.clear = function() {

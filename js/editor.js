@@ -12,7 +12,7 @@ var Editor = new (function() {
     tileKeysMapping[KEY_G] = [ENEMY_SIMPLE, ENEMY_SHOOTING];
     tileKeysMapping[KEY_H] = [ENEMY_ADVANCED1, ENEMY_ADVANCED2, ENEMY_ADVANCED3];
     tileKeysMapping[KEY_J] = [ENEMY_TURRET_SIMPLE, ENEMY_TURRET_ADVANCED];
-    tileKeysMapping[KEY_Y] = [POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
+    tileKeysMapping[KEY_Y] = [POWERUP_LASER, POWERUP_DOUBLE_LASER, POWERUP_TRIPLE_LASER];
     tileKeysMapping[KEY_U] = [POWERUP_ROCKET, POWERUP_DOUBLE_ROCKET, POWERUP_HOMING_ROCKET];
     tileKeysMapping[KEY_I] = [POWERUP_SHIELD, POWERUP_HEALTH, POWERUP_LIFE];
     tileKeysMapping[KEY_K] = [BOSS_1, BOSS_2, BOSS_3];
@@ -29,6 +29,7 @@ var Editor = new (function() {
     tileImages[BOSS_2] = [Images.boss2];
     tileImages[BOSS_3] = [Images.boss3];
 
+    tileImages[POWERUP_LASER] = [Images.powerUp_laser];
     tileImages[POWERUP_ROCKET] = [Images.powerUp_rocket];
     tileImages[POWERUP_DOUBLE_ROCKET] = [Images.powerUp_double_rocket];
     tileImages[POWERUP_HOMING_ROCKET] = [Images.powerUp_homing_rocket];
@@ -40,7 +41,7 @@ var Editor = new (function() {
 
     outputCode = document.createElement('textarea');
     outputCode.style.width = '95%';
-    outputCode.rows = 20;
+    outputCode.rows = 10;
     outputCode.style.display = 'none';
     document.body.appendChild(outputCode);
 
@@ -49,22 +50,23 @@ var Editor = new (function() {
       0: 'Clear level',
       a: 'Move left',
       d: 'Move right',
-      n: 'Append column', //adds new column to end of level
-      m: 'Remove last column', //can shorten the level or remove columns
+      n: 'Append column', // adds new column to end of level
+      m: 'Remove last column', // can shorten the level or remove columns
       t: 'Tiles: default, alternative style', // hit t twice to switch to
       // other tiles
       g: 'Enemy: Simple, shooting', // simple enemy - moves, doesn't shoot,
       // shooting enemy does both
-      h: 'Enemy: Advanced 1, advanced 2', // advanced 1 - five yellow
+      h: 'Enemy: Advanced 1, advanced 2, advanced 3', // advanced 1 - five yellow
       // enemies that move in wave, advanced 2 - tracks the player and
-      // explodes when in proximity
+      // explodes when in proximity, advanced 3 - hides behind wall tile and
+      // moves up or down when the player gets near
       j: 'Enemy: Simple turret, advanced turret', // simple turret -
-      // attachs to wall, shoots
+      // attaches to wall, shoots
       // one direction, advanced turret - attachs to wall, always shoot at the
       // player
-      y: 'Power up: double laser, triple laser', // double laser - gives
-      // player ship two laser weapons, shoots straight forward, triple
-      // laser - shotgun blast laster with three beams
+      y: 'Power up: laser, double laser, triple laser', // laser - default weapon
+      // double laser - gives player ship two laser weapons, shoots straight
+      // forward, triple laser - shotgun blast blaster with three beams
       u: 'Power up: rocket, double rocket, homing rocket', //
       i: 'Powerups: shield' // simple shield powerup for the player ship,
       // shield has 5 HP, 10

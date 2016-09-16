@@ -70,10 +70,12 @@ var Grid = new (function() {
     tilemap = Images[_level.tilemap];
     level = _level.map.slice(); // Copy just the values, not a reference
 
-    if (!this.loadedLevel) {
+    var resetLevel = (!this.loadedLevel);
+    this.loadedLevel = _level;
+
+    if (resetLevel) {
       this.reset();
     }
-    this.loadedLevel = _level;
 
     this.processGrid();
   };
@@ -225,6 +227,7 @@ var Grid = new (function() {
 
   this.levelInfo = function() {
     return {
+      noProjectile: this.loadedLevel && this.loadedLevel.noProjectile,
       cols: COLS,
       rows: ROWS,
       width: COLS * GRID_WIDTH,
@@ -278,7 +281,7 @@ var Grid = new (function() {
       this.cameraFollow(this.keyHeld_E);
     }
 
-    if (!debug_editor && this.isAtEndOfLevel() && EnemyList.isEmpty() && !Ship.isDead) {
+    if (!debug_editor && !Ship.isDead && this.levelComplete()) {
       if (!levelCompleteTime) {
         levelCompleteTime = Date.now() + levelCompleteDelay;
         statusText = 'Level complete!';
@@ -291,6 +294,17 @@ var Grid = new (function() {
         this.nextLevel();
       }
     }
+  };
+
+  this.levelComplete = function() {
+    var isComplete = this.isAtEndOfLevel() && EnemyList.isEmpty();
+
+    // Check if last powerup is picked up
+    if (this.loadedLevelId == 0) {
+      isComplete &= PowerUpList.isEmpty();
+    }
+
+    return isComplete;
   };
 
   function tileToIndex(col, row) {

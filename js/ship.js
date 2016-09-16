@@ -78,7 +78,13 @@ var Ship = new (function() {
     this.health = MAXHEALTH;
     this.isDead = false;
 
-    this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+    console.log('noprojectile?', levelInfo.noProjectile);
+    if (levelInfo.noProjectile) {
+      this.setProjectile(undefined);
+    }
+    else {
+      this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+    }
   };
 
   this.respawn = function() {
@@ -194,10 +200,14 @@ var Ship = new (function() {
   };
 
   this.setProjectile = function(projectile) {
+    projectileTimeout = projectileType = projectileRate = 0;
     projectileClass = projectile;
+    if (!projectile) {
+      return;
+    }
+
     projectileType = projectileClass.prototype.constructor.name;
     projectileRate = PROJECTILE_INFO[projectileType].rate;
-    projectileTimeout = 0;
     if (PROJECTILE_INFO[projectileType].timeLimit > 0) {
       projectileTimeout = Date.now() + PROJECTILE_INFO[projectileType].timeLimit * 1000;
     }
@@ -270,7 +280,7 @@ var Ship = new (function() {
       Sounds.explosion_ship.play();
     }
 
-    if (PROJECTILE_INFO[projectileType] && !debug_single_step) {
+    if (projectileType && PROJECTILE_INFO[projectileType] && !debug_single_step) {
       projectileLast++;
 
       if (projectileLast > projectileRate) {

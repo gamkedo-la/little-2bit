@@ -109,9 +109,8 @@ function gameStart(levelId) {
 
   Menu.deactivate();
 
-  Ship.restart();
   Grid.loadLevelId(levelId);
-  Grid.reset();
+  Ship.restart();
 
   if (debug && debug_single_step) {
     gameLoop();
