@@ -46,6 +46,7 @@ var Grid = new (function() {
 
   this.nextLevel = function() {
     if (!levels[this.loadedLevelId+1]) {
+      this.loadedLevel = undefined;
       MenuCredits.enableVictoryText();
       Menu.activate();
       return;
@@ -328,7 +329,7 @@ var Grid = new (function() {
 
   this.isSolidTileTypeAtCoords = function(x, y) {
     var type = this.tileTypeAtCoords(x, y);
-    return type != BRICK_SPACE && !EnemyList.brickTypeIsEnemy(type) && !PowerUpList.brickTypeIsPowerUp(type);
+    return type != BRICK_SPACE && type != undefined && !EnemyList.brickTypeIsEnemy(type) && !PowerUpList.brickTypeIsPowerUp(type);
   };
 
   this.tileTypeAtCoords = function(x, y) {
