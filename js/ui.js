@@ -1,6 +1,6 @@
 var UI = new (function() {
   this.height = 60;
-  this.sound = true;
+  this.sound = false;
 
   var mouseX, mouseY;
 

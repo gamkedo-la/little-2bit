@@ -4,6 +4,7 @@ const PFX_ROCKET = 2;
 const PFX_ROCKET_BLAST = 3;
 const PFX_LASER = 4;
 const PFX_SMOKE = 5;
+const PFX_BOUNCE = 6;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_TYPE] = {
@@ -118,6 +119,20 @@ PFX_CONFIG[PFX_SMOKE] = {
   gravity: 0,
   dieOnCollision: false,
   image: 'particle_smoke'
+};
+
+PFX_CONFIG[PFX_BOUNCE] = {
+  initialSpeed: 5,
+  speedDecay: 0.98,
+  initialSize: 2,
+  sizeDecay: 0.98,
+  initialLifeTime: 20,
+  randomInitialLifeTime: true,
+  initialAlpha: 1,
+  alphaDecay: 0.98,
+  dieOnCollision: true,
+  gravity: 0,
+  color: '#f00'
 };
 
 var ParticleList = new (function() {

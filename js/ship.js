@@ -3,6 +3,9 @@ const MAXLIVES = 6;
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
+const BOUNCE_BACK_TIME = 10;
+const BOUNCE_DAMAGE = 2;
+const VELOCITY_DECAY = 0.8;
 
 const SHIELD_LIFE_AMOUNT = 5;
 const SHIELD_ANIMATION = 3;
@@ -12,6 +15,7 @@ var Ship = new (function() {
   this.keyHeld_S = false;
   this.keyHeld_W = false;
   this.keyHeld_E = false;
+  this.bounceBackCountdown = 0;
 
   this.keyHeld = false;
 
@@ -20,10 +24,16 @@ var Ship = new (function() {
   this.speedY = 8;
   this.damage = 50;
 
+  var bounce_x = 0;
+  var bounce_y = 0;
+  var velocity_x = 0;
+  var velocity_y = 0;
+
   this.shieldAmount = 0;
   var shieldAnimationTimer = 0;
 
   var x, y;
+  var prev_x, prev_y;
   var minX, minY, maxX, maxY;
   var width = 100;
   var height = 35;
@@ -78,7 +88,6 @@ var Ship = new (function() {
     this.health = MAXHEALTH;
     this.isDead = false;
 
-    console.log('noprojectile?', levelInfo.noProjectile);
     if (levelInfo.noProjectile) {
       this.setProjectile(undefined);
     }
@@ -155,7 +164,7 @@ var Ship = new (function() {
       // Upper halfway right
       { x: x + quarterWidth, y: y - halfHeight },
       // Upper halfway left
-      { x: x, y: y - halfHeight },
+      { x: x, y: y - halfHeight - 5 },
       // Upper left
       { x: x - (eighthWidth * 3), y: y - halfHeight },
       // Middle left
@@ -163,11 +172,9 @@ var Ship = new (function() {
       // Lower left
       { x: x - quarterWidth, y: y + halfHeight },
       // Lower middle
-      { x: x, y: y + halfHeight },
+      { x: x, y: y + halfHeight + 5 },
       // Lower halfway right
       { x: x + quarterWidth, y: y + halfHeight },
-      // Lower right
-      { x: x + halfWidth, y: y + quarterHeight },
       // Middle right
       { x: x + halfWidth, y: y }
     ];
@@ -184,10 +191,19 @@ var Ship = new (function() {
     var checkCoords = this.bounds();
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
-        if (debug) {
-          drawFillCircle(gameContext, checkCoords[c].x, checkCoords[c].y, 5, '#0f0');
-        }
-        this.die();
+        this.doDamage(BOUNCE_DAMAGE);
+
+        // Step back now to not get stuck in the wall
+        x = prev_x;
+        y = prev_y;
+        // Recalculate the bounds outside the wall
+        checkCoords = this.bounds();
+
+        this.bounceBackCountdown = BOUNCE_BACK_TIME;
+        bounce_x = -(checkCoords[c].x - x) * .05;
+        bounce_y = -(checkCoords[c].y - y) * .05;
+
+        ParticleList.spawnParticles(PFX_BOUNCE, checkCoords[c].x, checkCoords[c].y, 360, 0, 5, 25);
         break;
       }
     }
@@ -225,37 +241,41 @@ var Ship = new (function() {
     this.lives = Math.min(this.lives + 1, MAXLIVES);
   };
 
-  this.update = function() {
-    if (this.isDead || !Grid.isReady || debug_editor) {
-      if (this.isDead) {
-        this.respawn();
-      }
-      return;
-    }
+  this.move = function() {
+    prev_x = x;
+    prev_y = y;
 
     x += Grid.cameraSpeed();
 
-    if (this.keyHeld_N) {
-      y -= this.speedY;
-      if (y < minY) {
-        y = minY;
-      }
+    var isNotBouncing = (this.bounceBackCountdown <= 0);
+
+    if (isNotBouncing && this.keyHeld_N) {
+      velocity_y = -this.speedY;
     }
-    else if (this.keyHeld_S) {
-      y += this.speedY;
-      if (y > maxY) {
-        y = maxY;
-      }
+    else if (isNotBouncing && this.keyHeld_S) {
+      velocity_y = this.speedY;
+    }
+    else {
+      velocity_y *= VELOCITY_DECAY;
     }
 
-    if (this.keyHeld_W) {
-      x -= this.speedX;
+    if (isNotBouncing && this.keyHeld_W) {
+      velocity_x = -this.speedX;
     }
-    else if (this.keyHeld_E) {
-      x += this.speedX;
-      if (x > maxX) {
-        x = maxX;
-      }
+    else if (isNotBouncing && this.keyHeld_E) {
+      velocity_x = this.speedX;
+    }
+    else {
+      velocity_x *= VELOCITY_DECAY;
+    }
+
+    x += velocity_x;
+    y += velocity_y;
+
+    if (this.bounceBackCountdown > 0) {
+      var factor = (BOUNCE_BACK_TIME / (1 + BOUNCE_BACK_TIME - this.bounceBackCountdown));
+      x += bounce_x * factor;
+      y += bounce_y * factor;
     }
 
     var camPanX = Grid.cameraPanX();
@@ -265,6 +285,28 @@ var Ship = new (function() {
 
     if (Grid.cameraSpeed() != 0 && x > camPanX + gameCanvas.width - width) {
       x = camPanX + gameCanvas.width - width;
+    }
+
+    // World bounds checks
+    if (y < minY) {
+      y = minY;
+    }
+    else if (y > maxY) {
+      y = maxY;
+    }
+    if (x > maxX) {
+      x = maxX;
+    }
+  };
+
+  this.update = function() {
+    if (this.isDead || !Grid.isReady || debug_editor) {
+      return;
+    }
+
+    this.move();
+    if (this.bounceBackCountdown > 0) {
+      this.bounceBackCountdown--;
     }
 
     this.checkCollisions();
