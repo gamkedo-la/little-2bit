@@ -45,7 +45,7 @@ var Images = new (function() {
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',
 
-    tilemap_cave: 'img/tilemap.png',
+    tilemap_cave: 'img/tilemap_cave.png',
     tilemap_demo: 'img/tilemap_template.png'
   };
 
