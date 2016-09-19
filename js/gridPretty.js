@@ -87,9 +87,13 @@ function initArtMaskLookup() {
   maskShiftLookup[SHL_C] = shiftMask(SHL_C);
 
   tilemaskToArtIdx = [];
+  tilemaskToArtIdx[shiftMaskAll(SHL_E, SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_SDXC;
   tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D, SHL_X, SHL_C)] = TILE_SDXC;
+  tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_SDXC;
   tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_ASDZXC;
   tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_Z, SHL_X)] = TILE_ASZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_Z, SHL_X, SHL_C)] = TILE_ASZX;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_A, SHL_S, SHL_Z, SHL_X)] = TILE_ASZX;
   tilemaskToArtIdx[shiftMaskAll(SHL_S, SHL_D, SHL_X)] = TILE_SDX;
   tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_D)] = TILE_ASD;
   tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S, SHL_X)] = TILE_ASX;
@@ -111,8 +115,12 @@ function initArtMaskLookup() {
   tilemaskToArtIdx[shiftMaskAll(SHL_A, SHL_S)] = TILE_AS;
   tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S)] = TILE_WS;
   tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_S, SHL_D)] = TILE_WESD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_E, SHL_S, SHL_D, SHL_C)] = TILE_WESD;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_S, SHL_D)] = TILE_WESD;
   tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S, SHL_D)] = TILE_QWEASD;
   tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S)] = TILE_QWAS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_E, SHL_A, SHL_S)] = TILE_QWAS;
+  tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S, SHL_Z)] = TILE_QWAS;
   tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_S, SHL_D)] = TILE_WSD;
   tilemaskToArtIdx[shiftMaskAll(SHL_W, SHL_A, SHL_S)] = TILE_WAS;
   tilemaskToArtIdx[shiftMaskAll(SHL_Q, SHL_W, SHL_A, SHL_S, SHL_D, SHL_Z, SHL_X, SHL_C)] = TILE_QWASDZXC;

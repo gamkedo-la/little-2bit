@@ -102,9 +102,17 @@ var Grid = new (function() {
 
   this.processGrid = function() {
     levelPrettyTileGrid = [];
+    var isAgainstGridEdge = false;
     for (var r = 0; r < ROWS; r++) {
       for (var c = 0; c < COLS; c++) {
         var i = tileToIndex(c, r);
+
+        if (!this.isSolidTileTypeAtCR_WithBoundsSafety(c, r)) {
+          levelPrettyTileGrid[i] = undefined; // skip
+          continue;
+        }
+
+        isAgainstGridEdge = (c - 1 < 0 || r - 1 < 0 || c + 1 >= COLS || r + 1 >= ROWS);
 
         // adjacency around a given title is labelled like:
         // QWE
@@ -150,77 +158,112 @@ var Grid = new (function() {
           cornerCount++;
         }
 
-        if ((bitMask & maskShiftLookup[SHL_S]) != 0) {
-          if (tilemaskToArtIdx[bitMask] != undefined) {
-            levelPrettyTileGrid[i] = tilemaskToArtIdx[bitMask];
+        if (tilemaskToArtIdx[bitMask] != undefined) {
+          levelPrettyTileGrid[i] = tilemaskToArtIdx[bitMask];
+        }
+        else if (directTouchCount == 4) {
+          if (cornerCount > 0) {
+            levelPrettyTileGrid[i] = TILE_QWEASDZXC;
           }
-          else if (directTouchCount == 4) {
-            if (cornerCount > 0) {
-              levelPrettyTileGrid[i] = TILE_QWEASDZXC;
-            }
-            else {
-              levelPrettyTileGrid[i] = TILE_WASDX;
-            }
-          }
-          else if (directTouchCount == 3) {
-            if ((bitMask & maskShiftLookup[SHL_W]) == 0) {
-              levelPrettyTileGrid[i] = TILE_ASDX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_A]) == 0) {
-              levelPrettyTileGrid[i] = TILE_WSDX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_D]) == 0) {
-              levelPrettyTileGrid[i] = TILE_WASX;
-            }
-            else /* if((bitMask & maskShiftLookup[SHL_X]) == 0) */ {
-              levelPrettyTileGrid[i] = TILE_WASD;
-            }
-          }
-          else if (directTouchCount == 2) {
-            if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
-              levelPrettyTileGrid[i] = TILE_ASD;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
-              levelPrettyTileGrid[i] = TILE_WSX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
-              levelPrettyTileGrid[i] = TILE_WSD;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_D]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
-              levelPrettyTileGrid[i] = TILE_SDX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
-              levelPrettyTileGrid[i] = TILE_ASX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_W]) != 0) {
-              levelPrettyTileGrid[i] = TILE_WAS;
-            }
-            //levelPrettyTileGrid[i] = TILE_S;
-          }
-          else if (directTouchCount == 1) {
-            if ((bitMask & maskShiftLookup[SHL_W]) != 0) {
-              levelPrettyTileGrid[i] = TILE_WS;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_D]) != 0) {
-              levelPrettyTileGrid[i] = TILE_SD;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_X]) != 0) {
-              levelPrettyTileGrid[i] = TILE_SX;
-            }
-            else if ((bitMask & maskShiftLookup[SHL_A]) != 0) {
-              levelPrettyTileGrid[i] = TILE_AS;
-            }
-          }
-          else /* if(directTouchCount == 0) */ {
-            levelPrettyTileGrid[i] = TILE_S;
-          }
-
-          if (level[i] == BRICK_ALTSTYLE) {
-            levelPrettyTileGrid[i] += PRETTY_TILE_ART_COLS * PRETTY_TILE_ART_ROWS_PER_STYLE;
+          else {
+            levelPrettyTileGrid[i] = TILE_WASDX;
           }
         }
-        else {
-          levelPrettyTileGrid[i] = undefined; // skip
+        else if (directTouchCount == 3) {
+          if ((bitMask & maskShiftLookup[SHL_W]) == 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_ASDZXC;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_ASDX;
+            }
+          }
+          else if ((bitMask & maskShiftLookup[SHL_A]) == 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_WESDXC;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_WSDX;
+            }
+          }
+          else if ((bitMask & maskShiftLookup[SHL_D]) == 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_QWASZX;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_WASX;
+            }
+          }
+          else /* if((bitMask & maskShiftLookup[SHL_X]) == 0) */ {
+              if (isAgainstGridEdge) {
+                levelPrettyTileGrid[i] = TILE_QWEASD;
+              }
+              else {
+                levelPrettyTileGrid[i] = TILE_WASD;
+              }
+          }
+        }
+        else if (directTouchCount == 2) {
+          if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
+            levelPrettyTileGrid[i] = TILE_ASD;
+          }
+          else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+            levelPrettyTileGrid[i] = TILE_WSX;
+          }
+          else if ((bitMask & maskShiftLookup[SHL_W]) != 0 && (bitMask & maskShiftLookup[SHL_D]) != 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_WESD;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_WSD;
+            }
+          }
+          else if ((bitMask & maskShiftLookup[SHL_D]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_SDXC;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_SDX;
+            }
+          }
+          else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_X]) != 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_ASZX;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_ASX;
+            }
+          }
+          else if ((bitMask & maskShiftLookup[SHL_A]) != 0 && (bitMask & maskShiftLookup[SHL_W]) != 0) {
+            if (isAgainstGridEdge) {
+              levelPrettyTileGrid[i] = TILE_QWAS;
+            }
+            else {
+              levelPrettyTileGrid[i] = TILE_WAS;
+            }
+          }
+          //levelPrettyTileGrid[i] = TILE_S;
+        }
+        else if (directTouchCount == 1) {
+          if ((bitMask & maskShiftLookup[SHL_W]) != 0) {
+            levelPrettyTileGrid[i] = TILE_WS;
+          }
+          else if ((bitMask & maskShiftLookup[SHL_D]) != 0) {
+            levelPrettyTileGrid[i] = TILE_SD;
+          }
+          else if ((bitMask & maskShiftLookup[SHL_X]) != 0) {
+            levelPrettyTileGrid[i] = TILE_SX;
+          }
+          else if ((bitMask & maskShiftLookup[SHL_A]) != 0) {
+            levelPrettyTileGrid[i] = TILE_AS;
+          }
+        }
+        else /* if(directTouchCount == 0) */ {
+          levelPrettyTileGrid[i] = TILE_S;
+        }
+
+        if (level[i] == BRICK_ALTSTYLE) {
+          levelPrettyTileGrid[i] += PRETTY_TILE_ART_COLS * PRETTY_TILE_ART_ROWS_PER_STYLE;
         }
       }
     }
@@ -405,7 +448,7 @@ var Grid = new (function() {
       this.processGrid();
     }
 
-    if (!this.isReady && statusText) {
+    if (!debug_editor && !this.isReady && statusText) {
       drawTextHugeCentered(statusText);
     }
   };
