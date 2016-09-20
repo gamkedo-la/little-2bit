@@ -52,9 +52,6 @@ function setupInput() {
 }
 
 function keyPressed(event) {
-  if (Ship.isDead && !Menu.active) {
-    Ship.respawn();
-  }
   keySet(event, true);
 }
 

@@ -105,11 +105,11 @@ var Ship = new (function() {
       respawnTime = Date.now() + respawnDelay;
       return;
     }
-    if (this.lives) {
-      Grid.reset();
-      Grid.refreshLevel();
-    }
-    else {
+
+    Grid.reset();
+    Grid.refreshLevel();
+
+    if (!this.lives) {
       MenuCredits.enableGameOverText();
       Menu.activate();
     }
@@ -300,7 +300,12 @@ var Ship = new (function() {
   };
 
   this.update = function() {
-    if (this.isDead || !Grid.isReady || debug_editor) {
+    if (!Grid.isReady || debug_editor) {
+      return;
+    }
+
+    if (this.isDead) {
+      Ship.respawn();
       return;
     }
 
