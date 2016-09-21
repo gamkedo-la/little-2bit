@@ -276,7 +276,7 @@ brickTypeEnemyClasses[ENEMY_SIMPLE] = SimpleEnemy;
 function SimpleEnemy(list, initialX, initialY) {
   var vx = -5;
   var vy = 0;
-  var health = 4;
+  var health = 3;
   var damage = 3;
   var image = Images.simple_enemy;
   var width = 72;
@@ -481,7 +481,7 @@ brickTypeEnemyClasses[ENEMY_TURRET_SIMPLE] = SimpleTurret;
 function SimpleTurret(list, initialX, initialY) {
   var vx = 0;
   var vy = 0;
-  var health = 4;
+  var health = 2;
   var damage = 3;
   var image = Images.simple_turret;
   var width = 40;
@@ -534,8 +534,8 @@ AdvancedEnemy1.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemy1.prototype.constructor = AdvancedEnemy1;
 
 function AdvancedEnemyShip(list, initialX, initialY, step) {
-  var vx = 5;
-  var health = 4;
+  var vx = 4;
+  var health = 3;
   var damage = 2;
   var image = Images.advanced_enemy1;
   var width = 55;
@@ -701,7 +701,7 @@ function AdvancedEnemy3(list, initialX, initialY) {
   var vx = 0;
   var vy = speed;
   var health = 4;
-  var damage = 2;
+  var damage = 3;
   var image = Images.advanced_enemy3;
   var width = 40;
   var height = 60;
