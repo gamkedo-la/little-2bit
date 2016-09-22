@@ -53,7 +53,10 @@ var UI = new (function() {
     uiContext.drawImage(Images.stars, -backgroundX + Grid.backgroundWidth, 0);
 
     uiContext.font = gameFontSmall;
-    drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit  (Level ' + (Grid.loadedLevelId + 1) + ')');
+    drawText(uiContext, 25, 25, '#fff', 'Level');
+    uiContext.textAlign = 'right';
+    drawText(uiContext, 150, 25, '#fff', (Grid.loadedLevelId + 1));
+    uiContext.textAlign = 'left';
 
     soundButton.draw(this.sound);
 
@@ -75,9 +78,9 @@ var UI = new (function() {
     }
 
     // Lives-bar
+    drawText(uiContext, 165, 25, '#fff', 'Lives');
     for (var l = 0; l < Ship.lives; l++) {
-      drawText(uiContext, 455, 45, '#fff', 'Lives');
-      drawBitmapCenteredWithRotation(uiContext, Images.ui_heart, 520 + l * Images.ui_heart.width + 5, 38);
+      drawBitmapCenteredWithRotation(uiContext, Images.ui_heart, 245 + l * Images.ui_heart.width + 5, 18);
     }
   };
 })();

@@ -98,8 +98,8 @@ var MenuCredits = new (function() {
   var loopCounter = 30;
   var startY = 420;
   var fadeInY = 390;
-  var fadeOutY = 100;
-  var stopY = 75;
+  var fadeOutY = 80;
+  var stopY = 50;
   var x = 0;
 
   var lines = [];

@@ -4,7 +4,7 @@ var Menu = new (function() {
   var buttons = [];
   var mouseX, mouseY;
   var menuLoop;
-  var menuFps = 20;
+  var menuFps = 30;
 
   var activeButton = undefined;
 
@@ -58,7 +58,6 @@ var Menu = new (function() {
 
     gameContext.font = gameFont;
     gameContext.textAlign = 'left';
-    drawText(gameContext, 25, 50, fontColorHighlight, 'Journey of little 2bit');
 
     for (var b = 0; b < buttons.length; b++) {
       buttons[b].draw();
@@ -122,7 +121,7 @@ var Menu = new (function() {
     var height = 30;
     var heightOffset = 5;
     var x = 25;
-    var y = 100 + buttons.length * (height + heightOffset);
+    var y = 50 + buttons.length * (height + heightOffset);
 
     this.draw = function() {
       var color = fontColor;
