@@ -18,8 +18,8 @@ var Boss = function(phase, list, initialX, initialY) {
   var halfHeight;
   var muzzlePosX;
   var muzzlePosY;
-  var topAngle = 177 * DEC2RAD;
-  var bottomAngle = 183 * DEC2RAD;
+  var topAngle = 177;
+  var bottomAngle = 183;
 
   this.health = 0;
   this.maxHealth = 0;
@@ -27,7 +27,7 @@ var Boss = function(phase, list, initialX, initialY) {
   var maxYSpeed;
 
   const DASH_TIMER = 75;
-  const SHOOT_TIMER = 30;
+  const SHOOT_TIMER = 18;
   const SPAWN_TIMER = 26;
 
   var dashShaking = false;
@@ -196,12 +196,16 @@ var Boss = function(phase, list, initialX, initialY) {
     }
   };
 
+  function randomAngle(min, max) {
+    return (min + (Math.random() * (max - min))) * DEC2RAD;
+  }
+
   this.updatePhase2 = function() {
     shootCountdown--;
     if (shootCountdown <= 0) {
       shootCountdown = SHOOT_TIMER;
-      new EnergyBall(enemyProjectiles, x - muzzlePosX, y - muzzlePosY, topAngle);
-      new EnergyBall(enemyProjectiles, x - muzzlePosX, y + muzzlePosY, bottomAngle);
+      new EnergyBall(enemyProjectiles, x - muzzlePosX, y - muzzlePosY, randomAngle(topAngle, topAngle - 10));
+      new EnergyBall(enemyProjectiles, x - muzzlePosX, y + muzzlePosY, randomAngle(bottomAngle, bottomAngle + 10));
     }
   };
 

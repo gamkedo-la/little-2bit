@@ -81,7 +81,6 @@ var UI = new (function() {
     if (boss) {
       drawText(uiContext, 460, 45, '#fff', 'Boss');
       this.drawHealthBar(515, 32, boss.maxHealth, boss.health);
-      console.log('boss', boss.maxHealth, boss.health);
     }
   };
 
