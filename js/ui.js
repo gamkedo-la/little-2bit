@@ -53,7 +53,7 @@ var UI = new (function() {
     uiContext.drawImage(Images.stars, -backgroundX + Grid.backgroundWidth, 0);
 
     uiContext.font = gameFontSmall;
-    drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit');
+    drawText(uiContext, 25, 25, '#fff', 'Journey of Little 2bit  (Level ' + (Grid.loadedLevelId + 1) + ')');
 
     soundButton.draw(this.sound);
 

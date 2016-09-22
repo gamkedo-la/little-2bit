@@ -69,24 +69,34 @@ var Menu = new (function() {
   };
 
   function keyDown(event) {
-    var activeIndex = buttons.indexOf(activeButton);
     switch (event.keyCode) {
       case KEY_UP_ARROW:
       case KEY_W:
-        if (activeIndex > 0) {
-          activeButton = buttons[activeIndex - 1];
-        }
+        setActiveButton(-1);
         break;
       case KEY_DOWN_ARROW:
       case KEY_S:
-        if (activeIndex < buttons.length - 1) {
-          activeButton = buttons[activeIndex + 1];
-        }
+        setActiveButton(+1);
         break;
       case KEY_ENTER:
       case KEY_SPACE:
         activeButton.activate();
     }
+  }
+
+  function setActiveButton(addIndex) {
+    var activeIndex = buttons.indexOf(activeButton);
+
+    activeIndex += addIndex;
+
+    if (activeIndex < 0) {
+      activeIndex = buttons.length - 1;
+    }
+    else if (activeIndex > buttons.length - 1) {
+      activeIndex = 0;
+    }
+
+    activeButton = buttons[activeIndex];
   }
 
   function mouseMove(event) {
@@ -99,6 +109,7 @@ var Menu = new (function() {
   function mouseReleased() {
     for (var i = 0; i < buttons.length; i++) {
       if (buttons[i].checkClick()) {
+        mouseX = mouseY = 0;
         return;
       }
     }
