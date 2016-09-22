@@ -68,21 +68,33 @@ var UI = new (function() {
 
     // Health-bar
     drawText(uiContext, 165, 45, '#fff', 'Health');
-    var c;
-    for (var h = 0; h < MAXHEALTH; h++) {
-      c = '#ccc';
-      if (h < Ship.health) {
-        c = '#f00';
-      }
-      drawFillRect(uiContext, 245 + h * 10, 32, 8, 13, c);
-    }
+    this.drawHealthBar(245, 32, MAXHEALTH, Ship.health);
 
     // Lives-bar
     drawText(uiContext, 165, 25, '#fff', 'Lives');
     for (var l = 0; l < Ship.lives; l++) {
       drawBitmapCenteredWithRotation(uiContext, Images.ui_heart, 245 + l * Images.ui_heart.width + 5, 18);
     }
+
+    // Boss health
+    var boss = EnemyList.getBoss();
+    if (boss) {
+      drawText(uiContext, 460, 45, '#fff', 'Boss');
+      this.drawHealthBar(515, 32, boss.maxHealth, boss.health);
+      console.log('boss', boss.maxHealth, boss.health);
+    }
   };
+
+  this.drawHealthBar = function(x, y, total, health) {
+    var c, currentHealth = (MAXHEALTH / total) * health;
+    for (var h = 0; h < MAXHEALTH; h++) {
+      c = '#ccc';
+      if (h < currentHealth) {
+        c = '#f00';
+      }
+      drawFillRect(uiContext, x + h * 10, y, 8, 13, c);
+    }
+  }
 })();
 
 var UIButton = function(x, y, img_on, img_off, toggleCallback) {

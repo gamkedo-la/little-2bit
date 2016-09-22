@@ -286,7 +286,7 @@ var Grid = new (function() {
       return 0;
     }
 
-    if (this.isAtEndOfLevel() || EnemyList.hasBoss()) {
+    if (this.isAtEndOfLevel() || EnemyList.getBoss()) {
       return 0;
     }
 
@@ -468,7 +468,7 @@ var Grid = new (function() {
   };
 
   this.cameraFollow = function(keyHeld_E) {
-    if (EnemyList.hasBoss()) {
+    if (EnemyList.getBoss()) {
       return;
     }
 

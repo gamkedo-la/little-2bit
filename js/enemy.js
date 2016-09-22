@@ -28,13 +28,13 @@ var EnemyList = new (function() {
     return enemyList.length == 0;
   };
 
-  this.hasBoss = function() {
+  this.getBoss = function() {
     var levelInfo = Grid.levelInfo();
     for (var i = 0; i < enemyList.length; i++) {
       if (enemyList[i].isBoss) {
         var b = enemyList[i].boundingBox();
         if (b.right < levelInfo.rightBound) {
-          return true;
+          return enemyList[i];
         }
       }
     }

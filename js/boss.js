@@ -21,7 +21,8 @@ var Boss = function(phase, list, initialX, initialY) {
   var topAngle = 177 * DEC2RAD;
   var bottomAngle = 183 * DEC2RAD;
 
-  var health;
+  this.health = 0;
+  this.maxHealth = 0;
   this.damage = 0;
   var maxYSpeed;
 
@@ -91,7 +92,8 @@ var Boss = function(phase, list, initialX, initialY) {
     halfHeight = currentImage.height / 2;
     muzzlePosX = (_phase == 3) ? 43 : 29;
     muzzlePosY = (_phase == 3) ? 80 : 40;
-    health = healths[phase];
+    this.health = healths[phase];
+    this.maxHealth = healths[phase];
     this.damage = damages[phase];
     maxYSpeed = maxYSpeeds[phase];
     dashing = retreating = false;
@@ -123,8 +125,8 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   this.doDamage = function(_damage) {
-    health -= _damage;
-    if (health <= 0) {
+    this.health -= _damage;
+    if (this.health <= 0) {
       phase--;
       if (phase <= 0) {
         this.isReadyToRemove = true;
