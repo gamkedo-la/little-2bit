@@ -1,5 +1,7 @@
 body {
     background-color: #0a4f80;
+    background-image: url(../img/mine-bg.png); 
+    background-repeat: repeat;
     overflow: hidden;
     font-family: Verdana;
 }
