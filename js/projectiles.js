@@ -247,6 +247,9 @@ const PROJECTILE_INFO = {
   // Enemy Projectiles
   EnergyBall: {
     rate: 32
+  },
+  BossBall: {
+    rate: 32
   }
 };
 
@@ -451,3 +454,32 @@ function EnergyBall(list, x, y, angle) {
 }
 EnergyBall.prototype = Object.create(ProjectileBase.prototype);
 EnergyBall.prototype.constructor = EnergyBall;
+
+function BossBall(list, x, y, angle) {
+  var damage = 0.5;
+  var blastRange = 0;
+  var speed = 8;
+  var vx = speed;
+  var vy = 0;
+  if (angle) {
+    vx = speed * Math.cos(angle);
+    vy = speed * Math.sin(angle);
+  }
+  var image = Images.boss_ball;
+  var width = 30;
+  var height = 30;
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
+  };
+
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
+
+  Sounds.boss_ball.play();
+}
+BossBall.prototype = Object.create(ProjectileBase.prototype);
+BossBall.prototype.constructor = BossBall;

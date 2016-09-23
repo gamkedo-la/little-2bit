@@ -204,8 +204,8 @@ var Boss = function(phase, list, initialX, initialY) {
     shootCountdown--;
     if (shootCountdown <= 0) {
       shootCountdown = SHOOT_TIMER;
-      new EnergyBall(enemyProjectiles, x - muzzlePosX, y - muzzlePosY, randomAngle(topAngle, topAngle - 10));
-      new EnergyBall(enemyProjectiles, x - muzzlePosX, y + muzzlePosY, randomAngle(bottomAngle, bottomAngle + 10));
+      new BossBall(enemyProjectiles, x - muzzlePosX, y - muzzlePosY, randomAngle(topAngle, topAngle - 10));
+      new BossBall(enemyProjectiles, x - muzzlePosX, y + muzzlePosY, randomAngle(bottomAngle, bottomAngle + 10));
     }
   };
 
