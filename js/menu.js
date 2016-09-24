@@ -5,6 +5,7 @@ var Menu = new (function() {
   var mouseX, mouseY;
   var menuLoop;
   var menuFps = 30;
+  var starFieldLeftSide = 0;
 
   var activeButton = undefined;
 
@@ -54,7 +55,10 @@ var Menu = new (function() {
   };
 
   var draw = function() {
-    drawBitmapCenteredWithRotation(gameContext, Images.stars, gameCanvas.width / 2, gameCanvas.height / 2);
+    drawFillRect(gameContext, 0, 0, gameCanvas.width, gameCanvas.height, "#000");
+    starFieldLeftSide += 2;
+    StarfieldList.update(starFieldLeftSide);
+    StarfieldList.draw(0);
 
     gameContext.font = gameFont;
     gameContext.textAlign = 'left';
