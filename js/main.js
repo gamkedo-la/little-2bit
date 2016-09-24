@@ -143,6 +143,7 @@ function gameLoop() {
   gameTime = Date.now - gameInitTime;
   TWEEN.update();
 
+  StarfieldList.update();
   Grid.update();
   PowerUpList.update();
   shipProjectiles.update();
@@ -175,6 +176,7 @@ function gameLoop() {
     }
   }
 
+  StarfieldList.draw();
   Grid.draw();
   PowerUpList.draw();
   shipProjectiles.draw();

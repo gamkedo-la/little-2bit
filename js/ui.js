@@ -35,8 +35,6 @@ var UI = new (function() {
   }
 
   this.update = function() {
-    backgroundX = Grid.cameraPanX() % Grid.backgroundWidth;
-
     var projectileClass = Ship.currentProjectile();
     if (projectileClass) {
       var imageName = PROJECTILE_INFO[projectileClass.prototype.constructor.name].uiImageName;
@@ -49,8 +47,7 @@ var UI = new (function() {
   };
 
   this.draw = function() {
-    uiContext.drawImage(Images.stars, -backgroundX, 0);
-    uiContext.drawImage(Images.stars, -backgroundX + Grid.backgroundWidth, 0);
+    uiContext.drawImage(Images.stars, 0, 0);
 
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Level');
