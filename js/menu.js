@@ -55,7 +55,6 @@ var Menu = new (function() {
   };
 
   var draw = function() {
-    drawFillRect(gameContext, 0, 0, gameCanvas.width, gameCanvas.height, "#000");
     starFieldLeftSide += 2;
     StarfieldList.update(starFieldLeftSide);
     StarfieldList.draw(0);

@@ -390,9 +390,6 @@ var Grid = new (function() {
   };
 
   this.draw = function() {
-    // gameContext.drawImage(Images.stars, this.backgroundX, 0);
-    // gameContext.drawImage(Images.stars, this.backgroundX + this.backgroundWidth, 0);
-
     var cameraLeftMostCol = Math.floor(camPanX / GRID_WIDTH);
     var cameraRightMostCol = cameraLeftMostCol + colsThatFitOnScreen + 2;
 
