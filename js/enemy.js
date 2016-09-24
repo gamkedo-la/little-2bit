@@ -608,7 +608,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
   var damage = 2;
   var image = Images.advanced_enemy2;
   var width = 40;
-  var height = 30;
+  var height = 40;
   var angle = Math.PI;
   var rotationEase = .3;
   var isExploding = false;
