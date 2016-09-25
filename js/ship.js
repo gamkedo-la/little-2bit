@@ -188,16 +188,32 @@ var Ship = new (function() {
   };
 
   this.checkCollisions = function() {
-    var checkCoords = this.bounds();
+    var checkCoords = [
+      { x: x, y: y - halfHeight },
+      { x: x, y: y + halfHeight },
+      { x: x - halfWidth, y: y },
+      { x: x + halfWidth, y: y },
+
+      { x: x - quarterWidth, y: y - halfHeight },
+      { x: x - quarterWidth, y: y + halfHeight },
+      { x: x + quarterWidth, y: y - halfHeight },
+      { x: x + quarterWidth, y: y + halfHeight },
+      { x: x - halfWidth, y: y - quarterHeight },
+      { x: x - halfWidth, y: y - quarterHeight },
+      { x: x + halfWidth, y: y + quarterHeight },
+      { x: x + halfWidth, y: y + quarterHeight }
+    ];
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
         this.doDamage(BOUNCE_DAMAGE);
 
+        // Recalculate the bounds outside the wall
+        checkCoords[c].x = checkCoords[c].x - (prev_x - x);
+        checkCoords[c].y = checkCoords[c].y - (prev_y - y);
+
         // Step back now to not get stuck in the wall
         x = prev_x;
         y = prev_y;
-        // Recalculate the bounds outside the wall
-        checkCoords = this.bounds();
 
         this.bounceBackCountdown = BOUNCE_BACK_TIME;
         bounce_x = -(checkCoords[c].x - x) * .05;
