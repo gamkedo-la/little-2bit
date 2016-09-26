@@ -82,6 +82,7 @@ function keySet(event, setTo) {
     event.preventDefault();
   }
 
+  Grid.keyHeld = setTo;
   if (Ship.isDead) {
     Ship.keyHeld = setTo;
   }

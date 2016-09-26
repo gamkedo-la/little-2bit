@@ -13,6 +13,10 @@ if (!Object.keys) {
   };
 }
 
+function isString(obj) {
+  return (Object.prototype.toString.call(obj) === '[object String]');
+}
+
 function rotateToTarget(vx, vy, speed, rotationEase, shipCoords, thisCoords) {
   var diffX = shipCoords.x - thisCoords.x;
   var diffY = shipCoords.y - thisCoords.y;

@@ -377,6 +377,10 @@ var Ship = new (function() {
   };
 
   this.draw = function() {
+    if (!debug_editor && !Grid.isReady) {
+      return;
+    }
+
     if (!this.isDead) {
       drawBitmapFrameCenteredWithRotation(gameContext, Images.ship, frame, x, y, width, height);
 

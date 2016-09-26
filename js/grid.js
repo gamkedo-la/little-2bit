@@ -8,6 +8,8 @@ var Grid = new (function() {
   var ROWS = 15;
 
   this.isReady = false;
+  var showIntroText = false;
+  var showCompleteText = false;
   var startTime;
   var startDelay = 500; // milliseconds
   var startCountDown = 4;
@@ -25,8 +27,7 @@ var Grid = new (function() {
   var colsThatFitOnScreen;
 
   var camPanX;
-  this.backgroundX = 0;
-  this.backgroundWidth = 0;
+  this.keyHeld = false;
   this.keyHeld_E = false;
 
   const PLAYER_DIST_FROM_CENTER_BEFORE_CAMERA_PAN_X = 100;
@@ -36,7 +37,6 @@ var Grid = new (function() {
     colsThatFitOnScreen = Math.floor(gameCanvas.width / GRID_WIDTH);
     camPanX = 0.0;
 
-    this.backgroundWidth = Images.stars.width;
     initArtMaskLookup();
   };
 
@@ -74,6 +74,9 @@ var Grid = new (function() {
     var resetLevel = (!this.loadedLevel);
     this.loadedLevel = _level;
 
+    showIntroText = !!levels_intro_text[this.loadedLevelId];
+    showCompleteText = !!levels_complete_text[this.loadedLevelId];
+
     if (resetLevel) {
       this.reset();
     }
@@ -92,9 +95,12 @@ var Grid = new (function() {
 
     // @todo reset to last respawn position?
 
-    camPanX = this.backgroundX = 0;
+    camPanX = 0;
     Ship.reset();
     this.isReady = false;
+
+    showIntroText = !!levels_intro_text[this.loadedLevelId];
+    showCompleteText = !!levels_complete_text[this.loadedLevelId];
 
     startTime = Date.now() + startDelay * 2;
     startCountDown = 4;
@@ -299,39 +305,55 @@ var Grid = new (function() {
   };
 
   this.update = function() {
-    if (!this.isReady && !levelCompleteTime) {
-      if (startTime < Date.now()) {
-        startCountDown--;
-        startTime = Date.now() + startDelay;
-      }
-      if (startCountDown == 4) {
-        statusText = 'Ready?';
-      }
-      else if (startCountDown <= 0) {
-        statusText = 'Go!';
+    if (!this.isReady && !this.levelComplete()) {
+      if (showIntroText) {
+        if (this.keyHeld && startTime < Date.now()) {
+          showIntroText = false;
+          this.keyHeld = false;
+          startTime = Date.now() + startDelay * 2;
+        }
       }
       else {
-        statusText = startCountDown;
-      }
-      if (startCountDown <= 0) {
-        this.isReady = true;
-        statusText = '';
+        if (startTime < Date.now()) {
+          startCountDown--;
+          startTime = Date.now() + startDelay;
+        }
+        if (startCountDown == 4) {
+          statusText = 'Ready?';
+        }
+        else if (startCountDown <= 0) {
+          statusText = 'Go!';
+        }
+        else {
+          statusText = ''+startCountDown;
+        }
+        if (startCountDown <= 0) {
+          this.isReady = true;
+          statusText = '';
+        }
       }
     }
 
     if (this.isReady && !Ship.isDead) {
       camPanX += this.cameraSpeed();
-      this.backgroundX = Math.floor(this.cameraPanX() / this.backgroundWidth) * this.backgroundWidth;
       this.cameraFollow(this.keyHeld_E);
     }
 
     if (!debug_editor && !Ship.isDead && this.levelComplete()) {
-      if (!levelCompleteTime) {
+      if (!levelCompleteTime && this.isReady) {
         levelCompleteTime = Date.now() + levelCompleteDelay;
         statusText = 'Level complete!';
         this.isReady = false;
         shipProjectiles.clear();
         enemyProjectiles.clear();
+      }
+
+      if (showCompleteText) {
+        if (levelCompleteTime <= Date.now() && this.keyHeld) {
+          levelCompleteTime = Date.now() + levelCompleteDelay / 2;
+          showCompleteText = false;
+          this.keyHeld = false;
+        }
       }
       else if (levelCompleteTime <= Date.now()) {
         levelCompleteTime = false;
@@ -445,8 +467,50 @@ var Grid = new (function() {
       this.processGrid();
     }
 
-    if (!debug_editor && !this.isReady && statusText) {
-      drawTextHugeCentered(statusText);
+    if (!debug_editor && !this.isReady) {
+      if (showIntroText) {
+        this.drawTextBox(levels_intro_text[this.loadedLevelId], gameFont);
+      }
+      else if (showCompleteText && this.levelComplete()) {
+        this.drawTextBox(levels_complete_text[this.loadedLevelId], gameFont);
+      }
+      else if (statusText) {
+        this.drawTextBox(statusText, gameFontHuge);
+      }
+    }
+  };
+
+  this.drawTextBox = function(text, font) {
+    var lineHeight = 26;
+    var numLines = 1;
+    if (!isString(text)) {
+      numLines = text.length;
+    }
+    else {
+      text = [text];
+    }
+
+    gameContext.font = font;
+    gameContext.textBaseline = 'middle';
+    gameContext.textAlign = 'center';
+
+    var textX = Grid.cameraPanX() + gameCanvas.width / 2;
+    var textY = gameCanvas.height / 2;
+
+    var t = text.slice();
+    var longestLine = t.sort(function (a, b) { return b.length - a.length; })[0];
+    var boxWidth = 40 + gameContext.measureText(longestLine).width;
+    var boxHeight = 40 + numLines * lineHeight;
+
+    // Block out the stars behind the text for readability
+    drawFillRect(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight, '#000');
+
+    if (numLines > 1) {
+      textY -= lineHeight * Math.floor(numLines / 2);
+    }
+    for (var l = 0; l < numLines; l++) {
+      drawText(gameContext, textX, textY, '#fff', text[l]);
+      textY += lineHeight;
     }
   };
 
