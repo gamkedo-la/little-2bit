@@ -16,8 +16,6 @@ var Images = new (function() {
     boss3: 'img/boss-3.png',
 
     corners: 'img/corners.png',
-    rocket: 'img/rocket.png',
-    laser: 'img/laser.png',
     energy_ball: 'img/enemy_shot.png',
     boss_ball: 'img/boss2_shot.png',
     ui_heart: 'img/ui-heart.png',
@@ -30,7 +28,7 @@ var Images = new (function() {
     powerUp_rocket: 'img/ui-rocket.png',
     powerUp_double_rocket: 'img/ui-double-rocket.png',
     powerUp_homing_rocket: 'img/ui-homing-rocket.png',
-    powerUp_laser: 'img/ui-laser.png',
+    powerUp_laser: 'img/powerUp-laser.png',
     powerUp_double_laser: 'img/ui-double-laser.png',
     powerUp_triple_laser: 'img/ui-triple-laser.png',
     powerUp_shield: 'img/ui-shield.png',

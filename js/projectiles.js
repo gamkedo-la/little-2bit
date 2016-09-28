@@ -263,7 +263,7 @@ function Laser(list, x, y, angle, noSound) {
     vx = speed * Math.cos(angle);
     vy = speed * Math.sin(angle);
   }
-  var image = Images.laser;
+  var image = Images.ui_laser;
   var width = 30;
   var height = 24;
 
@@ -329,7 +329,7 @@ function Rocket(list, x, y, noSound) {
   var blastRange = 90;
   var vx = 15;
   var vy = 0;
-  var image = Images.rocket;
+  var image = Images.ui_rocket;
   var width = 40;
   var height = 24;
 
@@ -371,7 +371,7 @@ function HomingRocket(list, x, y) {
   var vx = speed;
   var vy = 0;
   var angle = 0;
-  var image = Images.rocket;
+  var image = Images.ui_homing_rocket;
   var width = 40;
   var height = 24;
 

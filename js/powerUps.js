@@ -197,8 +197,8 @@ PowerUpHomingRocket.prototype.constructor = PowerUpHomingRocket;
 
 brickTypePowerUps[POWERUP_LASER] = PowerUpLaser;
 function PowerUpLaser(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 80;
+  var height = 48;
   var image = Images.powerUp_laser;
 
   this._pickUp = function() {
