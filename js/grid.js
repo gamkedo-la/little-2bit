@@ -349,7 +349,7 @@ var Grid = new (function() {
       }
 
       if (showCompleteText) {
-        if (levelCompleteTime <= Date.now() && this.keyHeld) {
+        if (levelCompleteTime && levelCompleteTime <= Date.now() && this.keyHeld) {
           levelCompleteTime = Date.now() + levelCompleteDelay / 2;
           showCompleteText = false;
           this.keyHeld = false;
