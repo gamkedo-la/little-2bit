@@ -343,7 +343,7 @@ var Grid = new (function() {
 
     if (!debug_editor && !Ship.isDead && this.levelComplete()) {
       if (!levelCompleteTime && this.isReady) {
-        levelCompleteTime = Date.now() + levelCompleteDelay;
+        levelCompleteTime = Date.now() + startDelay;
         statusText = 'Level complete!';
         this.isReady = false;
         shipProjectiles.clear();
