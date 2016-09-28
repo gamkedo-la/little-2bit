@@ -4,7 +4,7 @@ const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
 const BOUNCE_BACK_TIME = 10;
-const BOUNCE_DAMAGE = 2;
+const BOUNCE_DAMAGE = 1;
 const VELOCITY_DECAY = 0.8;
 
 const SHIELD_LIFE_AMOUNT = 5;
@@ -220,8 +220,8 @@ var Ship = new (function() {
         y = prev_y;
 
         this.bounceBackCountdown = BOUNCE_BACK_TIME;
-        bounce_x = -(checkCoords[c].x - x) * .05;
-        bounce_y = -(checkCoords[c].y - y) * .05;
+        bounce_x = -(checkCoords[c].x - x) * .03;
+        bounce_y = -(checkCoords[c].y - y) * .03;
 
         ParticleList.spawnParticles(PFX_BOUNCE, checkCoords[c].x, checkCoords[c].y, 360, 0, 5, 25);
         break;
@@ -333,6 +333,7 @@ var Ship = new (function() {
     }
 
     this.move();
+
     if (this.bounceBackCountdown > 0) {
       this.bounceBackCountdown--;
     }

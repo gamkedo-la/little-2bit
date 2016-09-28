@@ -10,7 +10,7 @@ var MenuCredits = new (function() {
     ''
   ];
   var credits = [
-    'Spad-XIII -- project lead, coding',
+    'SpadXIII -- project lead, coding',
     'level design, life/health art',
     'Jeremy -- rocket art',
     'cmarkle -- story text, energy ball,',
