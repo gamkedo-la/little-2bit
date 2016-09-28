@@ -220,27 +220,27 @@ const PROJECTILE_INFO = {
   },
   DoubleLaser: {
     rate: 10,
-    timeLimit: 8,
+    timeLimit: 0,
     uiImageName: 'ui_double_laser'
   },
   TripleLaser: {
     rate: 10,
-    timeLimit: 8,
+    timeLimit: 15,
     uiImageName: 'ui_triple_laser'
   },
   Rocket: {
-    rate: 18,
-    timeLimit: 5,
+    rate: 13,
+    timeLimit: 15,
     uiImageName: 'ui_rocket'
   },
   DoubleRocket: {
-    rate: 24,
-    timeLimit: 5,
+    rate: 18,
+    timeLimit: 15,
     uiImageName: 'ui_double_rocket'
   },
   HomingRocket: {
-    rate: 32,
-    timeLimit: 4,
+    rate: 13,
+    timeLimit: 10,
     uiImageName: 'ui_homing_rocket'
   },
 

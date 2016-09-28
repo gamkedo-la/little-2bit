@@ -52,6 +52,7 @@ var Ship = new (function() {
   var projectileRate = 0;
   var projectileLast = 0;
   var projectileTimeout = 0;
+  var projectileDefault = SHIP_DEFAULT_PROJECTILE;
 
   var frame = 0;
   var maxFrames = 0;
@@ -92,7 +93,7 @@ var Ship = new (function() {
       this.setProjectile(undefined);
     }
     else {
-      this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+      this.setProjectile(projectileDefault);
     }
   };
 
@@ -112,6 +113,8 @@ var Ship = new (function() {
     if (!this.lives) {
       MenuCredits.enableGameOverText();
       Menu.activate();
+      // Reset ship projectile to default...
+      this.setProjectile(SHIP_DEFAULT_PROJECTILE);
     }
   };
 
@@ -146,6 +149,7 @@ var Ship = new (function() {
     this.lives--;
     this.isDead = true;
     this.shieldAmount = 0;
+    projectileDefault = SHIP_DEFAULT_PROJECTILE;
     respawnAuto = false;
     respawnTime = Date.now() + respawnDelay;
   };
@@ -242,6 +246,9 @@ var Ship = new (function() {
     projectileRate = PROJECTILE_INFO[projectileType].rate;
     if (PROJECTILE_INFO[projectileType].timeLimit > 0) {
       projectileTimeout = Date.now() + PROJECTILE_INFO[projectileType].timeLimit * 1000;
+    }
+    else {
+      projectileDefault = projectileClass;
     }
   };
 
@@ -355,7 +362,7 @@ var Ship = new (function() {
 
     // Reset to default projectile
     if (projectileTimeout > 0 && projectileTimeout <= Date.now()) {
-      this.setProjectile(SHIP_DEFAULT_PROJECTILE);
+      this.setProjectile(projectileDefault);
     }
   };
 

@@ -49,6 +49,8 @@ var Grid = new (function() {
       this.loadedLevel = undefined;
       MenuCredits.enableVictoryText();
       Menu.activate();
+      // Reset ship projectile to default...
+      Ship.setProjectile(SHIP_DEFAULT_PROJECTILE);
       return;
     }
 
