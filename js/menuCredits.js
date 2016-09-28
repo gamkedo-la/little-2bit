@@ -20,10 +20,11 @@ var MenuCredits = new (function() {
     'mickyzo -- weapon, enemy, and',
     'player bump/hit/explosion sounds',
     'eandrade -- level design',
-    'Chris DeLeon -- tile map code',
+    'Chris DeLeon -- tile map code, stars',
+    'parallax',
     'c:games -- cave tile map',
     'Ashleigh -- page styling, weapons art',
-    'Oasis -- bosses art, enemy art, ',
+    'Oasis -- bosses art, enemy art,',
     'play testing',
     ''
   ];
