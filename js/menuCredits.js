@@ -10,15 +10,22 @@ var MenuCredits = new (function() {
     ''
   ];
   var credits = [
-    'Spad-XIII -- project lead',
+    'Spad-XIII -- project lead, coding',
+    'level design, life/health art',
     'Jeremy -- rocket art',
-    'cmarkle -- story, energy ball art',
-    'rocket art, space ship art',
+    'cmarkle -- story text, energy ball,',
+    'rocket, and space ship art',
     'flannelbeard -- player shields',
     'aciago -- turrets art',
-    'mickyzo -- single/double/triple laser,',
-    'player hit/explosion sounds',
-    'Chris DeLeon -- tile map code'
+    'mickyzo -- weapon, enemy, and',
+    'player bump/hit/explosion sounds',
+    'eandrade -- level design',
+    'Chris DeLeon -- tile map code',
+    'c:games -- cave tile map',
+    'Ashleigh -- page styling, weapons art',
+    'Oasis -- bosses art, enemy art, ',
+    'play testing',
+    ''
   ];
 
   var introText = [
