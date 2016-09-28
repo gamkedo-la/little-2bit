@@ -384,7 +384,7 @@ var Ship = new (function() {
   };
 
   this.draw = function() {
-    if (!debug_editor && !Grid.isReady) {
+    if (debug_editor) {
       return;
     }
 
