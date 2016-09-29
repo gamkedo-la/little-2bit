@@ -30,7 +30,7 @@ var MenuCredits = new (function() {
   ];
 
   var introText = [
-    'The Journey of Little 2-bit',
+    'Journey of Little 2-bit',
     '',
     '',
     '',
@@ -88,7 +88,7 @@ var MenuCredits = new (function() {
     creditsSeperator,
     '',
     '',
-    'The Journey of Little 2-bit',
+    'Journey of Little 2-bit',
     '',
     'A game made at Gamkedo.club',
     ''
@@ -117,7 +117,7 @@ var MenuCredits = new (function() {
     creditsSeperator,
     '',
     '',
-    'The Journey of Little 2-bit',
+    'Journey of Little 2-bit',
     '',
     'A game made at Gamkedo.club',
     ''
