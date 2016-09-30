@@ -103,7 +103,7 @@ var MenuCredits = new (function() {
     'From: Management',
     'Subject: Operation 2-bit--FAILED',
 	'',
-    'You are no longer considered B.I.T.',
+    'You are no longer considered',
 	'B.I.T. material, and as such, your',
 	'contract is hereby terminated.',
 	'',
