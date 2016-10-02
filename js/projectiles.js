@@ -325,7 +325,9 @@ DoubleLaser.prototype.constructor = DoubleLaser;
 function TripleLaser(list, x, y) {
   this._initialize = function() {
     new Laser(list, x, y, 0.4, true);
+    new Laser(list, x, y, 0.2, true);
     new Laser(list, x, y, 0, true);
+    new Laser(list, x, y, -0.2, true);
     new Laser(list, x, y, -0.4, true);
   };
 
