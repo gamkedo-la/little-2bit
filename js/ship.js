@@ -22,7 +22,7 @@ var Ship = new (function() {
   this.isDead = false;
   this.speedX = 10;
   this.speedY = 8;
-  this.damage = 50;
+  this.damage = 15;
 
   var bounce_x = 0;
   var bounce_y = 0;

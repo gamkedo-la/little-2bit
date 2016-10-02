@@ -49,15 +49,15 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   var damages = {
-    1: 7,
-    2: 8,
-    3: 9
+    1: 9,
+    2: 12,
+    3: 15
   };
 
   var maxYSpeeds = {
     1: 4,
     2: 3.5,
-    3: 3
+    3: 2.5
   };
 
   this.update = function() {

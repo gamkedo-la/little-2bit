@@ -233,7 +233,7 @@ const PROJECTILE_INFO = {
     uiImageName: 'ui_double_laser'
   },
   TripleLaser: {
-    rate: 10,
+    rate: 13,
     timeLimit: 15,
     uiImageName: 'ui_triple_laser'
   },
@@ -244,11 +244,11 @@ const PROJECTILE_INFO = {
   },
   DoubleRocket: {
     rate: 18,
-    timeLimit: 15,
+    timeLimit: 12,
     uiImageName: 'ui_double_rocket'
   },
   HomingRocket: {
-    rate: 13,
+    rate: 15,
     timeLimit: 10,
     uiImageName: 'ui_homing_rocket'
   },
@@ -261,7 +261,7 @@ const PROJECTILE_INFO = {
     rate: 32
   },
   BossBall: {
-    rate: 32
+    rate: 28
   }
 };
 
