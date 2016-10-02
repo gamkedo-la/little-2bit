@@ -393,7 +393,7 @@ function HomingRocket(list, x, y) {
 
   this._move = function(x, y) {
     var thisCoords = { x: x, y: y };
-    if (!target) {
+    if (!target || target.isReadyToRemove) {
       // Find a target
       target = EnemyList.findClosestEnemyInRange(thisCoords, targetRange);
     }
