@@ -233,7 +233,7 @@ const PROJECTILE_INFO = {
     uiImageName: 'ui_double_laser'
   },
   TripleLaser: {
-    rate: 13,
+    rate: 18,
     timeLimit: 15,
     uiImageName: 'ui_triple_laser'
   },
