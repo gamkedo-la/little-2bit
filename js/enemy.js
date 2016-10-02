@@ -161,6 +161,7 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
 
   this.explode = function() {
     if (!this.isOutOfBounds) {
+      ParticleList.explosion(x, y);
       this._explode(x, y);
     }
   };
@@ -300,7 +301,6 @@ function SimpleEnemy(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_simple_enemy.play();
   };
 
@@ -344,7 +344,6 @@ function ShootingEnemy(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_shooting_enemy.play();
   };
 
@@ -483,7 +482,6 @@ function SimpleTurret(list, initialX, initialY) {
   var height = 40;
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_simple_turret.play();
   };
 
@@ -505,7 +503,6 @@ function AimingTurret(list, initialX, initialY) {
   var height = 40;
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_turret.play();
   };
 
@@ -580,7 +577,6 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy1.play();
   };
 
@@ -663,7 +659,6 @@ function AdvancedEnemy2(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy2.play();
   };
 
@@ -770,7 +765,6 @@ function AdvancedEnemy3(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy3.play();
   };
 

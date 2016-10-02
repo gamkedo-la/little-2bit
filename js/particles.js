@@ -5,6 +5,9 @@ const PFX_ROCKET_BLAST = 3;
 const PFX_LASER = 4;
 const PFX_SMOKE = 5;
 const PFX_BOUNCE = 6;
+const PFX_EXPLOSION_SHRAPNEL = 7;
+const PFX_EXPLOSION_FLASH = 8;
+const PFX_EXPLOSION_FLAME = 9;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_TYPE] = {
@@ -135,6 +138,63 @@ PFX_CONFIG[PFX_BOUNCE] = {
   color: '#f00'
 };
 
+PFX_CONFIG[PFX_EXPLOSION_SHRAPNEL] = {
+  initialSpeed: 5,
+  randomInitialSpeed: true,
+  speedDecay: 0.975,
+  initialSize: 1,
+  randomInitialSize: true,
+  sizeDecay: 0.975,
+  initialLifeTime: 20,
+  randomInitialLifeTime: true,
+  initialAngle: 180,
+  randomInitialAngle: true,
+  rotationSpeed: .4,
+  rotationDecay: 0.98,
+  initialAlpha: .9,
+  randomInitialAlpha: true,
+  alphaDecay: 0.95,
+  gravity: 0,
+  dieOnCollision: false,
+  image: 'explosion_shrapnel_1'
+};
+
+PFX_CONFIG[PFX_EXPLOSION_FLASH] = {
+  initialSpeed: 0,
+  initialSize: 1,
+  randomInitialSize: true,
+  sizeDecay: 0.8,
+  initialLifeTime: 7,
+  randomInitialLifeTime: true,
+  initialAngle: 180,
+  randomInitialAngle: true,
+  rotationSpeed: 0,
+  initialAlpha: 0.9,
+  randomInitialAlpha: true,
+  alphaDecay: 0.70,
+  gravity: 0,
+  dieOnCollision: false,
+  image: ['explosion_flash_1', 'explosion_flash_2']
+};
+
+PFX_CONFIG[PFX_EXPLOSION_FLAME] = {
+  initialSpeed: 0,
+  initialSize: 1,
+  randomInitialSize: true,
+  sizeDecay: 1.08,
+  initialLifeTime: 10,
+  randomInitialLifeTime: true,
+  initialAngle: 180,
+  randomInitialAngle: true,
+  rotationSpeed: 0,
+  initialAlpha: 0.8,
+  randomInitialAlpha: true,
+  alphaDecay: 0.90,
+  gravity: 0,
+  dieOnCollision: false,
+  image: ['explosion_flame_1', 'explosion_flame_2']
+};
+
 var ParticleList = new (function() {
   var particleList = [];
 
@@ -145,6 +205,13 @@ var ParticleList = new (function() {
   function randomRange(initial) {
     return (initial * 0.7) + (Math.random() * initial * 0.5);
   }
+
+  this.explosion = function(x, y) {
+    // slightly random x,y?
+    this.spawnParticles(PFX_EXPLOSION_SHRAPNEL, x, y, 0, 360, 6, 13);
+    this.spawnParticles(PFX_EXPLOSION_FLAME, x, y, 0, 360, 2, 4);
+    this.spawnParticles(PFX_EXPLOSION_FLASH, x, y, 0, 360, 1, 2);
+  };
 
   this.spawnParticles = function(type, x, y, directionAngleMin, directionAngleMax, minQuantity, maxQuantity) {
     if (!PFX_CONFIG[type]) {
@@ -219,7 +286,13 @@ var ParticleList = new (function() {
       }
 
       if (particle.image != undefined) {
-        particle.image = Images[particle.image];
+        if (isString(particle.image)) {
+          particle.image = Images[particle.image];
+        }
+        else {
+          var image = particle.image[Math.floor(Math.random() * particle.image.length)];
+          particle.image = Images[image];
+        }
       }
 
       particleList.push(particle);

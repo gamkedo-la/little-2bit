@@ -347,7 +347,7 @@ var Ship = new (function() {
       PowerUpList.clear();
       shipProjectiles.clear();
       enemyProjectiles.clear();
-      ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 25, 50);
+      ParticleList.explosion(x, y);
       Sounds.explosion_ship.play();
     }
 

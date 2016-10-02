@@ -138,7 +138,7 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   this.explode = function() {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 40, 60);
+    ParticleList.explosion(x, y);
     Sounds.explosion_boss.play();
   };
 

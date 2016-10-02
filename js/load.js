@@ -46,6 +46,12 @@ var Images = new (function() {
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',
 
+    explosion_shrapnel_1: 'img/particle-shrapnel-1.png',
+    explosion_flash_1: 'img/particle-flare-1.png',
+    explosion_flash_2: 'img/particle-flare-2.png',
+    explosion_flame_1: 'img/particle-flame-1.png',
+    explosion_flame_2: 'img/particle-flame-2.png',
+
     tilemap_cave: 'img/tilemap_cave.png',
     tilemap_surface: 'img/tilemap_surface.png',
     tilemap_demo: 'img/tilemap_template.png'

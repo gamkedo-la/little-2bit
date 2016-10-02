@@ -129,6 +129,19 @@ function gameStart(levelId) {
     gameInitTime = Date.now();
     gameInterval = setInterval(gameLoop, 1000 / framesPerSecond);
   }
+
+  if (debug) {
+    gameCanvas.addEventListener('mouseup', explodeAt);
+
+    function explodeAt(event) {
+      var rect = gameCanvas.getBoundingClientRect();
+      var root = document.documentElement;
+      var mouseX = event.clientX - rect.left - root.scrollLeft;
+      var mouseY = event.clientY - rect.top - root.scrollTop;
+
+      ParticleList.explosion(mouseX, mouseY - 50);
+    }
+  }
 }
 
 function shakeScreen(amount) {
