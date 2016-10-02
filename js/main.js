@@ -91,9 +91,6 @@ function gameInitialize() {
         case KEY_P:
           debug_stop_camera = !debug_stop_camera;
           break;
-        case KEY_Z:
-          Grid.nextLevel();
-          break;
         default:
 //          console.log('Pressed', event.keyCode);
       }

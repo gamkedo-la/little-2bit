@@ -17,6 +17,8 @@ var Images = new (function() {
 
     corners: 'img/corners.png',
     energy_ball: 'img/enemy_shot.png',
+    turret_shot: 'img/turret-shot.png',
+    turret_shot_double: 'img/turret-shot-double.png',
     boss_ball: 'img/boss2_shot.png',
     ui_heart: 'img/ui-heart.png',
     ui_rocket: 'img/ui-rocket.png',
@@ -99,6 +101,8 @@ var Sounds = new (function() {
     bomb1: 'sfx/explosion1',
     bomb2: 'sfx/explosion1',
     energy_ball: 'sfx/energy ball',
+    turret_shot: 'sfx/energy ball',
+    turret_shot_double: 'sfx/energy ball',
     boss_ball: 'sfx/boss ball',
     countdown_advanced_enemy2: 'sfx/countdown advanced enemy2',
     advanced_enemy3_moves: 'sfx/advanced enemy3 moves',
