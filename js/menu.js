@@ -4,6 +4,7 @@ var Menu = new (function() {
   var buttons = [];
   var mouseX, mouseY;
   var menuLoop;
+  var music;
   var menuFps = 30;
   var starFieldLeftSide = 0;
 
@@ -37,6 +38,12 @@ var Menu = new (function() {
     Menu.active = true;
     MenuCredits.clear();
 
+    if (!music) {
+      music = new Audio('mus/title' + Sounds.audioFormat);
+      music.loop = true;
+    }
+    music.play();
+
     if (!menuLoop) {
       menuLoop = setInterval(draw, 1000 / menuFps);
     }
@@ -47,6 +54,8 @@ var Menu = new (function() {
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
+    music.pause();
+    music.fastSeek(0);
 
     if (menuLoop) {
       clearInterval(menuLoop);

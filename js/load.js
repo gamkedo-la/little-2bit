@@ -86,13 +86,13 @@ var Images = new (function() {
 })();
 
 var Sounds = new (function() {
-  var audioFormat = '.wav';
+  this.audioFormat = '.wav';
   var audio = new Audio();
   if (audio.canPlayType('audio/ogg')) {
-    audioFormat = '.ogg';
+    this.audioFormat = '.ogg';
   }
   else if (audio.canPlayType('audio/mp3')) {
-    audioFormat = '.mp3';
+    this.audioFormat = '.mp3';
   }
   
   var sounds = {
@@ -127,7 +127,7 @@ var Sounds = new (function() {
   this.initialize = function() {
     for (var key in sounds) {
       if (sounds.hasOwnProperty(key)) {
-        this[key] = new Sound(sounds[key] + audioFormat);
+        this[key] = new Sound(sounds[key] + this.audioFormat);
       }
     }
   };
