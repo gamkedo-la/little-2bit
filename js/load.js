@@ -104,8 +104,6 @@ var Sounds = new (function() {
     rocket: 'sfx/rocket 2',
     double_rocket: 'sfx/double rocket',
     homing_rocket: 'sfx/homing rocket',
-    bomb1: 'sfx/explosion1',
-    bomb2: 'sfx/explosion1',
     energy_ball: 'sfx/energy ball',
     turret_shot: 'sfx/energy ball',
     turret_shot_double: 'sfx/energy ball',
@@ -120,7 +118,7 @@ var Sounds = new (function() {
     explosion_advanced_enemy1: 'sfx/explosion1',
     explosion_advanced_enemy2: 'sfx/explosion1',
     explosion_advanced_enemy3: 'sfx/explosion2',
-    explosion_boss: 'sfx/explosion2',
+    explosion_boss: 'sfx/boss explosion',
     powerup_shield_pickup: 'sfx/shield power up',
     powerup_health_pickup: 'sfx/health power up',
     powerup_life_pickup: 'sfx/life power up'
