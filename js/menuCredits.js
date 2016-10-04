@@ -1,7 +1,5 @@
 var MenuCredits = new (function() {
   var creditsSeperator = '              ----------            ';
-  var title = [
-  ];
   var creditsSpacer = [
     '',
     '',
@@ -10,6 +8,10 @@ var MenuCredits = new (function() {
     ''
   ];
   var credits = [
+    'Journey of Little 2-bit',
+    '',
+    'A game made at Gamkedo.club',
+    '',
     'SpadXIII -- project lead, coding',
     'level design, life/health art',
     'Jeremy -- rocket art',
@@ -17,8 +19,8 @@ var MenuCredits = new (function() {
     'rocket, and space ship art',
     'flannelbeard -- player shields',
     'aciago -- turrets art',
-    'mickyzo -- weapon, enemy, and',
-    'player bump/hit/explosion sounds',
+    'mickyzo -- all sounds',
+    'thomaskresge -- menu music',
     'eandrade -- level design',
     'Chris DeLeon -- tile map code, stars',
     'parallax',
@@ -64,62 +66,52 @@ var MenuCredits = new (function() {
     '***INCOMING TRANSMISSION***',
     '',
     'You have saved my people from total',
-	'annihilation. You truly are a hero!',
-	'',
-	'',
-	'',
-	'',
-	'',
-	'The time for celebration is over...',
-	'',
-	'Although this battle is won, it',
-	'is but the first of many to come.',
-	'',
-	'The true battle, the battle for',
-	'the galaxy, is now upon us!',
-	'',
-	'We will need your services again soon.',
-	'',
+    'annihilation. You truly are a hero!',
+    '',
+    '',
+    '',
+    '',
+    '',
+    'The time for celebration is over...',
+    '',
+    'Although this battle is won, it',
+    'is but the first of many to come.',
+    '',
+    'The true battle, the battle for',
+    'the galaxy, is now upon us!',
+    '',
+    'We will need your services again soon.',
+    '',
     '-A friend',
     '',
     '***END TRANSMISSION***',
     '',
     '',
     creditsSeperator,
-    '',
-    '',
-    'Journey of Little 2-bit',
-    '',
-    'A game made at Gamkedo.club',
     ''
   ];
 
   var gameOverText = [
     '***INCOMING TRANSMISSION***',
     '',
-	'MEMORANDUM',
-	'',
-	'To: [Employee_11-16G]',
+    'MEMORANDUM',
+    '',
+    'To: [Employee_11-16G]',
     'From: Management',
     'Subject: Operation 2-bit--FAILED',
-	'',
+    '',
     'You are no longer considered',
-	'B.I.T. material, and as such, your',
-	'contract is hereby terminated.',
-	'',
-	'Please remember to choose B.I.T.',
-	'for all of your intergalactic ',
-	'transporting needs!',
-	'',
+    'B.I.T. material, and as such, your',
+    'contract is hereby terminated.',
+    '',
+    'Please remember to choose B.I.T.',
+    'for all of your intergalactic ',
+    'transporting needs!',
+    '',
     '***END TRANSMISSION***',
     '',
     '',
     creditsSeperator,
-    '',
-    '',
-    'Journey of Little 2-bit',
-    '',
-    'A game made at Gamkedo.club',
     ''
   ];
 
@@ -151,7 +143,7 @@ var MenuCredits = new (function() {
 
   this.setText = function(text) {
     menuCreditsText = [];
-    menuCreditsText = menuCreditsText.concat(title, text, creditsSpacer, credits, creditsSpacer, ['', '']);
+    menuCreditsText = menuCreditsText.concat(text, creditsSpacer, credits, creditsSpacer, ['', '']);
 
     this.showFirstLine();
   };
