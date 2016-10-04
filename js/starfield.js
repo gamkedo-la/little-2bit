@@ -1,4 +1,4 @@
-const STAR_COUNT = 200;
+const STAR_COUNT = 150;
 
 const CAM_SLIDE_MULTIPLIER = 0.15;
 
