@@ -26,9 +26,10 @@ var Boss = function(phase, list, initialX, initialY) {
   this.damage = 0;
   var maxYSpeed;
 
-  const DASH_TIMER = 75;
+  const DASH_TIMER = 60;
   const SHOOT_TIMER = 18;
   const SPAWN_TIMER = 26;
+  const SPAWN_SPECIAL = 5;
 
   var dashShaking = false;
   var dashing = false;
@@ -50,8 +51,8 @@ var Boss = function(phase, list, initialX, initialY) {
 
   var damages = {
     1: 9,
-    2: 12,
-    3: 15
+    2: 16,
+    3: 18
   };
 
   var maxYSpeeds = {
@@ -219,7 +220,7 @@ var Boss = function(phase, list, initialX, initialY) {
     if (spawnCountdown <= 0) {
       spawnCountdown = SPAWN_TIMER;
       spawnCount++;
-      if (spawnCount >= 5) {
+      if (spawnCount >= SPAWN_SPECIAL) {
         new AdvancedEnemy2(EnemyList, x - muzzlePosX, y - muzzlePosY);
         new AdvancedEnemy2(EnemyList, x - muzzlePosX, y + muzzlePosY);
         spawnCount = 0;
