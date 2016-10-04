@@ -55,7 +55,7 @@ var Menu = new (function() {
     gameCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
     music.pause();
-    music.fastSeek(0);
+    //music.fastSeek(0);
 
     if (menuLoop) {
       clearInterval(menuLoop);
