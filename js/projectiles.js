@@ -78,8 +78,8 @@ var ProjectileList = function() {
         var coords = projectiles[p].coords();
         var next = projectiles[p].step(.5);
         var bounds = [
-          { x: coords.x, y: coords.y},
-          { x: next.x, y: next.y + 1}
+          { x: coords.x, y: coords.y },
+          { x: next.x, y: next.y + 1 }
         ];
         if (checkCollisionBounds(bounds, objectBounds)) {
           projectiles[p].hitObject = object;
@@ -342,7 +342,7 @@ function Rocket(list, x, y, noSound) {
   var vx = 15;
   var vy = 0;
   var image = Images.ui_rocket;
-  var sound = !noSound ? 'rocket' : false
+  var sound = !noSound ? 'rocket' : false;
   var width = 40;
   var height = 24;
 
