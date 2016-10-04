@@ -17,6 +17,8 @@ var Images = new (function() {
 
     corners: 'img/corners.png',
     energy_ball: 'img/enemy_shot.png',
+    turret_shot: 'img/turret-shot.png',
+    turret_shot_double: 'img/turret-shot-double.png',
     boss_ball: 'img/boss2_shot.png',
     ui_heart: 'img/ui-heart.png',
     ui_rocket: 'img/ui-rocket.png',
@@ -43,6 +45,12 @@ var Images = new (function() {
 
     button_sound_on: 'img/button-sound-on.png',
     button_sound_off: 'img/button-sound-off.png',
+
+    explosion_shrapnel_1: 'img/particle-shrapnel-1.png',
+    explosion_flash_1: 'img/particle-flare-1.png',
+    explosion_flash_2: 'img/particle-flare-2.png',
+    explosion_flame_1: 'img/particle-flame-1.png',
+    explosion_flame_2: 'img/particle-flame-2.png',
 
     tilemap_cave: 'img/tilemap_cave.png',
     tilemap_demo: 'img/tilemap_template.png'
@@ -77,13 +85,13 @@ var Images = new (function() {
 })();
 
 var Sounds = new (function() {
-  var audioFormat = '.wav';
+  this.audioFormat = '.wav';
   var audio = new Audio();
   if (audio.canPlayType('audio/ogg')) {
-    audioFormat = '.ogg';
+    this.audioFormat = '.ogg';
   }
   else if (audio.canPlayType('audio/mp3')) {
-    audioFormat = '.mp3';
+    this.audioFormat = '.mp3';
   }
   
   var sounds = {
@@ -95,9 +103,9 @@ var Sounds = new (function() {
     rocket: 'sfx/rocket 2',
     double_rocket: 'sfx/double rocket',
     homing_rocket: 'sfx/homing rocket',
-    bomb1: 'sfx/explosion1',
-    bomb2: 'sfx/explosion1',
     energy_ball: 'sfx/energy ball',
+    turret_shot: 'sfx/energy ball',
+    turret_shot_double: 'sfx/energy ball',
     boss_ball: 'sfx/boss ball',
     countdown_advanced_enemy2: 'sfx/countdown advanced enemy2',
     advanced_enemy3_moves: 'sfx/advanced enemy3 moves',
@@ -109,7 +117,7 @@ var Sounds = new (function() {
     explosion_advanced_enemy1: 'sfx/explosion1',
     explosion_advanced_enemy2: 'sfx/explosion1',
     explosion_advanced_enemy3: 'sfx/explosion2',
-    explosion_boss: 'sfx/explosion2',
+    explosion_boss: 'sfx/boss explosion',
     powerup_shield_pickup: 'sfx/shield power up',
     powerup_health_pickup: 'sfx/health power up',
     powerup_life_pickup: 'sfx/life power up'
@@ -118,7 +126,7 @@ var Sounds = new (function() {
   this.initialize = function() {
     for (var key in sounds) {
       if (sounds.hasOwnProperty(key)) {
-        this[key] = new Sound(sounds[key] + audioFormat);
+        this[key] = new Sound(sounds[key] + this.audioFormat);
       }
     }
   };

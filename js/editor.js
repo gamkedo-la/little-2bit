@@ -47,7 +47,7 @@ var Editor = new (function() {
 
     console.log('Keys for the level editor:');
     console.table({
-      0: 'Clear level',
+      0: 'Clear level', // clears whole level of walls/enemies/power ups
       a: 'Move left',
       d: 'Move right',
       n: 'Append column', // adds new column to end of level
@@ -62,16 +62,19 @@ var Editor = new (function() {
       // moves up or down when the player gets near
       j: 'Enemy: Simple turret, advanced turret', // simple turret -
       // attaches to wall, shoots
-      // one direction, advanced turret - attachs to wall, always shoot at the
+      // one direction, advanced turret - attaches to wall, always shoot at the
       // player
+      k: 'Boss: boss 1, boss 2, boss 3', // boss 1 dashes towards player,
+      // boss 2 shoots energy balls, boss 3 spawns enemies. When killing boss 3,
+      // it transforms into boss 2, which when killed transforms into boss 1.
       y: 'Power up: laser, double laser, triple laser', // laser - default weapon
       // double laser - gives player ship two laser weapons, shoots straight
       // forward, triple laser - shotgun blast blaster with three beams
       u: 'Power up: rocket, double rocket, homing rocket', //
-      i: 'Powerups: shield' // simple shield powerup for the player ship,
+      i: 'Power up: shield' // simple shield power up for the player ship,
       // shield has 5 HP, 10
       // hits enemy weapons, 3 collisions with enemy ships negates shield,
-      // otherwise collisions with walls is instakill, for now.
+      // and a few collisions with walls.
     });
   };
 

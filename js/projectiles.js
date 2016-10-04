@@ -2,8 +2,17 @@ const COLLISION_CHECK_STEPS = 4;
 var ProjectileList = function() {
   var projectiles = [];
 
-  this.spawn = function(projectileClass, x, y, angle) {
-    new projectileClass(this, x, y, angle);
+  this.spawn = function() {
+    var projectileClass = arguments[0];
+    var args = Array.prototype.slice.call(arguments, 1);
+    args.unshift(this);
+    new (spawnWrapper(projectileClass, args));
+  };
+
+  var spawnWrapper = function(f, args) {
+    return function() {
+      f.apply(this, args);
+    };
   };
 
   this.push = function(projectile) {
@@ -224,7 +233,7 @@ const PROJECTILE_INFO = {
     uiImageName: 'ui_double_laser'
   },
   TripleLaser: {
-    rate: 10,
+    rate: 18,
     timeLimit: 15,
     uiImageName: 'ui_triple_laser'
   },
@@ -235,11 +244,11 @@ const PROJECTILE_INFO = {
   },
   DoubleRocket: {
     rate: 18,
-    timeLimit: 15,
+    timeLimit: 12,
     uiImageName: 'ui_double_rocket'
   },
   HomingRocket: {
-    rate: 13,
+    rate: 15,
     timeLimit: 10,
     uiImageName: 'ui_homing_rocket'
   },
@@ -248,8 +257,11 @@ const PROJECTILE_INFO = {
   EnergyBall: {
     rate: 32
   },
-  BossBall: {
+  TurretShot: {
     rate: 32
+  },
+  BossBall: {
+    rate: 28
   }
 };
 
@@ -313,7 +325,9 @@ DoubleLaser.prototype.constructor = DoubleLaser;
 function TripleLaser(list, x, y) {
   this._initialize = function() {
     new Laser(list, x, y, 0.4, true);
+    new Laser(list, x, y, 0.2, true);
     new Laser(list, x, y, 0, true);
+    new Laser(list, x, y, -0.2, true);
     new Laser(list, x, y, -0.4, true);
   };
 
@@ -381,7 +395,7 @@ function HomingRocket(list, x, y) {
 
   this._move = function(x, y) {
     var thisCoords = { x: x, y: y };
-    if (!target) {
+    if (!target || target.isReadyToRemove) {
       // Find a target
       target = EnemyList.findClosestEnemyInRange(thisCoords, targetRange);
     }
@@ -454,6 +468,44 @@ function EnergyBall(list, x, y, angle) {
 }
 EnergyBall.prototype = Object.create(ProjectileBase.prototype);
 EnergyBall.prototype.constructor = EnergyBall;
+
+function TurretShot(list, x, y, angle, singleShot) {
+  var damage = 0.5;
+  var blastRange = 0;
+  var speed = 8;
+  var vx = speed;
+  var vy = 0;
+  if (angle) {
+    vx = speed * Math.cos(angle);
+    vy = speed * Math.sin(angle);
+  }
+  var width = 11;
+  var height = 11;
+  var image = Images.turret_shot;
+  if (!singleShot) {
+    image = Images.turret_shot_double;
+    height = 25;
+  }
+
+  this._draw = function(frame, x, y, width, height) {
+    drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
+  };
+
+  this._explode = function(x, y) {
+    ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
+  };
+
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
+
+  if (!singleShot) {
+    Sounds.turret_shot_double.play();
+  }
+  else {
+    Sounds.turret_shot.play();
+  }
+}
+TurretShot.prototype = Object.create(ProjectileBase.prototype);
+TurretShot.prototype.constructor = TurretShot;
 
 function BossBall(list, x, y, angle) {
   var damage = 0.5;

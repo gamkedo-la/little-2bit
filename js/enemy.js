@@ -161,6 +161,7 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
 
   this.explode = function() {
     if (!this.isOutOfBounds) {
+      ParticleList.explosion(x, y);
       this._explode(x, y);
     }
   };
@@ -300,7 +301,6 @@ function SimpleEnemy(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_simple_enemy.play();
   };
 
@@ -344,7 +344,6 @@ function ShootingEnemy(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_shooting_enemy.play();
   };
 
@@ -368,26 +367,21 @@ ShootingEnemy.prototype.constructor = ShootingEnemy;
 function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, projectileClass, aimsAtShip) {
   // Set orientation
   var angle = 0;
-  var angleBody = 0;
   if (Grid.isSolidTileTypeAtCoords(initialX, initialY + GRID_HEIGHT)) {
     // Has solid beneath it, point up
     angle = 270;
-    angleBody = 0;
   }
   else if (Grid.isSolidTileTypeAtCoords(initialX - GRID_WIDTH, initialY)) {
     // Has solid on left side, point right
     angle = 0;
-    angleBody = 90;
   }
   else if (Grid.isSolidTileTypeAtCoords(initialX + GRID_WIDTH, initialY)) {
     // Has solid on right side, point left
     angle = 180;
-    angleBody = 270;
   }
   else if (Grid.isSolidTileTypeAtCoords(initialX, initialY - GRID_HEIGHT)) {
     // Has solid above it, point down
     angle = 90;
-    angleBody = 180;
   }
 
   var minAngle = (angle - 80);
@@ -402,7 +396,7 @@ function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, hei
   maxAngle *= DEC2RAD;
 
   angle *= DEC2RAD;
-  angleBody *= DEC2RAD;
+  var angleBody = angle;
 
   var halfWidth = width / 2;
   var halfHeight = height / 2;
@@ -469,7 +463,7 @@ function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, hei
 
   this._fireProjectile = function(x, y) {
     var muzzle = this.muzzle(x, y);
-    enemyProjectiles.spawn(projectileClass, muzzle.x, muzzle.y, angle);
+    enemyProjectiles.spawn(projectileClass, muzzle.x, muzzle.y, angle, aimsAtShip);
   };
 
   EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, projectileClass, angle);
@@ -488,11 +482,10 @@ function SimpleTurret(list, initialX, initialY) {
   var height = 40;
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_simple_turret.play();
   };
 
-  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, null, EnergyBall, false);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, null, TurretShot, false);
 }
 
 SimpleTurret.prototype = Object.create(TurretBase.prototype);
@@ -510,11 +503,10 @@ function AimingTurret(list, initialX, initialY) {
   var height = 40;
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_turret.play();
   };
 
-  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, EnergyBall, true);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, TurretShot, true);
 }
 
 AimingTurret.prototype = Object.create(TurretBase.prototype);
@@ -585,7 +577,6 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy1.play();
   };
 
@@ -668,7 +659,6 @@ function AdvancedEnemy2(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy2.play();
   };
 
@@ -775,7 +765,6 @@ function AdvancedEnemy3(list, initialX, initialY) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_BUBBLE, x, y, 360, 0, 20, 30);
     Sounds.explosion_advanced_enemy3.play();
   };
 

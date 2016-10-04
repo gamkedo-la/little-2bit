@@ -263,7 +263,7 @@ function PowerUpHealth(x, y) {
   var height = 24;
   var image = Images.powerUp_health;
 
-  var health = 6;
+  var health = 5;
 
   this._pickUp = function() {
     Sounds.powerup_health_pickup.play();
