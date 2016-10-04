@@ -137,6 +137,11 @@ var Boss = function(phase, list, initialX, initialY) {
     }
   };
 
+  this.bounce = function() {
+    dashing = false;
+    retreating = !dashing;
+  };
+
   this.explode = function() {
     ParticleList.explosion(x, y);
     Sounds.explosion_boss.play();

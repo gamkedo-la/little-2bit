@@ -72,6 +72,9 @@ var EnemyList = new (function() {
       if (!enemyList[i].isReadyToRemove && checkCollisionShapes(ship, enemyList[i])) {
         ship.doDamage(enemyList[i].damage);
         enemyList[i].doDamage(ship.damage);
+        if (enemyList[i].isBoss) {
+          enemyList[i].bounce();
+        }
       }
     }
   };
