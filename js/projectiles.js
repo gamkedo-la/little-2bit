@@ -347,8 +347,10 @@ function Rocket(list, x, y, noSound) {
   var sound = !noSound ? 'rocket' : false;
   var width = 40;
   var height = 24;
+  var halfWidth = width / 2;
 
   this._draw = function(frame, x, y, width, height) {
+    ParticleList.spawnParticles(PFX_SMOKE_SMALL, x - halfWidth, y, 165, 195, 3, 6);
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
@@ -383,6 +385,7 @@ function HomingRocket(list, x, y) {
   var sound = 'homing_rocket';
   var width = 40;
   var height = 24;
+  var halfWidth = width / 2;
 
   var targetRange = 180;
   var target = false;
@@ -410,6 +413,7 @@ function HomingRocket(list, x, y) {
   };
 
   this._draw = function(frame, x, y, width, height) {
+    ParticleList.spawnParticles(PFX_SMOKE_SMALL, x - halfWidth, y, 165, 195, 3, 6);
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height, angle);
 
     if (debug_draw_bounds) {

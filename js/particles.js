@@ -4,6 +4,7 @@ const PFX_ROCKET = 2;
 const PFX_ROCKET_BLAST = 3;
 const PFX_LASER = 4;
 const PFX_SMOKE = 5;
+const PFX_SMOKE_SMALL = 10;
 const PFX_BOUNCE = 6;
 const PFX_EXPLOSION_SHRAPNEL = 7;
 const PFX_EXPLOSION_FLASH = 8;
@@ -111,6 +112,27 @@ PFX_CONFIG[PFX_SMOKE] = {
   randomInitialSize: true,
   sizeDecay: 1.04,
   initialLifeTime: 30,
+  randomInitialLifeTime: true,
+  initialAngle: 180,
+  randomInitialAngle: true,
+  rotationSpeed: .05,
+  rotationDecay: 0.98,
+  initialAlpha: .9,
+  randomInitialAlpha: true,
+  alphaDecay: 0.95,
+  gravity: 0,
+  dieOnCollision: false,
+  image: 'particle_smoke'
+};
+
+PFX_CONFIG[PFX_SMOKE_SMALL] = {
+  initialSpeed: -5,
+  randomInitialSpeed: true,
+  speedDecay: 0.975,
+  initialSize: 0.7,
+  randomInitialSize: true,
+  sizeDecay: 1.06,
+  initialLifeTime: 10,
   randomInitialLifeTime: true,
   initialAngle: 180,
   randomInitialAngle: true,
