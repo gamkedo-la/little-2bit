@@ -162,11 +162,4 @@ var Sounds = new (function() {
       }
     };
   };
-
-  this.stopRewind = function(file) {
-    if (file) {
-      file.pause();
-      file.currentTime = 0;
-    }
-  };
 })();

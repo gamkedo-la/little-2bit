@@ -173,7 +173,9 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
       this._explode(x, y);
     }
 
-    Sounds.stopRewind(sound);
+    if (sound && sound.pause) {
+      sound.pause();
+    }
   };
 
   this.draw = function() {

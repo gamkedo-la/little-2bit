@@ -42,6 +42,7 @@ var Menu = new (function() {
       music = new Audio('mus/title' + Sounds.audioFormat);
       music.loop = true;
     }
+    music.currentTime = 0;
     music.play();
 
     if (!menuLoop) {
@@ -54,7 +55,7 @@ var Menu = new (function() {
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
-    Sounds.stopRewind(music);
+    music.pause();
 
     if (menuLoop) {
       clearInterval(menuLoop);
