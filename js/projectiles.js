@@ -114,12 +114,13 @@ var ProjectileList = function() {
   };
 };
 
-function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, image) {
+function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, image, sound) {
   this.isReadyToRemove = false;
   this.hitObject = false;
   this.isOutOfBounds = false;
   this.damage = damage;
   this.blastRange = blastRange;
+  sound = sound ? Sounds[sound].play() : false;
 
   var halfWidth = width / 2;
   var halfHeight = height / 2;
@@ -171,6 +172,8 @@ function ProjectileBase(list, x, y, vx, vy, width, height, damage, blastRange, i
     if (!this.isOutOfBounds) {
       this._explode(x, y);
     }
+
+    Sounds.stopRewind(sound);
   };
 
   this.draw = function() {
@@ -276,6 +279,7 @@ function Laser(list, x, y, angle, noSound) {
     vy = speed * Math.sin(angle);
   }
   var image = Images.ui_laser;
+  var sound = !noSound ? 'laser' : false;
   var width = 30;
   var height = 24;
 
@@ -300,11 +304,7 @@ function Laser(list, x, y, angle, noSound) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  if (!noSound) {
-    Sounds.laser.play();
-  }
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 Laser.prototype = Object.create(ProjectileBase.prototype);
 Laser.prototype.constructor = Laser;
@@ -331,9 +331,7 @@ function TripleLaser(list, x, y) {
     new Laser(list, x, y, -0.4, true);
   };
 
-  ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
-
-  Sounds.triple_laser.play();
+  ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0, 'triple_laser');
 }
 TripleLaser.prototype = Object.create(ProjectileBase.prototype);
 TripleLaser.prototype.constructor = TripleLaser;
@@ -344,6 +342,7 @@ function Rocket(list, x, y, noSound) {
   var vx = 15;
   var vy = 0;
   var image = Images.ui_rocket;
+  var sound = !noSound ? 'rocket' : false
   var width = 40;
   var height = 24;
 
@@ -352,15 +351,10 @@ function Rocket(list, x, y, noSound) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_ROCKET_BLAST, x, y, 0, 0, 1, 1);
-    ParticleList.spawnParticles(PFX_ROCKET, x, y, 360, 50, 10, 30);
+    ParticleList.explosion(x, y);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  if (!noSound) {
-    Sounds.rocket.play();
-  }
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 Rocket.prototype = Object.create(ProjectileBase.prototype);
 Rocket.prototype.constructor = Rocket;
@@ -371,9 +365,7 @@ function DoubleRocket(list, x, y) {
     new Rocket(list, x, y + 14, true);
   };
 
-  ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0);
-
-  Sounds.double_rocket.play();
+  ProjectileBase.call(this, list, x, y, 0, 0, 0, 0, 0, 0, 0, 'double_rocket');
 }
 DoubleRocket.prototype = Object.create(ProjectileBase.prototype);
 DoubleRocket.prototype.constructor = DoubleRocket;
@@ -386,6 +378,7 @@ function HomingRocket(list, x, y) {
   var vy = 0;
   var angle = 0;
   var image = Images.ui_homing_rocket;
+  var sound = 'homing_rocket';
   var width = 40;
   var height = 24;
 
@@ -427,13 +420,10 @@ function HomingRocket(list, x, y) {
   };
 
   this._explode = function(x, y) {
-    ParticleList.spawnParticles(PFX_ROCKET_BLAST, x, y, 0, 0, 1, 1);
-    ParticleList.spawnParticles(PFX_ROCKET, x, y, 0, 360, 10, 30);
+    ParticleList.explosion(x, y);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  Sounds.homing_rocket.play();
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 HomingRocket.prototype = Object.create(ProjectileBase.prototype);
 HomingRocket.prototype.constructor = HomingRocket;
@@ -451,6 +441,7 @@ function EnergyBall(list, x, y, angle) {
     vy = speed * Math.sin(angle);
   }
   var image = Images.energy_ball;
+  var sound = 'energy_ball';
   var width = 30;
   var height = 30;
 
@@ -462,9 +453,7 @@ function EnergyBall(list, x, y, angle) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  Sounds.energy_ball.play();
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 EnergyBall.prototype = Object.create(ProjectileBase.prototype);
 EnergyBall.prototype.constructor = EnergyBall;
@@ -482,6 +471,7 @@ function TurretShot(list, x, y, angle, singleShot) {
   var width = 11;
   var height = 11;
   var image = Images.turret_shot;
+  var sound = singleShot ? 'turret_shot' : 'turret_shot_double';
   if (!singleShot) {
     image = Images.turret_shot_double;
     height = 25;
@@ -495,14 +485,7 @@ function TurretShot(list, x, y, angle, singleShot) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  if (!singleShot) {
-    Sounds.turret_shot_double.play();
-  }
-  else {
-    Sounds.turret_shot.play();
-  }
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 TurretShot.prototype = Object.create(ProjectileBase.prototype);
 TurretShot.prototype.constructor = TurretShot;
@@ -518,6 +501,7 @@ function BossBall(list, x, y, angle) {
     vy = speed * Math.sin(angle);
   }
   var image = Images.boss_ball;
+  var sound = 'boss_ball';
   var width = 30;
   var height = 30;
 
@@ -529,9 +513,7 @@ function BossBall(list, x, y, angle) {
     ParticleList.spawnParticles(PFX_LASER, x, y, 360, 50, 2, 5);
   };
 
-  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image);
-
-  Sounds.boss_ball.play();
+  ProjectileBase.call(this, list, x, y, vx, vy, width, height, damage, blastRange, image, sound);
 }
 BossBall.prototype = Object.create(ProjectileBase.prototype);
 BossBall.prototype.constructor = BossBall;

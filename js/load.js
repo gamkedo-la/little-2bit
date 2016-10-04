@@ -53,6 +53,7 @@ var Images = new (function() {
     explosion_flame_2: 'img/particle-flame-2.png',
 
     tilemap_cave: 'img/tilemap_cave.png',
+    tilemap_surface: 'img/tilemap_surface.png',
     tilemap_demo: 'img/tilemap_template.png'
   };
 
@@ -135,12 +136,11 @@ var Sounds = new (function() {
     var timeOut = 8;
     var lastPlay = 0;
     var numSounds = 5;
-    var queue = [];
     var index = 0;
-    var file = new Audio(_file);
+    var queue = [new Audio(_file)];
 
-    for (var i = 0; i < numSounds; i++) {
-      queue[i] = file.cloneNode(false);
+    for (var i = 1; i < numSounds; i++) {
+      queue[i] = queue[0].cloneNode(false);
     }
 
     this.play = function() {
@@ -151,12 +151,22 @@ var Sounds = new (function() {
         lastPlay = Date.now();
         queue[index].currentTime = 0;
         queue[index].play();
+        var s = queue[index];
 
         index++;
         if (index >= numSounds) {
           index = 0;
         }
+
+        return s;
       }
     };
+  };
+
+  this.stopRewind = function(file) {
+    if (file) {
+      file.pause();
+      file.currentTime = 0;
+    }
   };
 })();
