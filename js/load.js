@@ -49,6 +49,7 @@ var Images = new (function() {
     explosion_shrapnel_1: 'img/particle-shrapnel-1.png',
     explosion_flash_1: 'img/particle-flare-1.png',
     explosion_flash_2: 'img/particle-flare-2.png',
+    explosion_flash_3: 'img/particle-flare-3.png',
     explosion_flame_1: 'img/particle-flame-1.png',
     explosion_flame_2: 'img/particle-flame-2.png',
 

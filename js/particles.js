@@ -196,7 +196,7 @@ PFX_CONFIG[PFX_EXPLOSION_FLASH] = {
   alphaDecay: 0.70,
   gravity: 0,
   dieOnCollision: false,
-  image: ['explosion_flash_1', 'explosion_flash_2']
+  image: ['explosion_flash_1', 'explosion_flash_2', 'explosion_flash_3']
 };
 
 PFX_CONFIG[PFX_EXPLOSION_FLAME] = {
