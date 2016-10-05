@@ -15,7 +15,7 @@ var MenuCredits = new (function() {
     'SpadXIII -- project lead, coding',
     'level design, life/health art',
     'Jeremy -- rocket art',
-    'cmarkle -- story text, energy ball,',
+    'Chris Markle -- story text, energy ball,',
     'rocket, and space ship art',
     'flannelbeard -- player shields',
     'aciago -- turrets art',
@@ -65,6 +65,9 @@ var MenuCredits = new (function() {
   var victoryText = [
     '***INCOMING TRANSMISSION***',
     '',
+	'You returned the cargo to its',
+	'rightful owner: B.I.T.',
+	'',
     'You have saved my people from total',
     'annihilation. You truly are a hero!',
     '',
