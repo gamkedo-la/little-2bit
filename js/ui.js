@@ -4,14 +4,13 @@ var UI = new (function() {
 
   var mouseX, mouseY;
 
-  var backgroundX = 0;
-
   var soundButton;
   var projectileImg;
   var center = {};
 
   this.toggleSound = function() {
     UI.sound = !UI.sound;
+    Menu.toggleMusic(UI.sound);
   };
 
   this.initialize = function() {
@@ -42,20 +41,18 @@ var UI = new (function() {
     }
   };
 
-  this.clear = function() {
-    uiContext.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
-  };
-
   this.draw = function() {
-    uiContext.drawImage(Images.stars, 0, 0);
+    soundButton.draw(this.sound);
+
+    if (Menu.active) {
+      return;
+    }
 
     uiContext.font = gameFontSmall;
     drawText(uiContext, 25, 25, '#fff', 'Level');
     uiContext.textAlign = 'right';
     drawText(uiContext, 150, 25, '#fff', (Grid.loadedLevelId + 1));
     uiContext.textAlign = 'left';
-
-    soundButton.draw(this.sound);
 
     // Projectile
     drawText(uiContext, 25, 45, '#fff', 'Weapon');

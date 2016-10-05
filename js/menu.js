@@ -19,8 +19,6 @@ var Menu = new (function() {
       activeButton = buttons[0];
     }
 
-    MenuCredits.initialize();
-
     Menu.activate();
   };
 
@@ -28,7 +26,6 @@ var Menu = new (function() {
     if (gameInterval) {
       clearInterval(gameInterval);
       gameInterval = undefined;
-      UI.clear();
     }
 
     gameCanvas.addEventListener('mousemove', mouseMove);
@@ -42,8 +39,7 @@ var Menu = new (function() {
       music = new Audio('mus/title' + Sounds.audioFormat);
       music.loop = true;
     }
-    music.currentTime = 0;
-    music.play();
+    this.toggleMusic(UI.sound);
 
     if (!menuLoop) {
       menuLoop = setInterval(draw, 1000 / menuFps);
@@ -55,11 +51,24 @@ var Menu = new (function() {
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
-    music.pause();
+    this.toggleMusic(false);
 
     if (menuLoop) {
       clearInterval(menuLoop);
       menuLoop = undefined;
+    }
+  };
+
+  this.toggleMusic = function(play) {
+    if (!Menu.active) {
+      return;
+    }
+    if (play) {
+      music.currentTime = 0;
+      music.play();
+    }
+    else {
+      music.pause();
     }
   };
 
@@ -76,7 +85,9 @@ var Menu = new (function() {
     }
 
     MenuCredits.draw();
-    drawBitmapCenteredWithRotation(gameContext, Images.corners, gameCanvas.width / 2, gameCanvas.height / 2);
+
+    UI.update();
+    UI.draw();
   };
 
   function keyDown(event) {

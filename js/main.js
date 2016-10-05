@@ -29,13 +29,19 @@ window.onload = function () {
   uiContext = uiCanvas.getContext('2d');
 
   Sounds.initialize();
-  Images.initialize(Menu.initialize);
+  Images.initialize(menuInitialize);
 };
+
+function menuInitialize() {
+  StarfieldList.initialize();
+  UI.initialize();
+  MenuCredits.initialize();
+  Menu.initialize();
+}
 
 function gameInitialize() {
   setupInput();
 
-  UI.initialize();
   Grid.initialize();
   Ship.initialize();
   Editor.initialize();
