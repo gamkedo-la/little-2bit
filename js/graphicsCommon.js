@@ -107,3 +107,28 @@ function drawTextHugeCentered(text) {
   gameContext.textAlign = 'center';
   drawText(gameContext, Grid.cameraPanX() + gameCanvas.width / 2, gameCanvas.height / 2, '#fff', text);
 }
+
+function drawTextBox(ctx, x, y, width, height) {
+  var cornerSize = 16;
+
+  ctx.beginPath();
+  ctx.moveTo(x + cornerSize, y);
+  ctx.quadraticCurveTo(x, y, x, y + cornerSize);
+
+  ctx.lineTo(x, y + height - cornerSize);
+  ctx.quadraticCurveTo(x, y + height, x + cornerSize, y + height);
+
+  ctx.lineTo(x + width - cornerSize, y + height);
+  ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - cornerSize);
+
+  ctx.lineTo(x + width, y + cornerSize);
+  ctx.quadraticCurveTo(x + width, y, x + width - cornerSize, y);
+
+  ctx.lineTo(x + cornerSize, y);
+
+  ctx.lineWidth = 4;
+  ctx.fillStyle = '#515151';
+  ctx.strokeStyle = '#878787';
+  ctx.stroke();
+  ctx.fill();
+}

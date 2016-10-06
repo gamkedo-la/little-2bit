@@ -477,13 +477,13 @@ var Grid = new (function() {
         this.drawTextBox(levels_complete_text[this.loadedLevelId], gameFont);
       }
       else if (statusText) {
-        this.drawTextBox(statusText, gameFontHuge);
+        this.drawTextBox(statusText, gameFontHuge, true);
       }
     }
   };
 
-  this.drawTextBox = function(text, font) {
-    var lineHeight = 26;
+  this.drawTextBox = function(text, font, noTextBox) {
+    var lineHeight = determineFontHeight(font);
     var numLines = 1;
     if (!isString(text)) {
       numLines = text.length;
@@ -505,7 +505,9 @@ var Grid = new (function() {
     var boxHeight = 40 + numLines * lineHeight;
 
     // Block out the stars behind the text for readability
-    drawFillRect(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight, '#000');
+    if (!noTextBox) {
+      drawTextBox(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight);
+    }
 
     if (numLines > 1) {
       textY -= lineHeight * Math.floor(numLines / 2);

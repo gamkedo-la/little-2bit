@@ -385,7 +385,7 @@ var Ship = new (function() {
   };
 
   this.draw = function() {
-    if (debug_editor) {
+    if (debug_editor || Grid.levelComplete()) {
       return;
     }
 
