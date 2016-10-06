@@ -196,7 +196,7 @@ PFX_CONFIG[PFX_EXPLOSION_FLASH] = {
   alphaDecay: 0.70,
   gravity: 0,
   dieOnCollision: false,
-  image: ['explosion_flash_1', 'explosion_flash_2', 'explosion_flash_3']
+  image: ['explosion_flash_1', 'explosion_flash_2', 'explosion_flash_3', 'explosion_flash_4']
 };
 
 PFX_CONFIG[PFX_EXPLOSION_FLAME] = {
@@ -214,7 +214,7 @@ PFX_CONFIG[PFX_EXPLOSION_FLAME] = {
   alphaDecay: 0.90,
   gravity: 0,
   dieOnCollision: false,
-  image: ['explosion_flame_1', 'explosion_flame_2']
+  image: ['explosion_flame_1', 'explosion_flame_2', 'explosion_flame_3', 'explosion_flame_4']
 };
 
 var ParticleList = new (function() {
