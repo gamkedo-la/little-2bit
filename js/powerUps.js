@@ -149,8 +149,8 @@ var brickTypePowerUps = [];
 
 brickTypePowerUps[POWERUP_ROCKET] = PowerUpRocket;
 function PowerUpRocket(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 50;
+  var height = 30;
   var image = Images.powerUp_rocket;
 
   this._pickUp = function() {
@@ -165,8 +165,8 @@ PowerUpRocket.prototype.constructor = PowerUpRocket;
 
 brickTypePowerUps[POWERUP_DOUBLE_ROCKET] = PowerUpDoubleRocket;
 function PowerUpDoubleRocket(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 67;
+  var height = 40;
   var image = Images.powerUp_double_rocket;
 
   this._pickUp = function() {
@@ -181,8 +181,8 @@ PowerUpDoubleRocket.prototype.constructor = PowerUpDoubleRocket;
 
 brickTypePowerUps[POWERUP_HOMING_ROCKET] = PowerUpHomingRocket;
 function PowerUpHomingRocket(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 50;
+  var height = 30;
   var image = Images.powerUp_homing_rocket;
 
   this._pickUp = function() {
@@ -210,8 +210,8 @@ function PowerUpLaser(x, y) {
 
 brickTypePowerUps[POWERUP_DOUBLE_LASER] = PowerUpDoubleLaser;
 function PowerUpDoubleLaser(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 67;
+  var height = 40;
   var image = Images.powerUp_double_laser;
 
   this._pickUp = function() {
@@ -226,8 +226,8 @@ PowerUpDoubleLaser.prototype.constructor = PowerUpDoubleLaser;
 
 brickTypePowerUps[POWERUP_TRIPLE_LASER] = PowerUpTripleLaser;
 function PowerUpTripleLaser(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 67;
+  var height = 40;
   var image = Images.powerUp_triple_laser;
 
   this._pickUp = function() {
