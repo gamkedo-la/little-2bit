@@ -323,7 +323,7 @@ var Ship = new (function() {
   };
 
   this.update = function() {
-    if (!Grid.isReady || debug_editor) {
+    if (!Grid.isReady || Grid.levelComplete() || debug_editor) {
       return;
     }
 

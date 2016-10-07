@@ -7,6 +7,7 @@ var Grid = new (function() {
   var COLS = 20;
   var ROWS = 15;
 
+  this.isStarted = false;
   this.isReady = false;
   var showIntroText = false;
   var showCompleteText = false;
@@ -99,6 +100,7 @@ var Grid = new (function() {
 
     camPanX = 0;
     Ship.reset();
+    this.isStarted = false;
     this.isReady = false;
 
     showIntroText = !!levels_intro_text[this.loadedLevelId];
@@ -290,7 +292,7 @@ var Grid = new (function() {
   };
 
   this.cameraSpeed = function() {
-    if (!this.isReady || debug_stop_camera) {
+    if (!this.isReady || !this.isStarted || debug_stop_camera) {
       return 0;
     }
 
@@ -307,7 +309,7 @@ var Grid = new (function() {
   };
 
   this.update = function() {
-    if (!this.isReady && !this.levelComplete()) {
+    if (!this.isReady && !this.isStarted && !this.levelComplete()) {
       if (showIntroText) {
         if (this.keyHeld && startTime < Date.now()) {
           showIntroText = false;
@@ -331,6 +333,7 @@ var Grid = new (function() {
         }
         if (startCountDown <= 0) {
           this.isReady = true;
+          this.isStarted = true;
           statusText = '';
         }
       }
@@ -365,7 +368,7 @@ var Grid = new (function() {
   };
 
   this.levelComplete = function() {
-    var isComplete = this.isAtEndOfLevel() && EnemyList.isEmpty();
+    var isComplete = this.isStarted && this.isAtEndOfLevel() && EnemyList.isEmpty();
 
     // Check if last powerup is picked up
     if (this.loadedLevelId == 0) {
