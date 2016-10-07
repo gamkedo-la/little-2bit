@@ -67,7 +67,7 @@ var UI = new (function() {
     // Lives-bar
     drawText(uiContext, 165, 25, '#fff', 'Lives');
     for (var l = 0; l < Ship.lives; l++) {
-      drawBitmapCenteredWithRotation(uiContext, Images.ui_heart, 245 + l * Images.ui_heart.width + 5, 18);
+      drawBitmapCenteredWithRotation(uiContext, Images.ui_life, 245 + l * Images.ui_life.width + 5, 18);
     }
 
     // Boss health

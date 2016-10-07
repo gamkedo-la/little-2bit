@@ -19,7 +19,7 @@ var Images = new (function() {
     turret_shot: 'img/turret-shot.png',
     turret_shot_double: 'img/turret-shot-double.png',
     boss_ball: 'img/boss2_shot.png',
-    ui_heart: 'img/ui-heart.png',
+    ui_life: 'img/ui-life.png',
     ui_rocket: 'img/ui-rocket.png',
     ui_double_rocket: 'img/ui-double-rocket.png',
     ui_homing_rocket: 'img/ui-homing-rocket.png',
