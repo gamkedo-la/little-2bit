@@ -28,8 +28,8 @@ var Boss = function(phase, list, initialX, initialY) {
 
   const DASH_TIMER = 60;
   const SHOOT_TIMER = 18;
-  const SPAWN_TIMER = 26;
-  const SPAWN_SPECIAL = 5;
+  const SPAWN_TIMER = 18;
+  const SPAWN_SPECIAL = 3;
 
   var dashShaking = false;
   var dashing = false;
@@ -61,12 +61,41 @@ var Boss = function(phase, list, initialX, initialY) {
     3: 2.5
   };
 
+  var shipLastY = -1;
+  var targetY = -1;
+  var hoverDistance = 80;
+
+  this.trackShipY = function(shipY) {
+    var dy = shipY - y;
+    if (dy != 0) {
+      y += sign(dy) * (Math.min(maxYSpeed, Math.abs(dy)));
+    }
+  };
+
+  this.hoverShipY = function(shipY) {
+    if (shipLastY != shipY) {
+      this.trackShipY(shipY);
+      if (y == shipY) {
+        shipLastY = shipY;
+        targetY = -1;
+      }
+    }
+    else if (targetY != -1 && y != targetY) {
+      this.trackShipY(targetY);
+    }
+    else {
+      targetY = shipY - hoverDistance + Math.floor(Math.random() * 2 * hoverDistance);
+    }
+  };
+
   this.update = function() {
     if (!dashing && !retreating) {
-      var shipCoords = Ship.coords();
-      var dy = shipCoords.y - y;
-      if (dy != 0) {
-        y += sign(dy) * (Math.min(maxYSpeed, Math.abs(dy)));
+      var shipY = Math.round(Ship.coords().y);
+      if (phase == 1) {
+        this.trackShipY(shipY);
+      }
+      else {
+        this.hoverShipY(shipY);
       }
     }
 
