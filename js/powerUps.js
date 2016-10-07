@@ -242,8 +242,8 @@ PowerUpTripleLaser.prototype.constructor = PowerUpTripleLaser;
 
 brickTypePowerUps[POWERUP_SHIELD] = PowerUpShield;
 function PowerUpShield(x, y) {
-  var width = 40;
-  var height = 24;
+  var width = 67;
+  var height = 40;
   var image = Images.powerUp_shield;
 
   this._pickUp = function() {
