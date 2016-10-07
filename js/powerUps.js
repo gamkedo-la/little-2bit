@@ -260,7 +260,7 @@ PowerUpShield.prototype.constructor = PowerUpShield;
 brickTypePowerUps[POWERUP_HEALTH] = PowerUpHealth;
 function PowerUpHealth(x, y) {
   var width = 40;
-  var height = 24;
+  var height = 40;
   var image = Images.powerUp_health;
 
   var health = 5;
@@ -279,7 +279,7 @@ PowerUpHealth.prototype.constructor = PowerUpHealth;
 brickTypePowerUps[POWERUP_LIFE] = PowerUpLife;
 function PowerUpLife(x, y) {
   var width = 40;
-  var height = 24;
+  var height = 40;
   var image = Images.powerUp_life;
 
   this._pickUp = function() {
