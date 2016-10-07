@@ -131,4 +131,9 @@ function drawTextBox(ctx, x, y, width, height) {
   ctx.strokeStyle = '#878787';
   ctx.stroke();
   ctx.fill();
+
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'right';
+  ctx.font = gameFontExtraSmall;
+  ctx.fillText('Press any key...', x + width - cornerSize, y + height - 10, width);
 }

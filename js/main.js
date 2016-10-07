@@ -6,6 +6,7 @@ var gameInitTime, gameTime;
 var gameFontHuge = '50pt Verdana';
 var gameFont = 'bold 20pt Verdana';
 var gameFontSmall = '16pt Verdana';
+var gameFontExtraSmall = '10pt Verdana';
 var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
 

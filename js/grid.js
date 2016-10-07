@@ -492,15 +492,12 @@ var Grid = new (function() {
       text = [text];
     }
 
-    gameContext.font = font;
-    gameContext.textBaseline = 'middle';
-    gameContext.textAlign = 'center';
-
     var textX = Grid.cameraPanX() + gameCanvas.width / 2;
     var textY = gameCanvas.height / 2;
 
     var t = text.slice();
     var longestLine = t.sort(function (a, b) { return b.length - a.length; })[0];
+    gameContext.font = font;
     var boxWidth = 40 + gameContext.measureText(longestLine).width;
     var boxHeight = 40 + numLines * lineHeight;
 
@@ -508,6 +505,10 @@ var Grid = new (function() {
     if (!noTextBox) {
       drawTextBox(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight);
     }
+
+    gameContext.font = font;
+    gameContext.textBaseline = 'middle';
+    gameContext.textAlign = 'center';
 
     if (numLines > 1) {
       textY -= lineHeight * Math.floor(numLines / 2);
