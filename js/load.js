@@ -1,6 +1,5 @@
 var Images = new (function() {
   var images = {
-    stars: 'img/stars.png',
     ship: 'img/player_ship.png',
     simple_enemy: 'img/simple_enemy.png',
     shooting_enemy: 'img/enemy_ship.png',
@@ -95,7 +94,7 @@ var Sounds = new (function() {
   if (audio.canPlayType('audio/ogg')) {
     this.audioFormat = '.ogg';
   }
-  
+
   var sounds = {
     ship_hit: 'sfx/2bit hit',
     shield_hit: 'sfx/shield hit',
