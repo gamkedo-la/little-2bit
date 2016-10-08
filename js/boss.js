@@ -192,7 +192,7 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   this.hotSpots = function() {
-    var hotSpotSize = (phase == 3) ? 15 : 10;
+    var hotSpotSize = (phase == 3) ? 20 : 15;
     return [
       [
         { x: x - muzzlePosX + 15, y: y - muzzlePosY - hotSpotSize },
