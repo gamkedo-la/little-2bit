@@ -47,11 +47,11 @@ var Menu = new (function() {
   };
 
   this.deactivate = function() {
+    this.toggleMusic(false);
     Menu.active = false;
     gameCanvas.removeEventListener('mousemove', mouseMove);
     gameCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
-    this.toggleMusic(false);
 
     if (menuLoop) {
       clearInterval(menuLoop);
