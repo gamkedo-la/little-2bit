@@ -14,6 +14,7 @@ var Images = new (function() {
     boss1: 'img/boss-1.png',
     boss2: 'img/boss-2.png',
     boss3: 'img/boss-3.png',
+    boss3_hotspot_glow: 'img/boss-3-hotspot-glow.png',
 
     energy_ball: 'img/enemy_shot.png',
     turret_shot: 'img/turret-shot.png',

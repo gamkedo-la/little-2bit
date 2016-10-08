@@ -9,6 +9,8 @@ const PFX_BOUNCE = 6;
 const PFX_EXPLOSION_SHRAPNEL = 7;
 const PFX_EXPLOSION_FLASH = 8;
 const PFX_EXPLOSION_FLAME = 9;
+const PFX_HOTSPOT_GLOW = 11;
+const PFX_HOTSPOT_GLOW_SMALL = 12;
 
 var PFX_CONFIG = [];
 PFX_CONFIG[PFX_TYPE] = {
@@ -217,6 +219,32 @@ PFX_CONFIG[PFX_EXPLOSION_FLAME] = {
   image: ['explosion_flame_1', 'explosion_flame_2', 'explosion_flame_3', 'explosion_flame_4']
 };
 
+PFX_CONFIG[PFX_HOTSPOT_GLOW] = {
+  initialSpeed: 0,
+  initialSize: 1,
+  sizeDecay: 0.97,
+  initialLifeTime: 8,
+  rotationSpeed: 0,
+  initialAlpha: 0.6,
+  alphaDecay: 0.90,
+  gravity: 0,
+  dieOnCollision: false,
+  image: 'boss3_hotspot_glow'
+};
+
+PFX_CONFIG[PFX_HOTSPOT_GLOW_SMALL] = {
+  initialSpeed: 0,
+  initialSize: 5,
+  sizeDecay: 1.08,
+  initialLifeTime: 6,
+  rotationSpeed: 0,
+  initialAlpha: 0.6,
+  alphaDecay: 0.90,
+  gravity: 0,
+  dieOnCollision: false,
+  color: '#339dfa'
+};
+
 var ParticleList = new (function() {
   var particleList = [];
 
@@ -235,7 +263,15 @@ var ParticleList = new (function() {
     this.spawnParticles(PFX_EXPLOSION_FLASH, x, y, 0, 360, 1, 2);
   };
 
+  this.push = function(particle) {
+    particleList.push(particle);
+  };
+
   this.spawnParticles = function(type, x, y, directionAngleMin, directionAngleMax, minQuantity, maxQuantity) {
+    this.createParticles(this, type, x, y, directionAngleMin, directionAngleMax, minQuantity, maxQuantity);
+  };
+
+  this.createParticles = function(list, type, x, y, directionAngleMin, directionAngleMax, minQuantity, maxQuantity) {
     if (!PFX_CONFIG[type]) {
       return;
     }
@@ -317,11 +353,11 @@ var ParticleList = new (function() {
         }
       }
 
-      particleList.push(particle);
+      list.push(particle);
     }
   };
 
-  var updateParticle = function(particle) {
+  this.updateParticle = function(particle) {
     particle.lifeTime--;
 
     if (particle.sizeDecay) {
@@ -355,7 +391,7 @@ var ParticleList = new (function() {
     particle.y += particle.speedY;
   };
 
-  var drawParticle = function(particle) {
+  this.drawParticle = function(particle) {
     if (particle.alpha < 1) {
       gameContext.save();
       gameContext.globalAlpha = particle.alpha;
@@ -373,7 +409,7 @@ var ParticleList = new (function() {
 
   this.update = function() {
     for (var i = particleList.length - 1; i >= 0; i--) {
-      updateParticle(particleList[i]);
+      this.updateParticle(particleList[i]);
       if (particleList[i].isReadyToRemove) {
         particleList.splice(i, 1);
       }
@@ -382,7 +418,7 @@ var ParticleList = new (function() {
 
   this.draw = function() {
     for (var i = 0; i < particleList.length; i++) {
-      drawParticle(particleList[i]);
+      this.drawParticle(particleList[i]);
     }
   };
 })();

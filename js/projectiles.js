@@ -87,7 +87,7 @@ var ProjectileList = function() {
       }
 
       if (projectiles[p].hitObject) {
-        projectiles[p].hitObject.doDamage(projectiles[p].damage);
+        projectiles[p].hitObject.doDamage(projectiles[p].damage, projectiles[p]);
         projectiles[p].isReadyToRemove = true;
       }
     }

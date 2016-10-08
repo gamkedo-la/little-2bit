@@ -42,6 +42,10 @@ var Boss = function(phase, list, initialX, initialY) {
   var spawnCountdown = SPAWN_TIMER;
   var spawnCount = 0;
 
+  const HOTSPOT_TIMER = 30;
+  var hotSpotTimeout = HOTSPOT_TIMER;
+  var glowParticles = [];
+
   // @todo tweak!
   var healths = {
     1: 100,
@@ -58,17 +62,19 @@ var Boss = function(phase, list, initialX, initialY) {
   var maxYSpeeds = {
     1: 4,
     2: 3.5,
-    3: 2.5
+    3: 2
   };
 
   var shipLastY = -1;
   var targetY = -1;
   var hoverDistance = 80;
+  var speedY = 0;
 
   this.trackShipY = function(shipY) {
     var dy = shipY - y;
     if (dy != 0) {
-      y += sign(dy) * (Math.min(maxYSpeed, Math.abs(dy)));
+      speedY = sign(dy) * (Math.min(maxYSpeed, Math.abs(dy)));
+      y += speedY;
     }
   };
 
@@ -110,6 +116,25 @@ var Boss = function(phase, list, initialX, initialY) {
         this.updatePhase3();
         break;
     }
+
+    for (var p = glowParticles.length - 1; p >= 0; p--) {
+      glowParticles[p].y += speedY;
+      ParticleList.updateParticle(glowParticles[p]);
+      if (glowParticles[p].isReadyToRemove) {
+        glowParticles.splice(p, 1);
+      }
+    }
+
+    if (phase > 1) {
+      hotSpotTimeout--;
+      if (hotSpotTimeout == 0) {
+        var type = (phase == 3) ? PFX_HOTSPOT_GLOW : PFX_HOTSPOT_GLOW_SMALL;
+        ParticleList.createParticles(glowParticles, type, x - muzzlePosX + 5, y + muzzlePosY - 3, 0, 0, 1);
+        ParticleList.createParticles(glowParticles, type, x - muzzlePosX + 5, y - muzzlePosY + 3, 180, 180, 1);
+        ParticleList.createParticles(glowParticles, PFX_HOTSPOT_GLOW_SMALL, x - halfWidth, y, 0, 0, 1);
+        hotSpotTimeout = HOTSPOT_TIMER;
+      }
+    }
   };
 
   this.switchPhase = function(_phase) {
@@ -120,8 +145,8 @@ var Boss = function(phase, list, initialX, initialY) {
     thirdWidth = currentImage.width / 3;
     quarterWidth = currentImage.width / 4;
     halfHeight = currentImage.height / 2;
-    muzzlePosX = (_phase == 3) ? 43 : 29;
-    muzzlePosY = (_phase == 3) ? 80 : 40;
+    muzzlePosX = (_phase == 3) ? 43 : 32;
+    muzzlePosY = (_phase == 3) ? 80 : 46;
     this.health = healths[phase];
     this.maxHealth = healths[phase];
     this.damage = damages[phase];
@@ -131,6 +156,9 @@ var Boss = function(phase, list, initialX, initialY) {
     dashCountdown = DASH_TIMER;
     shootCountdown = SHOOT_TIMER;
     spawnCountdown = SPAWN_TIMER;
+
+    glowParticles = [];
+    hotSpotTimeout = HOTSPOT_TIMER;
   };
   this.switchPhase(phase);
 
@@ -144,17 +172,66 @@ var Boss = function(phase, list, initialX, initialY) {
   };
 
   this.bounds = function() {
+    if (phase == 3) {
+      return [
+        { x: x - halfWidth, y: y },
+        { x: x - 10, y: y + halfHeight },
+        { x: x + quarterWidth, y: y + halfHeight },
+        { x: x + quarterWidth, y: y },
+        { x: x + quarterWidth, y: y - halfHeight },
+        { x: x - 10, y: y - halfHeight }
+      ];
+    }
+
     return [
       { x: x - halfWidth, y: y },
-      { x: x - thirdWidth, y: y + halfHeight },
       { x: x + quarterWidth, y: y + halfHeight },
       { x: x + quarterWidth, y: y },
-      { x: x + quarterWidth, y: y - halfHeight },
-      { x: x - thirdWidth, y: y - halfHeight }
+      { x: x + quarterWidth, y: y - halfHeight }
     ];
   };
 
-  this.doDamage = function(_damage) {
+  this.hotSpots = function() {
+    var hotSpotSize = (phase == 3) ? 15 : 10;
+    return [
+      [
+        { x: x - muzzlePosX + 15, y: y - muzzlePosY - hotSpotSize },
+        { x: x - muzzlePosX - 15, y: y - muzzlePosY - hotSpotSize },
+        { x: x - muzzlePosX - 15, y: y - muzzlePosY + hotSpotSize },
+        { x: x - muzzlePosX + 15, y: y - muzzlePosY + hotSpotSize }
+      ],
+      [
+        { x: x - muzzlePosX + 15, y: y + muzzlePosY - hotSpotSize },
+        { x: x - muzzlePosX - 15, y: y + muzzlePosY - hotSpotSize },
+        { x: x - muzzlePosX - 15, y: y + muzzlePosY + hotSpotSize },
+        { x: x - muzzlePosX + 15, y: y + muzzlePosY + hotSpotSize }
+      ],
+      [
+        {x: x - halfWidth + 15, y: y - hotSpotSize },
+        {x: x - halfWidth - 15, y: y - hotSpotSize },
+        {x: x - halfWidth - 15, y: y + hotSpotSize },
+        {x: x - halfWidth + 15, y: y + hotSpotSize }
+      ]
+    ];
+  };
+
+  this.doDamage = function(_damage, projectile) {
+    if (projectile && phase > 1) {
+      // Check impact in vulnerable spots.
+      var hasHit = false;
+      var hotSpots = this.hotSpots();
+      for (var h = 0; h < hotSpots.length; h++) {
+        if (checkCollisionBounds(projectile.bounds(), hotSpots[h])) {
+          hasHit = true;
+          break;
+        }
+      }
+
+      if (!hasHit) {
+        return;
+      }
+    }
+
     this.health -= _damage;
     if (this.health <= 0) {
       phase--;
@@ -188,6 +265,11 @@ var Boss = function(phase, list, initialX, initialY) {
       offsetX = Math.random() * dashShake - dashShake * 0.5;
       offsetY = Math.random() * dashShake - dashShake * 0.5;
     }
+
+    for (var p = glowParticles.length - 1; p >= 0; p--) {
+      ParticleList.drawParticle(glowParticles[p]);
+    }
+
     drawBitmapCenteredWithRotation(gameContext, currentImage, x + offsetX, y + offsetY);
 
     if (debug_draw_bounds) {
@@ -196,7 +278,17 @@ var Boss = function(phase, list, initialX, initialY) {
         drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#ff0');
       }
       b.push(b[0]);
-      drawLines(gameContext, 'yellow', b);
+      drawLines(gameContext, '#ff0', b);
+
+      var h = this.hotSpots();
+      for (var d = 0; d < h.length; d++) {
+        b = h[d];
+        for (c = 0; c < b.length; c++) {
+          drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#0f0');
+        }
+        b.push(b[0]);
+        drawLines(gameContext, '#0f0', b);
+      }
     }
   };
 
