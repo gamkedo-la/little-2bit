@@ -90,13 +90,10 @@ var Images = new (function() {
 })();
 
 var Sounds = new (function() {
-  this.audioFormat = '.wav';
+  this.audioFormat = '.mp3';
   var audio = new Audio();
   if (audio.canPlayType('audio/ogg')) {
     this.audioFormat = '.ogg';
-  }
-  else if (audio.canPlayType('audio/mp3')) {
-    this.audioFormat = '.mp3';
   }
   
   var sounds = {
