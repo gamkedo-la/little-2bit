@@ -124,20 +124,30 @@ var Sounds = new (function() {
     powerup_life_pickup: 'sfx/life power up'
   };
 
-  this.initialize = function() {
+  this.initialize = function(callback) {
+    var numToLoad = Object.keys(sounds).length;
     for (var key in sounds) {
       if (sounds.hasOwnProperty(key)) {
-        this[key] = new Sound(sounds[key] + this.audioFormat);
+        this[key] = new Sound(sounds[key] + this.audioFormat, doneLoading);
+      }
+    }
+
+    function doneLoading() {
+      numToLoad--;
+      if (numToLoad == 0) {
+        callback();
       }
     }
   };
 
-  var Sound = function(_file) {
+  var Sound = function(_file, callback) {
     var timeOut = 8;
     var lastPlay = 0;
     var numSounds = 5;
     var index = 0;
-    var queue = [new Audio(_file)];
+    var file = new Audio(_file);
+    file.addEventListener('canplaythrough', callback);
+    var queue = [file];
 
     for (var i = 1; i < numSounds; i++) {
       queue[i] = queue[0].cloneNode(false);

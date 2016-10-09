@@ -32,8 +32,9 @@ window.onload = function () {
   uiCanvas = document.getElementById('uiCanvas');
   uiContext = uiCanvas.getContext('2d');
 
-  Sounds.initialize();
-  Images.initialize(menuInitialize);
+  Sounds.initialize(function() {
+    Images.initialize(menuInitialize);
+  });
 };
 
 function menuInitialize() {
