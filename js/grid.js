@@ -77,6 +77,7 @@ var Grid = new (function() {
     var resetLevel = (!this.loadedLevel);
     this.loadedLevel = _level;
 
+    statusText = '';
     showIntroText = !!levels_intro_text[this.loadedLevelId];
     showCompleteText = !!levels_complete_text[this.loadedLevelId];
 
@@ -103,6 +104,7 @@ var Grid = new (function() {
     this.isStarted = false;
     this.isReady = false;
 
+    statusText = '';
     showIntroText = !!levels_intro_text[this.loadedLevelId];
     showCompleteText = !!levels_complete_text[this.loadedLevelId];
 
