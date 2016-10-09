@@ -158,6 +158,11 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
   };
 
   this.doDamage = function(amount) {
+    if (this._doDamage) {
+      this._doDamage(amount);
+      return;
+    }
+
     health -= amount;
     this.isReadyToRemove = (health <= 0);
   };
@@ -606,7 +611,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
   var angle = Math.PI;
   var rotationEase = .3;
   var isExploding = false;
-  var damageRange = 50;
+  var damageRange = 90;
   var explodeRange = 80;
   var explodeShake = 1;
   var explodeTimer = 15;
@@ -622,6 +627,16 @@ function AdvancedEnemy2(list, initialX, initialY) {
       { x: x + halfWidth, y: y },
       { x: x - eighthWidth, y: y - halfHeight }
     ];
+  };
+
+  this._doDamage = function(amount) {
+    // Do not take damage on the last 8 countdown frames
+    if (isExploding && explodeTimer < 8) {
+      return;
+    }
+
+    health -= amount;
+    this.isReadyToRemove = (health <= 0);
   };
 
   this._update = function(x, y) {

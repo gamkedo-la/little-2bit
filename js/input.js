@@ -86,3 +86,11 @@ function keySet(event, setTo) {
     Ship.keyHeld = setTo;
   }
 }
+
+function preventSpacebarScroll(event) {
+  if (event.keyCode == KEY_SPACE) {
+    event.preventDefault();
+  }
+}
+document.addEventListener('keydown', preventSpacebarScroll);
+document.addEventListener('keyup', preventSpacebarScroll);
