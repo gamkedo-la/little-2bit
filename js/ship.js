@@ -3,9 +3,10 @@ const MAXLIVES = 6;
 const MAXHEALTH = 20;
 const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
-const BOUNCE_BACK_TIME = 10;
+const BOUNCE_BACK_TIME = 6;
 const BOUNCE_DAMAGE = 1;
 const VELOCITY_DECAY = 0.8;
+const VELOCITY_GAIN = 0.3;
 
 const SHIELD_LIFE_AMOUNT = 5;
 const SHIELD_ANIMATION = 3;
@@ -273,20 +274,20 @@ var Ship = new (function() {
     var isNotBouncing = (this.bounceBackCountdown <= 0);
 
     if (isNotBouncing && this.keyHeld_N) {
-      velocity_y = -this.speedY;
+      velocity_y += (-this.speedY - velocity_y) * VELOCITY_GAIN;
     }
     else if (isNotBouncing && this.keyHeld_S) {
-      velocity_y = this.speedY;
+      velocity_y += (this.speedY - velocity_y) * VELOCITY_GAIN;
     }
     else {
       velocity_y *= VELOCITY_DECAY;
     }
 
     if (isNotBouncing && this.keyHeld_W) {
-      velocity_x = -this.speedX;
+      velocity_x += (-this.speedX- velocity_x) * VELOCITY_GAIN;
     }
     else if (isNotBouncing && this.keyHeld_E) {
-      velocity_x = this.speedX;
+      velocity_x += (this.speedX - velocity_x) * VELOCITY_GAIN;
     }
     else {
       velocity_x *= VELOCITY_DECAY;

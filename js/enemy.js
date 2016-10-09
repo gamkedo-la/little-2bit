@@ -606,8 +606,8 @@ function AdvancedEnemy2(list, initialX, initialY) {
   var angle = Math.PI;
   var rotationEase = .3;
   var isExploding = false;
+  var damageRange = 50;
   var explodeRange = 80;
-  var explodeRangeSquared = explodeRange * explodeRange;
   var explodeShake = 1;
   var explodeTimer = 15;
 
@@ -627,18 +627,20 @@ function AdvancedEnemy2(list, initialX, initialY) {
   this._update = function(x, y) {
     var thisCoords = { x: x, y: y };
     var shipCoords = Ship.coords();
-    var distance = distanceBetweenPointsSquared(thisCoords, shipCoords);
+    var distance = distanceBetweenPoints(thisCoords, shipCoords);
 
     if (isExploding) {
       if (explodeTimer-- <= 0) {
-        Ship.doDamage(Math.round(damage * (explodeRangeSquared / distance) * 10) / 10);
+        if (distance < damageRange) {
+          Ship.doDamage(Math.round(damage * (explodeRange / distance) * 10) / 10);
+        }
         this.isReadyToRemove = true;
       }
       return;
     }
 
     // Check distance to player
-    isExploding = (explodeRangeSquared >= distance);
+    isExploding = (explodeRange >= distance);
 
     // Move towards player
     var newVs = rotateToTarget(vx, vy, speed, rotationEase, shipCoords, { x: x, y: y });
@@ -679,6 +681,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
 
     if (debug_draw_bounds) {
       drawStrokeCircle(gameContext, x, y, explodeRange, '#f00');
+      drawStrokeCircle(gameContext, x, y, damageRange, '#ff0');
     }
   };
 

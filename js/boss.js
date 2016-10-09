@@ -28,8 +28,7 @@ var Boss = function(phase, list, initialX, initialY) {
 
   const DASH_TIMER = 60;
   const SHOOT_TIMER = 18;
-  const SPAWN_TIMER = 18;
-  const SPAWN_SPECIAL = 3;
+  const SPAWN_TIMER = 40;
 
   var dashShaking = false;
   var dashing = false;
@@ -340,15 +339,8 @@ var Boss = function(phase, list, initialX, initialY) {
     spawnCountdown--;
     if (spawnCountdown <= 0) {
       spawnCountdown = SPAWN_TIMER;
-      spawnCount++;
-      if (spawnCount >= SPAWN_SPECIAL) {
-        new AdvancedEnemy2(EnemyList, x - muzzlePosX, y - muzzlePosY);
-        new AdvancedEnemy2(EnemyList, x - muzzlePosX, y + muzzlePosY);
-        spawnCount = 0;
-      }
-      else {
-        new SimpleEnemy(EnemyList, x - muzzlePosX, y);
-      }
+      new AdvancedEnemy2(EnemyList, x - muzzlePosX, y - muzzlePosY);
+      new AdvancedEnemy2(EnemyList, x - muzzlePosX, y + muzzlePosY);
     }
   };
 

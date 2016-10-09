@@ -29,6 +29,7 @@ var MenuCredits = new (function() {
     'play testing',
     'Ashleigh Morris -- page styling, weapons art',
     'power ups, turret projectile art',
+    'Nicholas Polchies -- play testing',
     ''
   ];
 
