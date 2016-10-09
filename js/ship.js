@@ -416,9 +416,6 @@ var Ship = new (function() {
 
       this.drawShield();
     }
-    else {
-      drawTextHugeCentered('Oh noes!?');
-    }
 
     if (debug_draw_bounds) {
       var b = this.bounds();

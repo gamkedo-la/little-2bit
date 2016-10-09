@@ -100,9 +100,6 @@ var EnemyList = new (function() {
   };
 
   this.draw = function() {
-    if (!Grid.isReady) {
-      return;
-    }
     for (var i = 0; i < enemyList.length; i++) {
       enemyList[i].draw();
     }
