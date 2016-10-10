@@ -28,8 +28,8 @@ var Menu = new (function() {
       gameInterval = undefined;
     }
 
-    gameCanvas.addEventListener('mousemove', mouseMove);
-    gameCanvas.addEventListener('mouseup', mouseReleased);
+    drawCanvas.addEventListener('mousemove', mouseMove);
+    drawCanvas.addEventListener('mouseup', mouseReleased);
     document.addEventListener('keydown', keyDown);
 
     Menu.active = true;
@@ -49,8 +49,8 @@ var Menu = new (function() {
   this.deactivate = function() {
     this.toggleMusic(false);
     Menu.active = false;
-    gameCanvas.removeEventListener('mousemove', mouseMove);
-    gameCanvas.removeEventListener('mouseup', mouseReleased);
+    drawCanvas.removeEventListener('mousemove', mouseMove);
+    drawCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
 
     if (menuLoop) {
@@ -88,6 +88,8 @@ var Menu = new (function() {
 
     UI.update();
     UI.draw();
+		
+		redrawCanvas();
   };
 
   function keyDown(event) {
@@ -122,10 +124,10 @@ var Menu = new (function() {
   }
 
   function mouseMove(event) {
-    var rect = gameCanvas.getBoundingClientRect();
+    var rect = drawCanvas.getBoundingClientRect();
     var root = document.documentElement;
-    mouseX = event.clientX - rect.left - root.scrollLeft;
-    mouseY = event.clientY - rect.top - root.scrollTop;
+    mouseX = (event.clientX - rect.left - root.scrollLeft)/drawScale;
+    mouseY = (event.clientY - rect.top - uiCanvas.height * drawScale - root.scrollTop)/drawScale;
   }
 
   function mouseReleased() {

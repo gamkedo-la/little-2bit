@@ -20,14 +20,14 @@ var UI = new (function() {
 
     soundButton = new UIButton(uiCanvas.width - 20, uiCanvas.height / 2, Images.button_sound_on, Images.button_sound_off, UI.toggleSound);
 
-    uiCanvas.addEventListener('mouseup', mouseReleased);
+	  drawCanvas.addEventListener('mouseup', mouseReleased);
   };
 
   function mouseReleased(event) {
-    var rect = uiCanvas.getBoundingClientRect();
+    var rect = drawCanvas.getBoundingClientRect();
     var root = document.documentElement;
-    mouseX = event.clientX - rect.left - root.scrollLeft;
-    mouseY = event.clientY - rect.top - root.scrollTop;
+    mouseX = (event.clientX - rect.left - root.scrollLeft)/drawScale;
+    mouseY = (event.clientY - rect.top - root.scrollTop)/drawScale;
 
     soundButton.checkClick(mouseX, mouseY);
     event.preventDefault();
