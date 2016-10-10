@@ -10,7 +10,7 @@ var MenuCredits = new (function() {
   var credits = [
     'Journey of Little 2-bit',
     '',
-    'A game made at Gamkedo.club',
+    'A game made at Gamkedo.Club',
     '',
     'SpadXIII -- project lead, coding',
     'level design, life/health art',
@@ -29,7 +29,7 @@ var MenuCredits = new (function() {
     'play testing',
     'Ashleigh Morris -- page styling, weapons art',
     'power ups, turret projectile art',
-    'Nicholas Polchies -- play testing',
+    'Nicholas Polchies -- canvas scaling, play testing',
     ''
   ];
 
