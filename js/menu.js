@@ -18,6 +18,10 @@ var Menu = new (function() {
       activeButton = buttons[0];
     }
 
+    if (!music) {
+      music = new Audio('mus/title' + Sounds.audioFormat);
+      music.loop = true;
+    }
     Menu.activate();
   };
 
@@ -34,10 +38,6 @@ var Menu = new (function() {
     Menu.active = true;
     MenuCredits.clear();
 
-    if (!music) {
-      music = new Audio('mus/title' + Sounds.audioFormat);
-      music.loop = true;
-    }
     this.toggleMusic(UI.sound);
 
     if (!menuLoop) {

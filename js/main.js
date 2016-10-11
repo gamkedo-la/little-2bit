@@ -40,8 +40,9 @@ window.onload = function () {
   drawCanvas = document.getElementById('drawCanvas');
   drawContext = drawCanvas.getContext('2d');
 
-  Sounds.initialize();
-  Images.initialize(menuInitialize);
+  Sounds.initialize(function() {
+    Images.initialize(menuInitialize);
+  });
 	
 	initDrawingCanvas();
 	resizeWindow();
