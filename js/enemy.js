@@ -33,7 +33,7 @@ var EnemyList = new (function() {
     for (var i = 0; i < enemyList.length; i++) {
       if (enemyList[i].isBoss) {
         var b = enemyList[i].boundingBox();
-        if (b.right < levelInfo.rightBound) {
+        if (b.right - 20 < levelInfo.rightBound) {
           return enemyList[i];
         }
       }
