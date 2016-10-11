@@ -5,7 +5,7 @@ const SHIP_FRAME_DELAY = 2;
 const SHIP_DEFAULT_PROJECTILE = Laser;
 const BOUNCE_BACK_TIME = 6;
 const BOUNCE_DAMAGE = 1;
-const VELOCITY_DECAY = 0.8;
+const VELOCITY_DECAY = 0.9;
 const VELOCITY_GAIN = 0.3;
 
 const SHIELD_LIFE_AMOUNT = 5;
@@ -36,8 +36,8 @@ var Ship = new (function() {
   var x, y;
   var prev_x, prev_y;
   var minX, minY, maxX, maxY;
-  var width = 100;
-  var height = 35;
+  var width = 82;
+  var height = 32;
   var halfWidth, quarterWidth, eighthWidth;
   var halfHeight, quarterHeight, eighthHeight;
 
@@ -169,15 +169,15 @@ var Ship = new (function() {
       // Upper halfway right
       { x: x + quarterWidth, y: y - halfHeight },
       // Upper halfway left
-      { x: x, y: y - halfHeight - 5 },
+      { x: x, y: y - halfHeight },
       // Upper left
-      { x: x - (eighthWidth * 3), y: y - halfHeight },
+      { x: x - quarterWidth, y: y - halfHeight },
       // Middle left
       { x: x - quarterWidth, y: y },
       // Lower left
       { x: x - quarterWidth, y: y + halfHeight },
       // Lower middle
-      { x: x, y: y + halfHeight + 5 },
+      { x: x, y: y + halfHeight },
       // Lower halfway right
       { x: x + quarterWidth, y: y + halfHeight },
       // Middle right
@@ -192,8 +192,8 @@ var Ship = new (function() {
     };
   };
 
-  this.checkCollisions = function() {
-    var checkCoords = [
+  this.bounceBox = function() {
+    return [
       { x: x, y: y - halfHeight },
       { x: x, y: y + halfHeight },
       { x: x - halfWidth, y: y },
@@ -208,6 +208,10 @@ var Ship = new (function() {
       { x: x + halfWidth, y: y + quarterHeight },
       { x: x + halfWidth, y: y + quarterHeight }
     ];
+  };
+
+  this.checkCollisions = function() {
+    var checkCoords = this.bounceBox();
     for (var c = 0; c < checkCoords.length; c++) {
       if (Grid.isSolidTileTypeAtCoords(checkCoords[c].x, checkCoords[c].y)) {
         this.doDamage(BOUNCE_DAMAGE);
@@ -221,8 +225,8 @@ var Ship = new (function() {
         y = prev_y;
 
         this.bounceBackCountdown = BOUNCE_BACK_TIME;
-        bounce_x = -(checkCoords[c].x - x) * .03;
-        bounce_y = -(checkCoords[c].y - y) * .03;
+        bounce_x = -(checkCoords[c].x - x) * .04;
+        bounce_y = -(checkCoords[c].y - y) * .07;
 
         ParticleList.spawnParticles(PFX_BOUNCE, checkCoords[c].x, checkCoords[c].y, 360, 0, 5, 25);
         break;
@@ -271,22 +275,22 @@ var Ship = new (function() {
 
     x += Grid.cameraSpeed();
 
-    var isNotBouncing = (this.bounceBackCountdown <= 0);
+    var isBouncing = (this.bounceBackCountdown > 0);
 
-    if (isNotBouncing && this.keyHeld_N) {
+    if (!isBouncing && this.keyHeld_N) {
       velocity_y += (-this.speedY - velocity_y) * VELOCITY_GAIN;
     }
-    else if (isNotBouncing && this.keyHeld_S) {
+    else if (!isBouncing && this.keyHeld_S) {
       velocity_y += (this.speedY - velocity_y) * VELOCITY_GAIN;
     }
     else {
       velocity_y *= VELOCITY_DECAY;
     }
 
-    if (isNotBouncing && this.keyHeld_W) {
+    if (!isBouncing && this.keyHeld_W) {
       velocity_x += (-this.speedX- velocity_x) * VELOCITY_GAIN;
     }
-    else if (isNotBouncing && this.keyHeld_E) {
+    else if (!isBouncing && this.keyHeld_E) {
       velocity_x += (this.speedX - velocity_x) * VELOCITY_GAIN;
     }
     else {
@@ -296,7 +300,10 @@ var Ship = new (function() {
     x += velocity_x;
     y += velocity_y;
 
-    if (this.bounceBackCountdown > 0) {
+    if (isBouncing) {
+      velocity_y *= VELOCITY_DECAY * 0.7;
+      velocity_x *= VELOCITY_DECAY * 0.7;
+
       var factor = (BOUNCE_BACK_TIME / (1 + BOUNCE_BACK_TIME - this.bounceBackCountdown));
       x += bounce_x * factor;
       y += bounce_y * factor;
@@ -396,8 +403,8 @@ var Ship = new (function() {
       // Add some smoke to the engines!
       var minSmoke = (this.keyHeld_E) ? 2 : 1;
       var maxSmoke = (this.keyHeld_E) ? 4 : 1;
-      ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth - 5, y - quarterHeight - eighthHeight, 160, 195, minSmoke, maxSmoke);
-      ParticleList.spawnParticles(PFX_SMOKE, x - quarterWidth + 5, y + quarterHeight + eighthHeight, 165, 200, minSmoke, maxSmoke);
+      ParticleList.spawnParticles(PFX_SMOKE, x - halfWidth, y - quarterHeight - eighthHeight, 160, 195, minSmoke, maxSmoke);
+      ParticleList.spawnParticles(PFX_SMOKE, x - halfWidth + 8, y + quarterHeight + eighthHeight, 165, 200, minSmoke, maxSmoke);
 
       if (maxFrames > 1 && frameDelay-- <= 0) {
         frameDelay = SHIP_FRAME_DELAY;
@@ -420,9 +427,15 @@ var Ship = new (function() {
       }
       b.push(b[0]);
       drawLines(gameContext, '#f00', b);
-      this.checkCollisions();
       var muzzle = this.muzzleCoords();
-      drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, '#00f');
+      drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
+
+      b = this.bounceBox();
+      for (c = 0; c < b.length; c++) {
+        drawFillCircle(gameContext, b[c].x, b[c].y, 5, '#0f0');
+      }
+      b.push(b[0]);
+      drawLines(gameContext, '#0f0', b);
     }
   };
 
