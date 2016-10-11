@@ -108,7 +108,44 @@ function drawTextHugeCentered(text) {
   drawText(gameContext, Grid.cameraPanX() + gameCanvas.width / 2, gameCanvas.height / 2, '#fff', text);
 }
 
-function drawTextBox(ctx, x, y, width, height) {
+function drawTextBox(text, font, textBoxBorder) {
+  var lineHeight = determineFontHeight(font);
+  var numLines = 1;
+  if (!isString(text)) {
+    numLines = text.length;
+  }
+  else {
+    text = [text];
+  }
+
+  var textX = Grid.cameraPanX() + gameCanvas.width / 2;
+  var textY = gameCanvas.height / 2;
+
+  var t = text.slice();
+  var longestLine = t.sort(function (a, b) { return b.length - a.length; })[0];
+  gameContext.font = font;
+  var boxWidth = 40 + gameContext.measureText(longestLine).width;
+  var boxHeight = 40 + numLines * lineHeight;
+
+  // Block out the stars behind the text for readability
+  if (textBoxBorder) {
+    _drawTextBoxBorder(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight);
+  }
+
+  gameContext.font = font;
+  gameContext.textBaseline = 'middle';
+  gameContext.textAlign = 'center';
+
+  if (numLines > 1) {
+    textY -= lineHeight * Math.floor(numLines / 2);
+  }
+  for (var l = 0; l < numLines; l++) {
+    drawText(gameContext, textX, textY, '#fff', text[l]);
+    textY += lineHeight;
+  }
+}
+
+function _drawTextBoxBorder(ctx, x, y, width, height) {
   var cornerSize = 16;
 
   ctx.beginPath();

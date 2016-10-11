@@ -346,7 +346,21 @@ var Grid = new (function() {
       this.cameraFollow(this.keyHeld_E);
     }
 
-    if (!debug_editor && !Ship.isDead && this.levelComplete()) {
+    if (Ship.isDead) {
+      if (!levelCompleteTime && this.isReady) {
+        statusText = 'Oh noes!';
+        levelCompleteTime = Date.now() + levelCompleteDelay;
+        this.isReady = false;
+        shipProjectiles.clear();
+        enemyProjectiles.clear();
+      }
+      else if (levelCompleteTime <= Date.now()) {
+        levelCompleteTime = false;
+        this.refreshLevel();
+        this.reset();
+      }
+    }
+    else if (!debug_editor && this.levelComplete()) {
       if (!levelCompleteTime && this.isReady) {
         levelCompleteTime = Date.now() + startDelay;
         statusText = 'Level complete!';
@@ -474,53 +488,23 @@ var Grid = new (function() {
       this.processGrid();
     }
 
+    textBoxText = false;
     if (!debug_editor && !this.isReady) {
       if (showIntroText) {
-        this.drawTextBox(levels_intro_text[this.loadedLevelId], gameFont);
+        textBoxText = levels_intro_text[this.loadedLevelId];
+        textBoxFont = gameFont;
+        textBoxBorder = true;
       }
       else if (showCompleteText && this.levelComplete()) {
-        this.drawTextBox(levels_complete_text[this.loadedLevelId], gameFont);
+        textBoxText = levels_complete_text[this.loadedLevelId];
+        textBoxFont = gameFont;
+        textBoxBorder = true;
       }
       else if (statusText) {
-        this.drawTextBox(statusText, gameFontHuge, true);
+        textBoxText = statusText;
+        textBoxFont = gameFontHuge;
+        textBoxBorder = false;
       }
-    }
-  };
-
-  this.drawTextBox = function(text, font, noTextBox) {
-    var lineHeight = determineFontHeight(font);
-    var numLines = 1;
-    if (!isString(text)) {
-      numLines = text.length;
-    }
-    else {
-      text = [text];
-    }
-
-    var textX = Grid.cameraPanX() + gameCanvas.width / 2;
-    var textY = gameCanvas.height / 2;
-
-    var t = text.slice();
-    var longestLine = t.sort(function (a, b) { return b.length - a.length; })[0];
-    gameContext.font = font;
-    var boxWidth = 40 + gameContext.measureText(longestLine).width;
-    var boxHeight = 40 + numLines * lineHeight;
-
-    // Block out the stars behind the text for readability
-    if (!noTextBox) {
-      drawTextBox(gameContext, textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight);
-    }
-
-    gameContext.font = font;
-    gameContext.textBaseline = 'middle';
-    gameContext.textAlign = 'center';
-
-    if (numLines > 1) {
-      textY -= lineHeight * Math.floor(numLines / 2);
-    }
-    for (var l = 0; l < numLines; l++) {
-      drawText(gameContext, textX, textY, '#fff', text[l]);
-      textY += lineHeight;
     }
   };
 

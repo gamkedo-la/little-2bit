@@ -15,6 +15,9 @@ var gameFontSmall = '16pt Verdana';
 var gameFontExtraSmall = '10pt Verdana';
 var fontColor = '#ddd';
 var fontColorHighlight = '#09d';
+var textBoxText = false;
+var textBoxFont = false;
+var textBoxBorder = true;
 
 var shipProjectiles, enemyProjectiles;
 
@@ -215,6 +218,9 @@ function gameLoop() {
   EnemyList.draw();
   Ship.draw();
   Editor.draw();
+  if (textBoxText) {
+    drawTextBox(textBoxText, textBoxFont, textBoxBorder);
+  }
 
   gameContext.restore();
 
