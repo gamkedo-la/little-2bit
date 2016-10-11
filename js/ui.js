@@ -26,8 +26,8 @@ var UI = new (function() {
   function mouseReleased(event) {
     var rect = drawCanvas.getBoundingClientRect();
     var root = document.documentElement;
-    mouseX = (event.clientX - rect.left - root.scrollLeft)/drawScale;
-    mouseY = (event.clientY - rect.top - root.scrollTop)/drawScale;
+    mouseX = (event.clientX - rect.left - root.scrollLeft) / drawScale;
+    mouseY = (event.clientY - rect.top - root.scrollTop) / drawScale;
 
     soundButton.checkClick(mouseX, mouseY);
     event.preventDefault();
@@ -45,6 +45,8 @@ var UI = new (function() {
     soundButton.draw(this.sound);
 
     if (Menu.active) {
+      // Draw game title
+      drawTitle();
       return;
     }
 
@@ -87,6 +89,58 @@ var UI = new (function() {
       }
       drawFillRect(uiContext, x + h * 10, y, 8, 13, c);
     }
+  };
+
+  var titleShadows = [
+    {
+      offsetX: 0,
+      offsetY: 1,
+      blur: 0,
+      color: '#ccc'
+    },
+    {
+      offsetX: 0,
+      offsetY: 2,
+      blur: 0,
+      color: '#c9c9c9'
+    },
+    {
+      offsetX: 0,
+      offsetY: 3,
+      blur: 0,
+      color: '#bbb'
+    },
+    {
+      offsetX: 0,
+      offsetY: 4,
+      blur: 0,
+      color: '#b9b9b9'
+    },
+    {
+      offsetX: 0,
+      offsetY: 5,
+      blur: 0,
+      color: '#aaa'
+    }
+  ];
+
+  function drawTitle() {
+    uiContext.font = gameFont;
+    uiContext.textAlign = 'center';
+    uiContext.textBaseline = 'middle';
+
+    for (var s = 0; s < titleShadows.length; s++) {
+      var shadow = titleShadows[s];
+
+      uiContext.shadowColor = shadow.color;
+      uiContext.shadowOffsetX = shadow.offsetX;
+      uiContext.shadowOffsetY = shadow.offsetY;
+      uiContext.shadowBlur = shadow.blur;
+      drawText(uiContext, uiCanvas.width / 2, 25, '#fff', 'Journey of Little 2-bit');
+    }
+
+    uiContext.shadowColor = 'transparent';
+    uiContext.shadowBlur = 0;
   }
 })();
 
