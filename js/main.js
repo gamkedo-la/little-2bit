@@ -22,7 +22,7 @@ var screenShakeAmount = 0;
 var screenShakeAmountHalf = 0;
 
 // Debug
-var debug = true;
+var debug = false;
 var debug_editor = false;
 var debug_draw_bounds = false;
 var debug_single_step = false;
