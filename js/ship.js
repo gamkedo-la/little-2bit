@@ -422,7 +422,7 @@ var Ship = new (function() {
       drawLines(gameContext, '#f00', b);
       this.checkCollisions();
       var muzzle = this.muzzleCoords();
-      drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, "#00f");
+      drawFillCircle(gameContext, muzzle.x, muzzle.y, 5, '#00f');
     }
   };
 

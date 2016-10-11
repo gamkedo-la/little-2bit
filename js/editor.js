@@ -1,5 +1,3 @@
-var mouseCoords = {};
-
 var Editor = new (function() {
   var editor = this;
 
@@ -40,9 +38,10 @@ var Editor = new (function() {
     tileImages[POWERUP_LIFE] = [Images.powerUp_life];
 
     outputCode = document.createElement('textarea');
-    outputCode.style.width = '95%';
-    outputCode.rows = 10;
+    outputCode.rows = 5;
+    outputCode.style.width = '50%';
     outputCode.style.display = 'none';
+    outputCode.style.position = 'absolute';
     document.body.appendChild(outputCode);
 
     console.log('Keys for the level editor:');
@@ -84,13 +83,13 @@ var Editor = new (function() {
     if (debug_editor) {
       document.addEventListener('keyup', this.keyUp);
       document.addEventListener('keydown', this.keyDown);
-      document.addEventListener('mousemove', this.mouseMove);
+      document.addEventListener('mousemove', calculateMouseCoords);
       this.outputLevelCode();
     }
     else {
       document.removeEventListener('keyup', this.keyUp);
       document.removeEventListener('keydown', this.keyDown);
-      document.removeEventListener('mousemove', this.mouseMove);
+      document.removeEventListener('mousemove', calculateMouseCoords);
       outputCode.style.display = 'none';
     }
 
@@ -100,15 +99,6 @@ var Editor = new (function() {
   this.outputLevelCode = function() {
     outputCode.style.display = 'block';
     outputCode.value = JSON.stringify(Grid.loadedLevel);
-  };
-
-  this.mouseMove = function(event) {
-    var rect = gameCanvas.getBoundingClientRect();
-    var root = document.documentElement;
-    mouseCoords = {
-      x: event.clientX - rect.left - root.scrollLeft,
-      y: event.clientY - rect.top - root.scrollTop
-    };
   };
 
   var keyDown_D = false;

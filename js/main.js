@@ -8,6 +8,7 @@ var framesPerSecond = 30;
 var gameInitialized = false;
 var gameInterval;
 var gameInitTime, gameTime;
+var mouseCoords = {};
 var gameFontHuge = '50pt Verdana';
 var gameFont = 'bold 20pt Verdana';
 var gameFontSmall = '16pt Verdana';
@@ -21,7 +22,7 @@ var screenShakeAmount = 0;
 var screenShakeAmountHalf = 0;
 
 // Debug
-var debug = false;
+var debug = true;
 var debug_editor = false;
 var debug_draw_bounds = false;
 var debug_single_step = false;
@@ -29,11 +30,12 @@ var debug_stop_camera = false;
 var debug_stop_enemies = false;
 
 window.onload = function () {
-	
   gameCanvas = document.getElementById('gameCanvas');
   gameContext = gameCanvas.getContext('2d');
   uiCanvas = document.getElementById('uiCanvas');
   uiContext = uiCanvas.getContext('2d');
+  drawCanvas = document.getElementById('drawCanvas');
+  drawContext = drawCanvas.getContext('2d');
 
   Sounds.initialize();
   Images.initialize(menuInitialize);
@@ -155,6 +157,7 @@ function gameStart(levelId) {
       var mouseX = (event.clientX - rect.left - root.scrollLeft)/drawScale;
       var mouseY = (event.clientY - rect.top - root.scrollTop)/drawScale;
 
+      console.log('explode at', mouseX, mouseY);
       ParticleList.explosion(mouseX, mouseY - 50);
     }
   }
@@ -216,49 +219,56 @@ function gameLoop() {
   gameContext.restore();
 
   UI.draw();
-	
-	redrawCanvas();
+
+  redrawCanvas();
 }
 
-function resizeWindow(){
-	gameDiv.height = window.innerHeight;
-	gameDiv.width = window.innerWidth;
+function resizeWindow() {
+  gameDiv.height = window.innerHeight;
+  gameDiv.width = window.innerWidth;
 
-	if(window.innerWidth/window.innerHeight < aspectRatio){
-		drawCanvas.width = window.innerWidth;
-		drawCanvas.height = window.innerWidth / aspectRatio;
-	}else{
-		drawCanvas.height = window.innerHeight;
-		drawCanvas.width = window.innerHeight * aspectRatio;
-	}
+  if (window.innerWidth / window.innerHeight < aspectRatio) {
+    drawCanvas.width = window.innerWidth;
+    drawCanvas.height = window.innerWidth / aspectRatio;
+  }
+  else {
+    drawCanvas.height = window.innerHeight;
+    drawCanvas.width = window.innerHeight * aspectRatio;
+  }
 
-	drawCanvas.style.top = (window.innerHeight/2 - drawCanvas.height/2) + "px";
-	drawCanvas.style.left = (window.innerWidth/2 - drawCanvas.width/2) + "px";
+  drawCanvas.style.top = (window.innerHeight / 2 - drawCanvas.height / 2) + 'px';
+  drawCanvas.style.left = (window.innerWidth / 2 - drawCanvas.width / 2) + 'px';
 
-	drawScale = drawCanvas.width/gameCanvas.width;
+  drawScale = drawCanvas.width / gameCanvas.width;
 }
 
-function redrawCanvas(){
-	//Use scale and translate to allign multiple canvas objects to the drawing canvas
-	drawContext.save();
-	drawContext.translate(0, uiCanvas.height * drawScale);
-	drawContext.scale(drawScale, drawScale);
-	drawContext.drawImage(gameCanvas, 0, 0);
-	drawContext.restore();
-	
-	
-	drawContext.save();
-	drawContext.scale(drawScale, drawScale);
-	drawContext.drawImage(uiCanvas, 0, 0);
-	drawContext.restore();
+function calculateMouseCoords(event) {
+  var rect = drawCanvas.getBoundingClientRect();
+  var root = document.documentElement;
+
+  mouseCoords = {
+    x: (event.clientX - rect.left - root.scrollLeft) / drawScale,
+    y: (event.clientY - rect.top - uiCanvas.height * drawScale - root.scrollTop) / drawScale
+  };
 }
 
-function initDrawingCanvas(){
-	document.body.style.overflow = 'hidden';
-  drawCanvas = document.getElementById('drawCanvas');
-  drawContext = drawCanvas.getContext('2d');
-  window.addEventListener("resize", resizeWindow);
+function redrawCanvas() {
+  // Use scale and translate to align multiple canvas objects to the drawing canvas
+  drawContext.save();
+  drawContext.translate(0, uiCanvas.height * drawScale);
+  drawContext.scale(drawScale, drawScale);
+  drawContext.drawImage(gameCanvas, 0, 0);
+  drawContext.restore();
+
+  drawContext.save();
+  drawContext.scale(drawScale, drawScale);
+  drawContext.drawImage(uiCanvas, 0, 0);
+  drawContext.restore();
+}
+
+function initDrawingCanvas() {
+  window.addEventListener('resize', resizeWindow);
   gameDiv = document.getElementById('gameDiv');
-	
-	aspectRatio = gameCanvas.width/(gameCanvas.height + uiCanvas.height);
+
+  aspectRatio = gameCanvas.width / (gameCanvas.height + uiCanvas.height);
 }

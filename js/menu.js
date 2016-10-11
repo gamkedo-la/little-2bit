@@ -2,7 +2,6 @@ var Menu = new (function() {
   this.active = false;
 
   var buttons = [];
-  var mouseX, mouseY;
   var menuLoop;
   var music;
   var menuFps = 30;
@@ -28,7 +27,7 @@ var Menu = new (function() {
       gameInterval = undefined;
     }
 
-    drawCanvas.addEventListener('mousemove', mouseMove);
+    drawCanvas.addEventListener('mousemove', calculateMouseCoords);
     drawCanvas.addEventListener('mouseup', mouseReleased);
     document.addEventListener('keydown', keyDown);
 
@@ -49,7 +48,7 @@ var Menu = new (function() {
   this.deactivate = function() {
     this.toggleMusic(false);
     Menu.active = false;
-    drawCanvas.removeEventListener('mousemove', mouseMove);
+    drawCanvas.removeEventListener('mousemove', calculateMouseCoords);
     drawCanvas.removeEventListener('mouseup', mouseReleased);
     document.removeEventListener('keydown', keyDown);
 
@@ -88,8 +87,8 @@ var Menu = new (function() {
 
     UI.update();
     UI.draw();
-		
-		redrawCanvas();
+
+    redrawCanvas();
   };
 
   function keyDown(event) {
@@ -123,17 +122,10 @@ var Menu = new (function() {
     activeButton = buttons[activeIndex];
   }
 
-  function mouseMove(event) {
-    var rect = drawCanvas.getBoundingClientRect();
-    var root = document.documentElement;
-    mouseX = (event.clientX - rect.left - root.scrollLeft)/drawScale;
-    mouseY = (event.clientY - rect.top - uiCanvas.height * drawScale - root.scrollTop)/drawScale;
-  }
-
   function mouseReleased() {
     for (var i = 0; i < buttons.length; i++) {
       if (buttons[i].checkClick()) {
-        mouseX = mouseY = 0;
+        mouseCoords.x = mouseCoords.y = 0;
         return;
       }
     }
@@ -164,8 +156,8 @@ var Menu = new (function() {
     };
 
     this.hover = function() {
-      return x + width > mouseX && mouseX > x &&
-        y + heightOffset > mouseY && mouseY > y - height + heightOffset;
+      return x + width > mouseCoords.x && mouseCoords.x > x &&
+        y + heightOffset > mouseCoords.y && mouseCoords.y > y - height + heightOffset;
     };
 
     this.activate = function() {

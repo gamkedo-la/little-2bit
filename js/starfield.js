@@ -58,8 +58,8 @@ var StarfieldList = new (function() {
   };
 
   this.draw = function(leftSide) {
-    drawFillRect(gameContext, leftSide, 0, gameCanvas.width, gameCanvas.height, "#000");
-    drawFillRect(uiContext, 0, 0, uiCanvas.width, uiCanvas.height, "#000");
+    drawFillRect(gameContext, leftSide, 0, gameCanvas.width, gameCanvas.height, '#000');
+    drawFillRect(uiContext, 0, 0, uiCanvas.width, uiCanvas.height, '#000');
     for (var s = 0; s < game_stars.length; s++) {
       if (s < ui_stars.length) {
         ui_stars[s].draw(0);
