@@ -45,6 +45,10 @@ var Grid = new (function() {
     this.loadLevel(this.loadedLevel);
   };
 
+  this.unloadLevel = function() {
+    this.loadedLevel = undefined;
+  };
+
   this.nextLevel = function() {
     if (!levels[this.loadedLevelId+1]) {
       this.loadedLevel = undefined;

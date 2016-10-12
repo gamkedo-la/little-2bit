@@ -14,6 +14,7 @@ const KEY_RIGHT_ARROW = 39;
 const KEY_DOWN_ARROW = 40;
 
 const KEY_ENTER = 13;
+const KEY_ESC = 27;
 const KEY_SPACE = 32;
 
 const KEY_W = 87;
@@ -79,6 +80,11 @@ function keySet(event, setTo) {
   if (event.keyCode == KEY_S || event.keyCode == KEY_DOWN_ARROW) {
     Ship.keyHeld_S = setTo;
     event.preventDefault();
+  }
+
+  if (!Menu.active && event.keyCode == KEY_ESC) {
+    Grid.unloadLevel();
+    Menu.activate();
   }
 
   Grid.keyHeld = setTo;

@@ -81,7 +81,7 @@ var UI = new (function() {
     // Projectile
     drawText(uiContext, 25, 45, '#fff', 'Weapon');
     if (projectileImg) {
-      uiContext.drawImage(projectileImg, 115, 25);
+      uiContext.drawImage(projectileImg, 115, 32);
     }
 
     // Health-bar

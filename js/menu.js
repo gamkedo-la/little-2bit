@@ -27,6 +27,7 @@ var Menu = new (function() {
 
   this.activate = function() {
     if (gameInterval) {
+      shakeScreen(0);
       clearInterval(gameInterval);
       gameInterval = undefined;
     }
