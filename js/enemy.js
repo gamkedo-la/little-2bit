@@ -72,6 +72,7 @@ var EnemyList = new (function() {
       if (!enemyList[i].isReadyToRemove && checkCollisionShapes(ship, enemyList[i])) {
         ship.doDamage(enemyList[i].damage);
         enemyList[i].doDamage(ship.damage);
+        enemyList[i].isShot = true;
         if (enemyList[i].isBoss) {
           enemyList[i].bounce();
         }
@@ -93,6 +94,9 @@ var EnemyList = new (function() {
       if (enemyList[i].isReadyToRemove) {
         if (!enemyList[i].isOutOfBounds) {
           enemyList[i].explode();
+          if (enemyList[i].isShot) {
+            UI.addScore(enemyList[i].score);
+          }
         }
         enemyList.splice(i, 1);
       }
@@ -106,7 +110,7 @@ var EnemyList = new (function() {
   };
 })();
 
-function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, height, image, projectileClass, projectileAngle) {
+function EnemyBase(list, initialX, initialY, vx, vy, health, damage, score, width, height, image, projectileClass, projectileAngle) {
   var halfWidth = width / 2;
   var halfHeight = height / 2;
 
@@ -127,6 +131,7 @@ function EnemyBase(list, initialX, initialY, vx, vy, health, damage, width, heig
   }
 
   this.damage = damage;
+  this.score = score;
   this.isOutOfBounds = false;
   this.isReadyToRemove = false;
 
@@ -284,6 +289,7 @@ function SimpleEnemy(list, initialX, initialY) {
   var vy = 0;
   var health = 3;
   var damage = 3;
+  var score = 100;
   var image = Images.simple_enemy;
   var width = 72;
   var height = 48;
@@ -313,7 +319,7 @@ function SimpleEnemy(list, initialX, initialY) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, score, width, height, image);
 }
 
 SimpleEnemy.prototype = Object.create(EnemyBase.prototype);
@@ -325,6 +331,7 @@ function ShootingEnemy(list, initialX, initialY) {
   var vy = 0;
   var health = 10;
   var damage = 3;
+  var score = 150;
   var image = Images.shooting_enemy;
   var width = 70;
   var height = 60;
@@ -363,13 +370,13 @@ function ShootingEnemy(list, initialX, initialY) {
     };
   };
 
-  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, EnergyBall, 180);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, score, width, height, image, EnergyBall, 180);
 }
 
 ShootingEnemy.prototype = Object.create(EnemyBase.prototype);
 ShootingEnemy.prototype.constructor = ShootingEnemy;
 
-function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, projectileClass, aimsAtShip) {
+function TurretBase(list, initialX, initialY, vx, vy, health, damage, score, width, height, image_body, image_barrels, projectileClass, aimsAtShip) {
   // Set orientation
   var angle = 0;
   if (Grid.isSolidTileTypeAtCoords(initialX, initialY + GRID_HEIGHT)) {
@@ -471,7 +478,7 @@ function TurretBase(list, initialX, initialY, vx, vy, health, damage, width, hei
     enemyProjectiles.spawn(projectileClass, muzzle.x, muzzle.y, angle, aimsAtShip);
   };
 
-  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, projectileClass, angle);
+  EnemyBase.call(this, list, initialX, initialY, vx, vy, health, damage, score, width, height, image_body, projectileClass, angle);
 }
 TurretBase.prototype = Object.create(EnemyBase.prototype);
 TurretBase.prototype.constructor = TurretBase;
@@ -482,6 +489,7 @@ function SimpleTurret(list, initialX, initialY) {
   var vy = 0;
   var health = 2;
   var damage = 3;
+  var score = 100;
   var image = Images.simple_turret;
   var width = 40;
   var height = 40;
@@ -490,7 +498,7 @@ function SimpleTurret(list, initialX, initialY) {
     Sounds.explosion_simple_turret.play();
   };
 
-  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image, null, TurretShot, false);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, score, width, height, image, null, TurretShot, false);
 }
 
 SimpleTurret.prototype = Object.create(TurretBase.prototype);
@@ -502,6 +510,7 @@ function AimingTurret(list, initialX, initialY) {
   var vy = 0;
   var health = 4;
   var damage = 3;
+  var score = 175;
   var image_body = Images.advanced_turret_body;
   var image_barrels = Images.advanced_turret_barrels;
   var width = 40;
@@ -511,7 +520,7 @@ function AimingTurret(list, initialX, initialY) {
     Sounds.explosion_advanced_turret.play();
   };
 
-  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, width, height, image_body, image_barrels, TurretShot, true);
+  TurretBase.call(this, list, initialX, initialY, vx, vy, health, damage, score, width, height, image_body, image_barrels, TurretShot, true);
 }
 
 AimingTurret.prototype = Object.create(TurretBase.prototype);
@@ -525,7 +534,7 @@ function AdvancedEnemy1(list, initialX, initialY) {
     }
   };
 
-  EnemyBase.call(this, list, initialX, initialY, 0, 0, 0, 0, 0, 0, 0);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, 0, 0, 0, 0, 0, 0);
 }
 AdvancedEnemy1.prototype = Object.create(EnemyBase.prototype);
 AdvancedEnemy1.prototype.constructor = AdvancedEnemy1;
@@ -534,6 +543,7 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
   var vx = 4;
   var health = 3;
   var damage = 2;
+  var score = 150;
   var image = Images.advanced_enemy1;
   var width = 55;
   var height = 42;
@@ -589,7 +599,7 @@ function AdvancedEnemyShip(list, initialX, initialY, step) {
     drawBitmapFrameCenteredWithRotation(gameContext, image, frame, x, y, width, height);
   };
 
-  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, score, width, height, image);
 }
 
 AdvancedEnemyShip.prototype = Object.create(EnemyBase.prototype);
@@ -602,6 +612,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
   var vy = 0;
   var health = 4;
   var damage = 2;
+  var score = 200;
   var image = Images.advanced_enemy2;
   var width = 40;
   var height = 40;
@@ -697,7 +708,7 @@ function AdvancedEnemy2(list, initialX, initialY) {
     }
   };
 
-  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, score, width, height, image);
 }
 
 AdvancedEnemy2.prototype = Object.create(EnemyBase.prototype);
@@ -710,6 +721,7 @@ function AdvancedEnemy3(list, initialX, initialY) {
   var vy = speed;
   var health = 4;
   var damage = 3;
+  var score = 200;
   var image = Images.advanced_enemy3;
   var width = 40;
   var height = 60;
@@ -793,7 +805,7 @@ function AdvancedEnemy3(list, initialX, initialY) {
     }
   };
 
-  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, width, height, image);
+  EnemyBase.call(this, list, initialX, initialY, 0, 0, health, damage, score, width, height, image);
 }
 
 AdvancedEnemy3.prototype = Object.create(EnemyBase.prototype);

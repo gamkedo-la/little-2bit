@@ -60,12 +60,13 @@ function gameInitialize() {
 
   Grid.initialize();
   Ship.initialize();
-  Editor.initialize();
 
   shipProjectiles = new ProjectileList();
   enemyProjectiles = new ProjectileList();
 
   if (debug) {
+    Editor.initialize();
+
     console.log('Debug mode enabled! Action keys:');
     console.table({
       1: 'Single laser',
@@ -186,7 +187,9 @@ function gameLoop() {
   Ship.update();
   ParticleList.update();
   UI.update();
-  Editor.update();
+  if (debug) {
+    Editor.update();
+  }
 
   if (!gameInterval) {
     return;
@@ -218,7 +221,9 @@ function gameLoop() {
   ParticleList.draw();
   EnemyList.draw();
   Ship.draw();
-  Editor.draw();
+  if (debug) {
+    Editor.draw();
+  }
   if (textBoxText) {
     drawTextBox(textBoxText, textBoxFont, textBoxBorder);
   }

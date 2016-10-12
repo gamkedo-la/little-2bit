@@ -17,13 +17,16 @@ function isString(obj) {
   return (Object.prototype.toString.call(obj) === '[object String]');
 }
 
+function padLeft(nr, n, str) {
+  return Array(n - String(nr).length + 1).join(str || '0') + nr;
+}
+
+
 var fontHeightCache = [];
-function determineFontHeight(font)
-{
+function determineFontHeight(font) {
   var result = fontHeightCache[font];
 
-  if (!result)
-  {
+  if (!result) {
     var body = document.getElementsByTagName('body')[0];
     var dummy = document.createElement('div');
 

@@ -24,6 +24,7 @@ var Boss = function(phase, list, initialX, initialY) {
   this.health = 0;
   this.maxHealth = 0;
   this.damage = 0;
+  this.score = 0;
   var maxYSpeed;
 
   const DASH_TIMER = 60;
@@ -62,6 +63,12 @@ var Boss = function(phase, list, initialX, initialY) {
     1: 4,
     2: 3.5,
     3: 2
+  };
+
+  var scores = {
+    1: 300,
+    2: 400,
+    3: 500
   };
 
   var shipLastY = -1;
@@ -149,6 +156,7 @@ var Boss = function(phase, list, initialX, initialY) {
     this.health = healths[phase];
     this.maxHealth = healths[phase];
     this.damage = damages[phase];
+    this.score = scores[phase];
     maxYSpeed = maxYSpeeds[phase];
     dashing = retreating = false;
 

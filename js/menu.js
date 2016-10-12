@@ -37,6 +37,7 @@ var Menu = new (function() {
 
     Menu.active = true;
     MenuCredits.clear();
+    UI.resetScore();
 
     this.toggleMusic(UI.sound);
 

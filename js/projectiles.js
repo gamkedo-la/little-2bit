@@ -88,6 +88,7 @@ var ProjectileList = function() {
 
       if (projectiles[p].hitObject) {
         projectiles[p].hitObject.doDamage(projectiles[p].damage, projectiles[p]);
+        projectiles[p].hitObject.isShot = true;
         projectiles[p].isReadyToRemove = true;
       }
     }
@@ -108,6 +109,7 @@ var ProjectileList = function() {
 
       var distance = distanceBetweenPoints(projectiles[p].coords(), objectCoords);
       if (projectiles[p].blastRange >= distance) {
+        object.isShot = true;
         object.doDamage(Math.round(projectiles[p].damage * (distance / projectiles[p].blastRange)));
       }
     }

@@ -8,6 +8,29 @@ var UI = new (function() {
   var projectileImg;
   var center = {};
 
+  this.score = 0;
+  var countingToScore = 0;
+  var tweenCurrent = {
+    score: this.score
+  };
+  var tweenUpdate = function() {
+    UI.score = Math.round(tweenCurrent.score);
+  };
+
+  var easing = TWEEN.Easing.Quadratic.InOut;
+  var tweenAdd = new TWEEN.Tween(tweenCurrent)
+    .easing(easing)
+    .onUpdate(tweenUpdate);
+
+  this.addScore = function(amount) {
+    countingToScore += amount;
+    tweenAdd.stop().to({score: countingToScore}, 800).start();
+  };
+
+  this.resetScore = function() {
+    this.score = 0;
+  };
+
   this.toggleSound = function() {
     UI.sound = !UI.sound;
     Menu.toggleMusic(UI.sound);
@@ -45,8 +68,7 @@ var UI = new (function() {
     soundButton.draw(this.sound);
 
     if (Menu.active) {
-      // Draw game title
-      drawTitle();
+      drawGameTitle();
       return;
     }
 
@@ -71,6 +93,10 @@ var UI = new (function() {
     for (var l = 0; l < Ship.lives; l++) {
       drawBitmapCenteredWithRotation(uiContext, Images.ui_life, 245 + l * Images.ui_life.width + 5, 18);
     }
+
+    // Score
+    drawText(uiContext, 460, 25, '#fff', 'Score');
+    drawText(uiContext, 525, 25, '#fff', padLeft(this.score, 6, '0'));
 
     // Boss health
     var boss = EnemyList.getBoss();
@@ -124,7 +150,7 @@ var UI = new (function() {
     }
   ];
 
-  function drawTitle() {
+  function drawGameTitle() {
     uiContext.font = gameFont;
     uiContext.textAlign = 'center';
     uiContext.textBaseline = 'middle';
