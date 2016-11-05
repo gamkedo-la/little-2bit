@@ -132,7 +132,12 @@ var Sounds = new (function() {
       }
     }
 
-    function doneLoading() {
+    function doneLoading(event) {
+      if (event) {
+        // Remove event-listener so it only fires once!
+        event.target.removeEventListener(event.type, arguments.callee);
+      }
+
       numToLoad--;
       if (numToLoad == 0) {
         callback();
